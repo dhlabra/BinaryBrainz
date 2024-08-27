@@ -34,11 +34,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "vistaPrincipal") {
-        composable("vistaPrincipal") {
+    NavHost(navController = navController, startDestination = "vista_principal") {
+        composable("vista_principal") {
             VistaPrincipal(navController)
         }
-        composable("vistaServicios") {
+        composable("vista_servicios") {
             VistaServicios()
         }
     }
@@ -74,7 +74,7 @@ fun VistaPrincipal(navController: NavController, modifier: Modifier = Modifier) 
         // Botón "Comenzar"
         Button(
             onClick = {
-                navController.navigate("vistaServicios")
+                navController.navigate("vista_servicios")
             },
             modifier = Modifier
                 .fillMaxWidth()

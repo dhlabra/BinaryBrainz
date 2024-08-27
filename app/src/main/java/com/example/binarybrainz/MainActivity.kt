@@ -133,8 +133,8 @@ fun VistaServicios(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                ImageCard(imageId = R.drawable.image1, description = "Violencia Doméstica")
-                ImageCard(imageId = R.drawable.image2, description = "Sentencia de Divorcio")
+                ImageCard(imageId = R.drawable.clinicapenal, description = "Violencia Doméstica")
+                ImageCard(imageId = R.drawable.clinicapenal, description = "Sentencia de Divorcio")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -144,8 +144,8 @@ fun VistaServicios(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                ImageCard(imageId = R.drawable.image3, description = "Testamento")
-                ImageCard(imageId = R.drawable.image4, description = "Pensión Alimenticia")
+                ImageCard(imageId = R.drawable.clinicapenal, description = "Testamento")
+                ImageCard(imageId = R.drawable.clinicapenal, description = "Pensión Alimenticia")
             }
         }
     }

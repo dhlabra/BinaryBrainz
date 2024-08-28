@@ -18,6 +18,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
+import com.example.binarybrainz.views.VistaPrincipal
+import com.example.binarybrainz.views.VistaServicios
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,112 +46,9 @@ fun AppNavigation() {
     }
 }
 
-@Composable
-fun VistaPrincipal(navController: NavController, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Imagen del logotipo de la aplicación
-        Image(
-            painter = painterResource(id = R.drawable.clinicapenal),
-            contentDescription = "Logotipo de la Aplicación",
-            modifier = Modifier
-                .size(200.dp)
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
 
-        // Texto de bienvenida
-        Text(
-            text = "¡Bienvenido!",
-            style = MaterialTheme.typography.headlineMedium
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón "Comenzar"
-        Button(
-            onClick = {
-                navController.navigate("vista_servicios")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            Text(text = "Comenzar")
-        }
-    }
-}
-
-@Composable
-fun VistaServicios(modifier: Modifier = Modifier) {
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Logotipo en la parte superior izquierda
-                Image(
-                    painter = painterResource(id = R.drawable.clinicapenal),
-                    contentDescription = "Logotipo de la Clínica Penal",
-                    modifier = Modifier.size(48.dp)
-                )
-
-                // Botones en la parte superior derecha
-                Row {
-                    TextButton(onClick = { /* TODO: Acción para "Nuestros Servicios" */ }) {
-                        Text("Nuestros Servicios")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = { /* TODO: Acción para "Login" */ }) {
-                        Text("Login")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = { /* TODO: Acción para "Necesito Ayuda" */ }) {
-                        Text("Necesito Ayuda")
-                    }
-                }
-            }
-        }
-    ) { paddingValues ->
-        // Contenido principal con las imágenes y botones
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp)
-        ) {
-            // Fila de imágenes superiores
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                ImageCard(imageId = R.drawable.clinicapenal, description = "Violencia Doméstica")
-                ImageCard(imageId = R.drawable.clinicapenal, description = "Sentencia de Divorcio")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Fila de imágenes inferiores
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                ImageCard(imageId = R.drawable.clinicapenal, description = "Testamento")
-                ImageCard(imageId = R.drawable.clinicapenal, description = "Pensión Alimenticia")
-            }
-        }
-    }
-}
 
 @Composable
 fun ImageCard(imageId: Int, description: String) {

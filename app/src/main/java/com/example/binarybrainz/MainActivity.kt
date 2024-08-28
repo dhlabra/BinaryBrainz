@@ -51,7 +51,8 @@ fun ImageCard(imageId: Int, description: String) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
-            .padding(16.dp),
+            .padding(16.dp)
+            .safeDrawingPadding(),
     ) {
         Box(
             modifier = Modifier

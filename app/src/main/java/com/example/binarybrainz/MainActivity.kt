@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -47,24 +46,40 @@ fun AppNavigation() {
 }
 
 
-
-
-
 @Composable
 fun ImageCard(imageId: Int, description: String) {
-    Column(
-        modifier = Modifier.padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        modifier = Modifier
+            .padding(16.dp),
     ) {
-        Image(
-            painter = painterResource(id = imageId),
-            contentDescription = description,
+        Box(
             modifier = Modifier
-                .size(150.dp)
                 .padding(8.dp)
-        )
-        Button(onClick = { /* TODO: Acción para "Más información" */ }) {
-            Text(text = "Más información")
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column (
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Image(
+                    painter = painterResource(id = imageId),
+                    contentDescription = description,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = description
+                )
+
+                Button(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = { /* TODO: Acción para "Más información" */ },) {
+                    Text(text = "Más información")
+                }
+            }
         }
     }
 }

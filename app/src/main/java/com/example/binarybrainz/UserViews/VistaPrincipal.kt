@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,10 @@ fun VistaPrincipal(navController: NavController, modifier: Modifier = Modifier) 
                 .padding(horizontal = 16.dp)
         ) {
             Text(text = "Comenzar")
+        }
+
+        TextButton(onClick = { navController.navigate("login_view") }) {
+            Text("Soy Colaborador")
         }
     }
 }

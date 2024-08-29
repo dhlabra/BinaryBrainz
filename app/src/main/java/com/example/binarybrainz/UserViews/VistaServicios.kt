@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,13 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ImageCard
 import com.example.binarybrainz.R
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VistaServicios(modifier: Modifier = Modifier) {
+fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -44,19 +47,14 @@ fun VistaServicios(modifier: Modifier = Modifier) {
                         contentDescription = "Logotipo de la Clínica Penal",
                         modifier = Modifier
                             .size(48.dp)
-                            .padding(8.dp)
+                            .padding(2.dp)
                     )
                 },
                 actions = {
                     TextButton(onClick = { /* TODO: Acción para "Servicios" */ }) {
                         Text("Servicios")
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = { /* TODO: Acción para "Login" */ }) {
-                        Text("Login")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    TextButton(onClick = { /* TODO: Acción para "Necesito Ayuda" */ }) {
+                    TextButton(onClick = { navController.navigate("necesito_ayuda_view") }) {
                         Text("Necesito Ayuda")
                     }
                 }
@@ -83,6 +81,6 @@ fun VistaServicios(modifier: Modifier = Modifier) {
 @Composable
 fun VistaServiciosPreview() {
     BinaryBrainzTheme {
-        VistaServicios()
+        VistaServicios(navController = rememberNavController())
     }
 }

@@ -17,8 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
-import com.example.binarybrainz.views.VistaPrincipal
-import com.example.binarybrainz.views.VistaServicios
+import com.example.binarybrainz.UserViews.VistaPrincipal
+import com.example.binarybrainz.UserViews.VistaServicios
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.example.binarybrainz.views
+package com.example.binarybrainz.UserViews
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

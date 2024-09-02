@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "vista_principal") {
+    NavHost(navController = navController, startDestination = "vista_servicios") {
         composable("vista_principal") {
             VistaPrincipal(navController)
         }

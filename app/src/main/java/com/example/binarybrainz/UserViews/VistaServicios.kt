@@ -1,5 +1,6 @@
 package com.example.binarybrainz.UserViews
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +14,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -51,11 +56,8 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
                     )
                 },
                 actions = {
-                    TextButton(onClick = { /* TODO: Acción para "Servicios" */ }) {
-                        Text("Servicios")
-                    }
-                    TextButton(onClick = { navController.navigate("necesito_ayuda_view") }) {
-                        Text("Necesito Ayuda")
+                    IconButton(onClick = { navController.navigate("login_view") }) {
+                        Icon(imageVector = Icons.Filled.Person, contentDescription = null)
                     }
                 }
             )

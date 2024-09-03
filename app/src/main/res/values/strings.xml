@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BinaryBrainz</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
 </resources>

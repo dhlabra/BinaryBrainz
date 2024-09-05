@@ -19,19 +19,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.binarybrainz.ColaboratorViews.CasosPendientes.MenuCasosPendientesScreen
+import com.example.binarybrainz.ColaboratorViews.CreacionCaso.MenuPlantillas
 import com.example.binarybrainz.ColaboratorViews.LoginView
-import com.example.binarybrainz.ColaboratorViews.MenuABGView
 import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 import com.example.binarybrainz.UserViews.MasInformacionView
 import com.example.binarybrainz.UserViews.NecesitoAyudaView
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
-import com.example.binarybrainz.UserViews.VistaPrincipal
 import com.example.binarybrainz.UserViews.VistaServicios
+import com.example.binarybrainz.ColaboratorViews.Historial.HistorialScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +46,6 @@ class MainActivity : ComponentActivity() {
     fun AppNavigation() {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = "vista_servicios") {
-            composable("vista_principal") {
-                VistaPrincipal(navController)
-            }
             composable("vista_servicios") {
                 VistaServicios(navController)
             }
@@ -60,9 +54,6 @@ class MainActivity : ComponentActivity() {
             }
             composable("necesito_ayuda_view") {
                 NecesitoAyudaView()
-            }
-            composable("menu_abg_view") {
-                MenuABGView(navController)
             }
             composable("apartado_casos_compartidos_view") {
                 ApartadoCasosCompartidosView(navController, "Estudiante")
@@ -78,12 +69,21 @@ class MainActivity : ComponentActivity() {
                 val servicioDescription = backStackEntry.arguments?.getString("servicioDescription")
                 MasInformacionView(navController, servicioDescription)
             }
+            composable("menu_historial_view") {
+                HistorialScreen(navController)
+            }
+            composable("menu_casos_pendientes_view") {
+                MenuCasosPendientesScreen(navController)
+            }
+            composable("creacion_caso_view") {
+                MenuPlantillas(navController)
+            }
         }
     }
 }
 
 @Composable
-fun ImageCard(imageId: Int, description: String, onClick: () -> Unit) {
+fun ImageCardVertical(imageId: Int, description: String, onClick: () -> Unit) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
@@ -122,11 +122,45 @@ fun ImageCard(imageId: Int, description: String, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun VistaPrincipalPreview() {
-    BinaryBrainzTheme {
-        VistaPrincipal(navController = rememberNavController())
+fun ImageCardHorizontal(imageId: Int, description: String, onClick: () -> Unit) {
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        modifier = Modifier
+            .padding(12.dp)
+            .padding(vertical = 16.dp)
+            .width(300.dp)
+            .safeDrawingPadding(),
+        onClick = onClick
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Image(
+                    painter = painterResource(id = imageId),
+                    contentDescription = description,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = description
+                )
+                Button(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = onClick
+                ) {
+                    Text(text = "Crear")
+                }
+            }
+        }
     }
 }
 

@@ -86,7 +86,7 @@ fun LoginView(navController: NavController, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            onClick = { navController.navigate("menu_abg_view") }
+            onClick = { navController.navigate("menu_casos_pendientes_view") }
         ) {
             Text(text = "Menu Abogado")
         }

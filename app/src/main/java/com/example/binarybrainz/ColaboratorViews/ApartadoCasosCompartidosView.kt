@@ -72,7 +72,7 @@ fun CaseList(navController: NavController, cases: List<String>) {
     LazyColumn {
         items(cases) { caseId ->
             CaseRow(navController = navController, caseId = caseId)
-            Divider(color = Color.Gray, thickness = 1.dp)
+            HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         }
     }
 }

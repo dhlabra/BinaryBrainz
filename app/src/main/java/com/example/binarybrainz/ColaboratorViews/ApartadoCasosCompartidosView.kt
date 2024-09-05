@@ -22,15 +22,15 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApartadoCasosCompartidos(navController: NavController) {
+fun ApartadoCasosCompartidosView(navController: NavController, studentName: String) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Casos Compartidos",
+                        text = studentName,
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Normal
                     )
                 },
                 navigationIcon = {
@@ -62,23 +62,23 @@ fun ApartadoCasosCompartidos(navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
-            CaseList(cases = listOf("Caso #123", "Caso #333", "Caso #475", "Caso #758"))
+            CaseList(navController = navController, cases = listOf("123", "333", "475", "758"))
         }
     }
 }
 
 @Composable
-fun CaseList(cases: List<String>) {
+fun CaseList(navController: NavController, cases: List<String>) {
     LazyColumn {
-        items(cases) { case ->
-            CaseRow(case)
+        items(cases) { caseId ->
+            CaseRow(navController = navController, caseId = caseId)
             Divider(color = Color.Gray, thickness = 1.dp)
         }
     }
 }
 
 @Composable
-fun CaseRow(case: String) {
+fun CaseRow(navController: NavController, caseId: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,8 +86,8 @@ fun CaseRow(case: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = case, fontSize = 18.sp)
-        IconButton(onClick = { /* Acción de editar caso */ }) {
+        Text(text = "Caso #$caseId", fontSize = 18.sp)
+        IconButton(onClick = { navController.navigate("edit_case_view/$caseId") }) {
             Icon(imageVector = Icons.Filled.Edit, contentDescription = "Editar Caso")
         }
     }
@@ -95,8 +95,8 @@ fun CaseRow(case: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun ApartadoCasosCompartidosPreview() {
+fun ApartadoCasosCompartidosViewPreview() {
     BinaryBrainzTheme {
-        ApartadoCasosCompartidos(navController = rememberNavController())
+        ApartadoCasosCompartidosView(navController = rememberNavController(), studentName = "Estudiante")
     }
 }

@@ -14,16 +14,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.binarybrainz.ColaboratorViews.LoginView
 import com.example.binarybrainz.ColaboratorViews.MenuABGView
-import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidos // Cambiado para importar la vista correcta
+import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
+import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
+import com.example.binarybrainz.UserViews.MasInformacionView
 import com.example.binarybrainz.UserViews.NecesitoAyudaView
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.UserViews.VistaPrincipal
@@ -60,20 +64,32 @@ class MainActivity : ComponentActivity() {
             composable("menu_abg_view") {
                 MenuABGView(navController)
             }
-            composable("apartado_casos_compartidos_view") { // Nueva ruta para ApartadoCasosCompartidos
-                ApartadoCasosCompartidos(navController)
+            composable("apartado_casos_compartidos_view") {
+                ApartadoCasosCompartidosView(navController, "Estudiante")
+            }
+            composable("edit_case_view/{caseId}") { backStackEntry ->
+                val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
+                EditarCasosEstudiantesView(navController, caseId)
+            }
+            composable(
+                "mas_informacion_view/{servicioDescription}",
+                arguments = listOf(navArgument("servicioDescription") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val servicioDescription = backStackEntry.arguments?.getString("servicioDescription")
+                MasInformacionView(navController, servicioDescription)
             }
         }
     }
 }
 
 @Composable
-fun ImageCard(imageId: Int, description: String) {
+fun ImageCard(imageId: Int, description: String, onClick: () -> Unit) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
             .padding(16.dp)
             .safeDrawingPadding(),
+        onClick = onClick
     ) {
         Box(
             modifier = Modifier
@@ -97,7 +113,7 @@ fun ImageCard(imageId: Int, description: String) {
                 )
                 Button(
                     modifier = Modifier.padding(8.dp),
-                    onClick = { /* TODO: Acción para "Más información" */ },
+                    onClick = onClick
                 ) {
                     Text(text = "Más información")
                 }

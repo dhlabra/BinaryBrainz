@@ -8,11 +8,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Alignment
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -26,6 +26,7 @@ import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 import com.example.binarybrainz.UserViews.MasInformacionView
 import com.example.binarybrainz.UserViews.NecesitoAyudaView
+import com.example.binarybrainz.UserViews.GenerarCasosClientesView // Importa la nueva vista aquí
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.UserViews.VistaServicios
 import com.example.binarybrainz.ColaboratorViews.Historial.HistorialScreen
@@ -54,6 +55,9 @@ class MainActivity : ComponentActivity() {
             }
             composable("necesito_ayuda_view") {
                 NecesitoAyudaView()
+            }
+            composable("generar_casos_clientes_view") { // Añade la navegación para GenerarCasosClientesView
+                GenerarCasosClientesView(navController)
             }
             composable("apartado_casos_compartidos_view") {
                 ApartadoCasosCompartidosView(navController, "Estudiante")

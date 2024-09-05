@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ImageCardVertical
-import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
@@ -30,7 +29,9 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
                 text = { Text("Necesito Ayuda") },
                 icon = { Icon(Icons.Filled.Info, contentDescription = null) },
                 modifier = modifier.padding(8.dp),
-                onClick = {})},
+                onClick = { navController.navigate("generar_casos_clientes_view") } // Navegación a la nueva vista
+            )
+        },
         modifier = modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
@@ -64,22 +65,22 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
             verticalArrangement = Arrangement.Center,
         ) {
             ImageCardVertical(
-                imageId = R.drawable.clinicapenal,
+                imageId = R.drawable.violenciadomestica,
                 description = "Violencia Doméstica",
                 onClick = { navController.navigate("mas_informacion_view/violencia_domestica") }
             )
             ImageCardVertical(
-                imageId = R.drawable.clinicapenal,
+                imageId = R.drawable.sentenciadedivorcio,
                 description = "Sentencia de Divorcio",
                 onClick = { navController.navigate("mas_informacion_view/sentencia_divorcio") }
             )
             ImageCardVertical(
-                imageId = R.drawable.clinicapenal,
+                imageId = R.drawable.testamento,
                 description = "Testamento",
                 onClick = { navController.navigate("mas_informacion_view/testamento") }
             )
             ImageCardVertical(
-                imageId = R.drawable.clinicapenal,
+                imageId = R.drawable.pensionalimenticia,
                 description = "Pensión Alimenticia",
                 onClick = { navController.navigate("mas_informacion_view/pension_alimenticia") }
             )

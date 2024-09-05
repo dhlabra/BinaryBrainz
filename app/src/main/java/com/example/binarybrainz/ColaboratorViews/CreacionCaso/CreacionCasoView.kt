@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ImageCardHorizontal
+import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
@@ -59,23 +60,23 @@ fun MenuPlantillas(navController: NavController) {
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    ImageCardHorizontal(
-                        imageId = R.drawable.clinicapenal,
+                    ImageCardVertical(
+                        imageId = R.drawable.casoblanco,
                         description = "Crear Plantilla",
                         onClick = { }
                     )
-                    ImageCardHorizontal(
-                        imageId = R.drawable.clinicapenal,
+                    ImageCardVertical(
+                        imageId = R.drawable.casouno,
                         description = "Plantilla 1",
                         onClick = { }
                     )
-                    ImageCardHorizontal(
-                        imageId = R.drawable.clinicapenal,
+                    ImageCardVertical(
+                        imageId = R.drawable.casodos,
                         description = "Plantilla 2",
                         onClick = { }
                     )
-                    ImageCardHorizontal(
-                        imageId = R.drawable.clinicapenal,
+                    ImageCardVertical(
+                        imageId = R.drawable.casotres,
                         description = "Plantilla 3",
                         onClick = { }
                     )

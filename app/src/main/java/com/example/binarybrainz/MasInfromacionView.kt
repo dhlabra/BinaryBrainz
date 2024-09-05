@@ -25,7 +25,7 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
     val (imageId, title, description, examples) = when (servicioDescription) {
         "violencia_domestica" -> {
             Quadruple(
-                R.drawable.clinicapenal, // Asegúrate de tener la imagen correcta
+                R.drawable.violenciadomestica, // Asegúrate de tener la imagen correcta
                 "Violencia Doméstica",
                 "Información detallada sobre violencia doméstica...",
                 listOf("Ejemplo 1", "Ejemplo 2", "Ejemplo 3")
@@ -33,7 +33,7 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
         }
         "sentencia_divorcio" -> {
             Quadruple(
-                R.drawable.clinicapenal,
+                R.drawable.sentenciadedivorcio,
                 "Sentencia de Divorcio",
                 "Información detallada sobre sentencia de divorcio...",
                 listOf("Ejemplo A", "Ejemplo B", "Ejemplo C")
@@ -41,7 +41,7 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
         }
         "testamento" -> {
             Quadruple(
-                R.drawable.clinicapenal,
+                R.drawable.testamento,
                 "Testamento",
                 "Información detallada sobre testamentos...",
                 listOf("Ejemplo X", "Ejemplo Y", "Ejemplo Z")
@@ -49,7 +49,7 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
         }
         "pension_alimenticia" -> {
             Quadruple(
-                R.drawable.clinicapenal,
+                R.drawable.pensionalimenticia,
                 "Pensión Alimenticia",
                 "Información detallada sobre pensión alimenticia...",
                 listOf("Ejemplo 1", "Ejemplo 2", "Ejemplo 3")

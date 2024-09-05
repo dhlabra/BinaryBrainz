@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ImageCardVertical
-import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 

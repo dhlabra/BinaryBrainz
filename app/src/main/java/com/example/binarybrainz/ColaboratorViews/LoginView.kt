@@ -9,46 +9,35 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.R
-import com.example.binarybrainz.UserViews.VistaServicios
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 @Composable
-fun LoginView() {
+fun LoginView(navController: NavController, modifier: Modifier = Modifier) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var loginError by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -85,17 +74,31 @@ fun LoginView() {
             value = password,
             onValueChange = { password = it },
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done
             ),
             isPasswordVisible = false,
             modifier = Modifier
                 .padding(bottom = 16.dp)
                 .fillMaxWidth()
         )
+
         Button(
-            modifier = Modifier.padding(8.dp),
-            onClick = { /* TODO: Acción para "Más información" */ },) {
-            Text(text = "Inicar Sesión")
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            onClick = { navController.navigate("menu_abg_view") }
+        ) {
+            Text(text = "Menu Abogado")
+        }
+
+        // Botón adicional para "Menu Estudiantes"
+        Button(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            onClick = { navController.navigate("apartado_casos_compartidos_view") }
+        ) {
+            Text(text = "Menu Estudiantes")
         }
     }
 }
@@ -107,15 +110,15 @@ fun EditNumberField(
     keyboardOptions: KeyboardOptions,
     value: String,
     onValueChange: (String) -> Unit,
-    isPasswordVisible : Boolean,
+    isPasswordVisible: Boolean,
     modifier: Modifier = Modifier
-){
+) {
     OutlinedTextField(
         value = value,
         leadingIcon = { Icon(imageVector = leadingIcon, contentDescription = null) },
         onValueChange = onValueChange,
         modifier = modifier,
-        label = {Text(stringResource(label))},
+        label = { Text(stringResource(label)) },
         shape = RoundedCornerShape(16.dp),
         singleLine = true,
         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -125,8 +128,8 @@ fun EditNumberField(
 
 @Preview(showBackground = true)
 @Composable
-fun VistaServiciosPreview() {
+fun LoginViewPreview() {
     BinaryBrainzTheme {
-        LoginView()
+        LoginView(navController = rememberNavController())
     }
 }

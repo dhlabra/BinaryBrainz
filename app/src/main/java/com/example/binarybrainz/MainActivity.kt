@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +22,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.binarybrainz.ColaboratorViews.LoginView
+import com.example.binarybrainz.ColaboratorViews.MenuABGView
+import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidos // Cambiado para importar la vista correcta
 import com.example.binarybrainz.UserViews.NecesitoAyudaView
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.UserViews.VistaPrincipal
@@ -35,42 +36,36 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BinaryBrainzTheme {
-//                Box(
-//                    contentAlignment = Alignment.Center,
-//                    modifier = Modifier.fillMaxSize()
-//                ) {
-//                    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.intro))
-//                    LottieAnimation(
-//                        composition,
-//                        iterations = LottieConstants.IterateForever,
-//                        modifier = Modifier.fillMaxSize()
-//                    )
-//                }
                 AppNavigation()
             }
         }
     }
-}
 
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "vista_servicios") {
-        composable("vista_principal") {
-            VistaPrincipal(navController)
-        }
-        composable("vista_servicios") {
-            VistaServicios(navController)
-        }
-        composable("login_view") {
-            LoginView()
-        }
-        composable("necesito_ayuda_view") {
-            NecesitoAyudaView()
+    @Composable
+    fun AppNavigation() {
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = "vista_servicios") {
+            composable("vista_principal") {
+                VistaPrincipal(navController)
+            }
+            composable("vista_servicios") {
+                VistaServicios(navController)
+            }
+            composable("login_view") {
+                LoginView(navController)
+            }
+            composable("necesito_ayuda_view") {
+                NecesitoAyudaView()
+            }
+            composable("menu_abg_view") {
+                MenuABGView(navController)
+            }
+            composable("apartado_casos_compartidos_view") { // Nueva ruta para ApartadoCasosCompartidos
+                ApartadoCasosCompartidos(navController)
+            }
         }
     }
 }
-
 
 @Composable
 fun ImageCard(imageId: Int, description: String) {
@@ -86,7 +81,7 @@ fun ImageCard(imageId: Int, description: String) {
                 .fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
@@ -100,10 +95,10 @@ fun ImageCard(imageId: Int, description: String) {
                     modifier = Modifier.padding(8.dp),
                     text = description
                 )
-
                 Button(
                     modifier = Modifier.padding(8.dp),
-                    onClick = { /* TODO: Acción para "Más información" */ },) {
+                    onClick = { /* TODO: Acción para "Más información" */ },
+                ) {
                     Text(text = "Más información")
                 }
             }

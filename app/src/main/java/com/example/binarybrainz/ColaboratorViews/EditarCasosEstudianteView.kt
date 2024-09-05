@@ -1,6 +1,5 @@
 package com.example.binarybrainz.StudentViews
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -204,6 +203,37 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
+                }
+
+                // Botones de acción
+                Button(
+                    onClick = { /* Acción de editar caso */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4267B2)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(text = "Editar Caso")
+                }
+
+                Button(
+                    onClick = { /* Acción de descargar como PDF */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4267B2)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(text = "Descargar como PDF")
+                }
+
+                Button(
+                    onClick = { /* Acción de compartir */ },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4267B2)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(text = "Compartir")
                 }
             }
         } ?: run {

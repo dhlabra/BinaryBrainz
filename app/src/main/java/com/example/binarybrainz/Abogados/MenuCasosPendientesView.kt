@@ -1,4 +1,4 @@
-package com.example.binarybrainz.ColaboratorViews.CasosPendientes
+package com.example.binarybrainz.Abogados
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

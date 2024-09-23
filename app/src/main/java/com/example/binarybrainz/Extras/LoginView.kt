@@ -1,4 +1,4 @@
-package com.example.binarybrainz.ColaboratorViews
+package com.example.binarybrainz.Extras
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image

@@ -22,13 +22,13 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApartadoCasosCompartidosView(navController: NavController, studentName: String) {
+fun ApartadoCasosCompartidosView(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = studentName,
+                        text = "Nombre Estudiante",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Normal
                     )
@@ -97,6 +97,6 @@ fun CaseRow(navController: NavController, caseId: String) {
 @Composable
 fun ApartadoCasosCompartidosViewPreview() {
     BinaryBrainzTheme {
-        ApartadoCasosCompartidosView(navController = rememberNavController(), studentName = "Estudiante")
+        ApartadoCasosCompartidosView(navController = rememberNavController())
     }
 }

@@ -8,12 +8,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,6 +26,7 @@ import com.example.binarybrainz.Abogados.HistorialScreen
 import com.example.binarybrainz.Abogados.MenuCasosPendientesScreen
 import com.example.binarybrainz.Abogados.MenuPlantillas
 import com.example.binarybrainz.Extras.LoginView
+import com.example.binarybrainz.Extras.SignUpView
 import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 import com.example.binarybrainz.UserViews.MasInformacionView
@@ -30,28 +34,58 @@ import com.example.binarybrainz.UserViews.NecesitoAyudaView
 import com.example.binarybrainz.UserViews.GenerarCasosClientesView // Importa la nueva vista aquí
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.UserViews.VistaServicios
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.gotrue.SessionStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
+
+    val supabase = createSupabaseClient(
+        supabaseUrl = "https://ptmutavwmroqlnzxblzg.supabase.co",
+        supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0bXV0YXZ3bXJvcWxuenhibHpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYzNTAyMzgsImV4cCI6MjA0MTkyNjIzOH0.pOjkUeB5okRMH1UV7kc-1f2LUZevN40kjKiLvqCSq1I"
+    ) {
+        install(Auth)
+        //install other modules
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         enableEdgeToEdge()
         setContent {
             BinaryBrainzTheme {
-                AppNavigation()
+                UserAuthScreen(UserViewModel(UserRepository(supabase, CoroutineScope(Dispatchers.IO))))
             }
         }
     }
 
     @Composable
-    fun AppNavigation() {
+    fun UserAuthScreen(viewModel: UserViewModel) {
+
+        val sessionState by viewModel.sessionState.collectAsState()
+
+        when (sessionState) {
+            is SessionStatus.Authenticated -> MenuCasosPendientesScreen(rememberNavController(), viewModel)
+            SessionStatus.LoadingFromStorage -> LoadingScreen()
+            SessionStatus.NetworkError -> ErrorScreen("Network error")
+            is SessionStatus.NotAuthenticated -> AppNavigation(viewModel)
+        }
+    }
+
+    @Composable
+    fun AppNavigation(viewModel: UserViewModel) {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = "vista_servicios") {
             composable("vista_servicios") {
                 VistaServicios(navController)
             }
             composable("login_view") {
-                LoginView(navController)
+                LoginView(navController, viewModel)
+            }
+            composable("signup_view") {
+                SignUpView(viewModel)
             }
             composable("necesito_ayuda_view") {
                 NecesitoAyudaView()
@@ -60,7 +94,7 @@ class MainActivity : ComponentActivity() {
                 GenerarCasosClientesView(navController)
             }
             composable("apartado_casos_compartidos_view") {
-                ApartadoCasosCompartidosView(navController, "Estudiante")
+                ApartadoCasosCompartidosView(navController)
             }
             composable("edit_case_view/{caseId}") { backStackEntry ->
                 val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
@@ -74,13 +108,13 @@ class MainActivity : ComponentActivity() {
                 MasInformacionView(navController, servicioDescription)
             }
             composable("menu_historial_view") {
-                HistorialScreen(navController)
+                HistorialScreen(navController, viewModel)
             }
             composable("menu_casos_pendientes_view") {
-                MenuCasosPendientesScreen(navController)
+                MenuCasosPendientesScreen(navController, viewModel)
             }
             composable("creacion_caso_view") {
-                MenuPlantillas(navController)
+                MenuPlantillas(navController, viewModel)
             }
         }
     }
@@ -166,6 +200,19 @@ fun ImageCardHorizontal(imageId: Int, description: String, onClick: () -> Unit) 
             }
         }
     }
+}
+
+
+
+@Composable
+fun ErrorScreen(message: String) {
+    Text(message)
+}
+
+
+@Composable
+fun LoadingScreen() {
+    CircularProgressIndicator()
 }
 
 @Preview(showBackground = true)

@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
+import com.example.binarybrainz.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
@@ -22,18 +23,18 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 
 @Composable
-fun MenuPlantillas(navController: NavController) {
+fun MenuPlantillas(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerAbogados(navController = navController, drawerState = drawerState)
+            DrawerAbogados(navController = navController, drawerState = drawerState, viewModel)
         }
     ) {
         Scaffold(
             topBar = {
-                TopBarAbogados(navController = navController, drawerState = drawerState)
+                TopBarAbogados(navController = navController, drawerState = drawerState, viewModel)
             }
         ) { paddingValues ->
             // Contenido principal de MenuABGView
@@ -82,13 +83,5 @@ fun MenuPlantillas(navController: NavController) {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MenuABGViewPreview() {
-    BinaryBrainzTheme {
-        MenuPlantillas(navController = rememberNavController())
     }
 }

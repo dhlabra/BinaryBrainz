@@ -1,4 +1,4 @@
-package com.example.binarybrainz.ColaboratorViews.CreacionCaso
+package com.example.binarybrainz.Abogados
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.binarybrainz.ImageCardHorizontal
 import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
 import com.example.binarybrainz.components.DrawerAbogados

@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
@@ -23,14 +24,18 @@ fun GenerarCasosClientesView(navController: NavController) {
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phone by remember { mutableStateOf(TextFieldValue("")) }
     var caseDescription by remember { mutableStateOf(TextFieldValue("")) }
-    var expanded by remember { mutableStateOf(false) } // Estado de expansión del menú
+    var expanded by remember { mutableStateOf(false) }
+    var isAttacker by remember { mutableStateOf(false) }
+    var isDefender by remember { mutableStateOf(false) }
+    var acceptTerms by remember { mutableStateOf(false) }
+    var acceptStudents by remember { mutableStateOf(false) }
 
     val categories = listOf("Violencia Doméstica", "Sentencia de Divorcio", "Testamento", "Pensión Alimenticia")
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("No te quedes callado") },
+                title = { Text("Solicitud de Ayuda") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
@@ -43,41 +48,9 @@ fun GenerarCasosClientesView(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)  // Espaciado entre los elementos
         ) {
-            // Botón desplegable para seleccionar una categoría
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded } // Cambia el estado cuando se hace clic
-            ) {
-                TextField(
-                    value = selectedCategory,
-                    onValueChange = { },
-                    readOnly = true,
-                    label = { Text("Selecciona una categoría") },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false } // Cierra el menú cuando se hace clic fuera
-                ) {
-                    categories.forEach { category ->
-                        DropdownMenuItem(
-                            text = { Text(category) },
-                            onClick = {
-                                selectedCategory = category
-                                expanded = false // Cierra el menú al seleccionar
-                            }
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Campo para nombre
             TextField(
                 value = name,
@@ -85,8 +58,6 @@ fun GenerarCasosClientesView(navController: NavController) {
                 label = { Text("Nombre") },
                 modifier = Modifier.fillMaxWidth()
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Campo para correo
             TextField(
@@ -96,8 +67,6 @@ fun GenerarCasosClientesView(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Campo para teléfono
             TextField(
                 value = phone,
@@ -106,19 +75,46 @@ fun GenerarCasosClientesView(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Botón para subir identificación oficial (icono de pin)
             OutlinedButton(
                 onClick = { /* Acción para subir identificación */ },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Icon(Icons.Default.MoreVert, contentDescription = "Subir Identificación")
+                Icon(Icons.Filled.MoreVert, contentDescription = "Subir Identificación")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Subir Identificación Oficial")
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // Botón desplegable para seleccionar una categoría
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
+            ) {
+                TextField(
+                    value = selectedCategory,
+                    onValueChange = { },
+                    readOnly = true,
+                    label = { Text("Servicio") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    categories.forEach { category ->
+                        DropdownMenuItem(
+                            text = { Text(category) },
+                            onClick = {
+                                selectedCategory = category
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
 
             // TextBox para descripción del caso (máximo 150 caracteres)
             TextField(
@@ -126,18 +122,52 @@ fun GenerarCasosClientesView(navController: NavController) {
                 onValueChange = {
                     if (it.text.length <= 150) caseDescription = it
                 },
-                label = { Text("Descripción breve del caso") },
+                label = { Text("Breve Descripción") },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(120.dp),  // Ajusté la altura para que sea más manejable
                 visualTransformation = VisualTransformation.None,
                 maxLines = 4,
                 placeholder = { Text("Describe brevemente tu caso...") }
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            // Check de términos y condiciones
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = acceptTerms,
+                    onCheckedChange = { acceptTerms = it }
+                )
+                Text(text = "Acepto los términos y condiciones.")
+            }
 
-            Text("${caseDescription.text.length} / 150 caracteres")
+            // Check de aceptación de estudiantes en la cita
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = acceptStudents,
+                    onCheckedChange = { acceptStudents = it }
+                )
+                Text(text = "Acepto que alumnos estén presentes en la cita.")
+            }
+
+            Text(text = "Uno de nuestros abogados se pondrá en contacto para agendar la cita.")
+
+            Spacer(modifier = Modifier.weight(1f))  // Empuja el botón hacia abajo
+
+            // Botón para mandar solicitud
+            Button(
+                onClick = { /* Acción para enviar solicitud */ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)  // Ajusté la altura para que el botón sea más visible
+            ) {
+                Text(text = "Mandar Solicitud")
+            }
         }
     }
 }

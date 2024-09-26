@@ -1,6 +1,5 @@
-package com.example.binarybrainz.ColaboratorViews.Historial
+package com.example.binarybrainz.Abogados
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -68,22 +67,22 @@ fun HistorialScreen(navController: NavController) {
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
-                TitleSection()
+                HistorialTitleSection()
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                FilterSection()
+                HistorialFilterSection()
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                CasesList(navController = navController, cases = listOf("123", "333", "475", "758"))
+                HistorialCasesList(navController = navController, cases = listOf("123", "333", "475", "758"))
             }
         }
     }
 }
 
 @Composable
-fun TitleSection() {
+fun HistorialTitleSection() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -101,7 +100,7 @@ fun TitleSection() {
 }
 
 @Composable
-fun FilterSection() {
+fun HistorialFilterSection() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
@@ -131,7 +130,7 @@ fun FilterSection() {
 }
 
 @Composable
-fun CasesList(navController: NavController, cases: List<String>) {
+fun HistorialCasesList(navController: NavController, cases: List<String>) {
     LazyColumn {
         items(cases) { caseId ->
             CaseRow(navController = navController, caseId = caseId)
@@ -141,7 +140,7 @@ fun CasesList(navController: NavController, cases: List<String>) {
 }
 
 @Composable
-fun CaseItem(caseId: String, navController: NavController) {
+fun HistorialCaseItem(caseId: String, navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -38,10 +38,5 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState) {
             selected = false,
             onClick = { navController.navigate("menu_historial_view") }
         )
-        NavigationDrawerItem(
-            label = { Text(text = "Agregar Estudiante") },
-            selected = false,
-            onClick = { /* Navegación a Agregar Estudiante */ }
-        )
     }
 }

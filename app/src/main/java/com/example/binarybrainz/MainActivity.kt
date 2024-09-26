@@ -19,9 +19,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.binarybrainz.ColaboratorViews.CasosPendientes.MenuCasosPendientesScreen
-import com.example.binarybrainz.ColaboratorViews.CreacionCaso.MenuPlantillas
-import com.example.binarybrainz.ColaboratorViews.LoginView
+import com.example.binarybrainz.Abogados.HistorialScreen
+import com.example.binarybrainz.Abogados.MenuCasosPendientesScreen
+import com.example.binarybrainz.Abogados.MenuPlantillas
+import com.example.binarybrainz.Extras.LoginView
 import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 import com.example.binarybrainz.UserViews.MasInformacionView
@@ -29,7 +30,6 @@ import com.example.binarybrainz.UserViews.NecesitoAyudaView
 import com.example.binarybrainz.UserViews.GenerarCasosClientesView // Importa la nueva vista aquí
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.UserViews.VistaServicios
-import com.example.binarybrainz.ColaboratorViews.Historial.HistorialScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

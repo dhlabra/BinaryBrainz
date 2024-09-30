@@ -15,12 +15,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
+import com.example.binarybrainz.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarAbogados(
     navController: NavController,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    viewModel: UserViewModel
 ) {
     val scope = rememberCoroutineScope()
 
@@ -39,7 +41,7 @@ fun TopBarAbogados(
             }
         },
         actions = {
-            IconButton(onClick = { navController.navigate("login_view") }) {
+            IconButton(onClick = { viewModel.signOut() }) {
                 Icon(
                     imageVector = Icons.Filled.Person,
                     contentDescription = "Perfil de Usuario"

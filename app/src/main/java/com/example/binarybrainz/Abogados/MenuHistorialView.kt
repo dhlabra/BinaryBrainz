@@ -40,23 +40,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.StudentViews.CaseRow
+import com.example.binarybrainz.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
 
 @Composable
-fun HistorialScreen(navController: NavController) {
+fun HistorialScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerAbogados(navController = navController, drawerState = drawerState)
+            DrawerAbogados(navController = navController, drawerState = drawerState, viewModel)
         }
     ) {
         Scaffold(
             topBar = {
-                TopBarAbogados(navController = navController, drawerState = drawerState)
+                TopBarAbogados(navController = navController, drawerState = drawerState, viewModel)
             }
         ) { paddingValues ->
             Column(
@@ -165,10 +166,4 @@ fun HistorialCaseItem(caseId: String, navController: NavController) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HistorialScreenPreview() {
-    HistorialScreen(navController = rememberNavController())
 }

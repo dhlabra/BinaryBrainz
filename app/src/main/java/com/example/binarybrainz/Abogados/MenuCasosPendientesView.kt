@@ -37,23 +37,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.binarybrainz.StudentViews.CaseRow
+import com.example.binarybrainz.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
 
 
 @Composable
-fun MenuCasosPendientesScreen(navController: NavController) {
+fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerAbogados(navController = navController, drawerState = drawerState)
+            DrawerAbogados(navController = navController, drawerState = drawerState, viewModel)
         }
     ) {
         Scaffold(
             topBar = {
-                TopBarAbogados(navController = navController, drawerState = drawerState)
+                TopBarAbogados(navController = navController, drawerState = drawerState, viewModel)
             }
         ) { paddingValues ->
             // Contenido principal de MenuABGView

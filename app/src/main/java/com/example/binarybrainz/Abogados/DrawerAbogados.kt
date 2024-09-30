@@ -9,11 +9,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.binarybrainz.UserViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrawerAbogados(navController: NavController, drawerState: DrawerState) {
+fun DrawerAbogados(navController: NavController, drawerState: DrawerState, viewModel: UserViewModel) {
     val scope = rememberCoroutineScope()
 
     ModalDrawerSheet(
@@ -37,6 +38,11 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState) {
             label = { Text(text = "Historial") },
             selected = false,
             onClick = { navController.navigate("menu_historial_view") }
+        )
+        NavigationDrawerItem(
+            label = { Text(text = "Crear Usuario") },
+            selected = false,
+            onClick = { navController.navigate("signup_view") }
         )
     }
 }

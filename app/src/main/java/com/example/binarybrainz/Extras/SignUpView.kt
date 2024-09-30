@@ -4,8 +4,11 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
@@ -14,11 +17,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,9 +46,13 @@ import io.github.jan.supabase.gotrue.SessionStatus
 
 
 @Composable
-fun LoginView(navController: NavController, viewModel: UserViewModel) {
+fun SignUpView(viewModel: UserViewModel) {
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var nombre by remember { mutableStateOf("") }
+    var tipo by remember { mutableStateOf("") }
+    var selectedOption by remember { mutableStateOf("") }
 
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
@@ -53,7 +63,6 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
             .fillMaxSize()
             .padding(horizontal = 40.dp)
             .safeDrawingPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Image(
@@ -64,7 +73,7 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
         )
         EditNumberField(
             label = R.string.correo,
-            leadingIcon = Icons.Filled.AccountCircle,
+            leadingIcon = Icons.Filled.Email,
             value = email,
             onValueChange = { email = it },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -82,7 +91,7 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
             value = password,
             onValueChange = { password = it },
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             isPasswordVisible = false,
             modifier = Modifier
@@ -90,29 +99,58 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
                 .fillMaxWidth()
         )
 
+        EditNumberField(
+            label = R.string.nombre,
+            leadingIcon = Icons.Filled.Face,
+            value = nombre,
+            onValueChange = { nombre = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            isPasswordVisible = true,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = (selectedOption == "Abogado"),
+                onClick = { selectedOption = "Abogado" }
+            )
+            Text(text = "Abogado")
+        }
+
+        // Opción 2
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RadioButton(
+                selected = (selectedOption == "Practicante"),
+                onClick = { selectedOption = "Practicante" }
+            )
+            Text(text = "Practicante")
+        }
+
+        tipo = selectedOption
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Muestra un mensaje de error si existe
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+
+                )
+        }
+
         Button(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            onClick = { navController.navigate("menu_casos_pendientes_view") }
-        ) {
-            Text(text = "Menu Abogado")
-        }
-
-        // Botón adicional para "Menu Estudiantes"
-        Button(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            onClick = { navController.navigate("apartado_casos_compartidos_view") }
-        ) {
-            Text(text = "Menu Estudiantes")
-        }
-
-        // Botón de Sign In
-        Button(
-            onClick = { viewModel.signIn(email, password) },
-            modifier = Modifier.fillMaxWidth(),
+            onClick = { viewModel.signUp(email, password, tipo, nombre) },
             enabled = !isLoading
         ) {
             if (isLoading) {
@@ -121,31 +159,8 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
 
                     )
             } else {
-                Text("Sign In")
+                Text("Sign Up")
             }
         }
     }
-}
-
-@Composable
-fun EditNumberField(
-    @StringRes label: Int,
-    leadingIcon: ImageVector,
-    keyboardOptions: KeyboardOptions,
-    value: String,
-    onValueChange: (String) -> Unit,
-    isPasswordVisible: Boolean,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        leadingIcon = { Icon(imageVector = leadingIcon, contentDescription = null) },
-        onValueChange = onValueChange,
-        modifier = modifier,
-        label = { Text(stringResource(label)) },
-        shape = RoundedCornerShape(16.dp),
-        singleLine = true,
-        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyboardOptions = keyboardOptions
-    )
 }

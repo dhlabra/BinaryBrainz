@@ -1,4 +1,4 @@
-package com.example.binarybrainz.UserViews
+package com.example.binarybrainz.Clientes
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -159,14 +159,17 @@ fun GenerarCasosClientesView(navController: NavController) {
 
             Spacer(modifier = Modifier.weight(1f))  // Empuja el botón hacia abajo
 
-            // Botón para mandar solicitud
+            // Botón para navegar al calendario
             Button(
-                onClick = { /* Acción para enviar solicitud */ },
+                onClick = {
+                    // Navegación hacia la vista del calendario
+                    navController.navigate("horarios_disponibles_view")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)  // Ajusté la altura para que el botón sea más visible
             ) {
-                Text(text = "Mandar Solicitud")
+                Text(text = "Siguiente")
             }
         }
     }

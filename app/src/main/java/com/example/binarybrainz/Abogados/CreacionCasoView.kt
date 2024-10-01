@@ -8,19 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
-import com.example.binarybrainz.UserViewModel
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
-import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
-
-
 
 @Composable
 fun MenuPlantillas(navController: NavController, viewModel: UserViewModel) {
@@ -34,7 +29,15 @@ fun MenuPlantillas(navController: NavController, viewModel: UserViewModel) {
     ) {
         Scaffold(
             topBar = {
-                TopBarAbogados(navController = navController, drawerState = drawerState, viewModel)
+                TopBarAbogados(
+                    navController = navController,
+                    drawerState = drawerState,
+                    viewModel = viewModel,
+                    onUserIconClick = {
+                        // Aquí se redirige al login cuando se presiona el icono de usuario
+                        navController.navigate("login_view")
+                    }
+                )
             }
         ) { paddingValues ->
             // Contenido principal de MenuABGView
@@ -55,7 +58,6 @@ fun MenuPlantillas(navController: NavController, viewModel: UserViewModel) {
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxSize()
-                        .padding(paddingValues)
                         .horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically

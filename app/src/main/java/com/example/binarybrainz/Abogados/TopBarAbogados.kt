@@ -15,21 +15,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
-import com.example.binarybrainz.UserViewModel
+import com.example.binarybrainz.Extras.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarAbogados(
     navController: NavController,
     drawerState: DrawerState,
-    viewModel: UserViewModel
+    viewModel: UserViewModel,
+    onUserIconClick: () -> Unit // Parámetro para definir la acción al hacer click en el ícono de usuario
 ) {
     val scope = rememberCoroutineScope()
 
     TopAppBar(
         title = {
             Text(
-                text = "",
+                text = "Panel de Abogados", // Puedes ajustar el texto del título si lo deseas
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center
@@ -41,7 +42,9 @@ fun TopBarAbogados(
             }
         },
         actions = {
-            IconButton(onClick = { viewModel.signOut() }) {
+            IconButton(onClick = {
+                onUserIconClick() // Acción cuando se presiona el ícono de usuario
+            }) {
                 Icon(
                     imageVector = Icons.Filled.Person,
                     contentDescription = "Perfil de Usuario"

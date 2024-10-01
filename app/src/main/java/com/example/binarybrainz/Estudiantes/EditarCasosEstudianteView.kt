@@ -81,7 +81,10 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Acción de perfil de usuario */ }) {
+                    IconButton(onClick = {
+                        // Redirige al login cuando se presiona el ícono de usuario
+                        navController.navigate("login_view")
+                    }) {
                         Icon(imageVector = Icons.Filled.Person, contentDescription = "Perfil de Usuario")
                     }
                 }
@@ -163,29 +166,6 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                             fontWeight = FontWeight.Normal,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
-                        Divider(color = Color.Gray, thickness = 0.5.dp)
-                        // Información de la identificación oficial
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "IDENTIFICACIÓN OFICIAL:",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            IconButton(onClick = { /* Acción para mostrar identificación */ }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Edit,
-                                    contentDescription = "Ver Identificación",
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                        }
                         Divider(color = Color.Gray, thickness = 0.5.dp)
                         // Información de la descripción
                         Text(

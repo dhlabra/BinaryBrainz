@@ -39,7 +39,10 @@ fun ApartadoCasosCompartidosView(navController: NavController) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Acción de perfil de usuario */ }) {
+                    IconButton(onClick = {
+                        // Redirige al login cuando se presiona el ícono de usuario
+                        navController.navigate("login_view")
+                    }) {
                         Icon(imageVector = Icons.Filled.Person, contentDescription = "Perfil de Usuario")
                     }
                 },

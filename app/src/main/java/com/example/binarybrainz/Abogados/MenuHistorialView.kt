@@ -34,13 +34,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.StudentViews.CaseRow
-import com.example.binarybrainz.UserViewModel
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
 
@@ -57,7 +55,14 @@ fun HistorialScreen(navController: NavController, viewModel: UserViewModel) {
     ) {
         Scaffold(
             topBar = {
-                TopBarAbogados(navController = navController, drawerState = drawerState, viewModel)
+                TopBarAbogados(
+                    navController = navController,
+                    drawerState = drawerState,
+                    viewModel
+                ) {
+                    // Aquí se redirige al login cuando se presiona el icono de usuario
+                    navController.navigate("login_view")
+                }
             }
         ) { paddingValues ->
             Column(

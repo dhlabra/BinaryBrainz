@@ -117,10 +117,10 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
-                    selected = (selectedOption == "Practicante"),
-                    onClick = { selectedOption = "Practicante" }
+                    selected = (selectedOption == "Estudiante"),
+                    onClick = { selectedOption = "Estudiante" }
                 )
-                Text(text = "Practicante")
+                Text(text = "Estudiante")
             }
 
             tipo = selectedOption

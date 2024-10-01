@@ -35,7 +35,6 @@ import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 import com.example.binarybrainz.UserViews.MasInformacionView
-import com.example.binarybrainz.UserViews.NecesitoAyudaView
 import com.example.binarybrainz.Clientes.GenerarCasosClientesView
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.Clientes.VistaServicios
@@ -66,6 +65,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun UserAuthScreen(viewModel: UserViewModel) {
 
@@ -92,9 +92,6 @@ class MainActivity : ComponentActivity() {
             }
             composable("signup_view") {
                 SignUpView(navController, viewModel)
-            }
-            composable("necesito_ayuda_view") {
-                NecesitoAyudaView()
             }
             composable("generar_casos_clientes_view") { // Añade la navegación para GenerarCasosClientesView
                 GenerarCasosClientesView(navController)

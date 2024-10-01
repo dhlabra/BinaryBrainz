@@ -80,14 +80,6 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Go Back")
                     }
                 },
-                actions = {
-                    IconButton(onClick = {
-                        // Redirige al login cuando se presiona el ícono de usuario
-                        navController.navigate("login_view")
-                    }) {
-                        Icon(imageVector = Icons.Filled.Person, contentDescription = "Perfil de Usuario")
-                    }
-                }
             )
         }
     ) { paddingValues ->

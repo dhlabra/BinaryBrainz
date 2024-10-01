@@ -29,7 +29,7 @@ import com.example.binarybrainz.Abogados.HistorialScreen
 import com.example.binarybrainz.Abogados.MenuCasosPendientesScreen
 import com.example.binarybrainz.Abogados.MenuPlantillas
 import com.example.binarybrainz.Extras.LoginView
-import com.example.binarybrainz.Extras.SignUpView
+import com.example.binarybrainz.Abogados.SignUpView
 import com.example.binarybrainz.Extras.UserRepository
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
@@ -38,7 +38,7 @@ import com.example.binarybrainz.UserViews.MasInformacionView
 import com.example.binarybrainz.UserViews.NecesitoAyudaView
 import com.example.binarybrainz.Clientes.GenerarCasosClientesView
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
-import com.example.binarybrainz.UserViews.VistaServicios
+import com.example.binarybrainz.Clientes.VistaServicios
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.SessionStatus
@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                 LoginView(navController, viewModel)
             }
             composable("signup_view") {
-                SignUpView(viewModel)
+                SignUpView(navController, viewModel)
             }
             composable("necesito_ayuda_view") {
                 NecesitoAyudaView()

@@ -3,6 +3,7 @@ package com.example.binarybrainz.Clientes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,12 +26,16 @@ fun GenerarCasosClientesView(navController: NavController) {
     var phone by remember { mutableStateOf(TextFieldValue("")) }
     var caseDescription by remember { mutableStateOf(TextFieldValue("")) }
     var expanded by remember { mutableStateOf(false) }
-    var isAttacker by remember { mutableStateOf(false) }
-    var isDefender by remember { mutableStateOf(false) }
     var acceptTerms by remember { mutableStateOf(false) }
     var acceptStudents by remember { mutableStateOf(false) }
 
+    // Categorías de servicio para el dropdown
     val categories = listOf("Violencia Doméstica", "Sentencia de Divorcio", "Testamento", "Pensión Alimenticia")
+
+    // Condición para habilitar el botón "Siguiente"
+    val isFormComplete = name.text.isNotBlank() && email.text.isNotBlank() && phone.text.isNotBlank()
+            && caseDescription.text.isNotBlank() && selectedCategory.isNotBlank()
+            && acceptTerms && acceptStudents
 
     Scaffold(
         topBar = {
@@ -85,24 +90,24 @@ fun GenerarCasosClientesView(navController: NavController) {
                 Text("Subir Identificación Oficial")
             }
 
-            // Botón desplegable para seleccionar una categoría
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded }
-            ) {
-                TextField(
+            // Botón desplegable para seleccionar una categoría de servicio
+            Box {
+                OutlinedTextField(
                     value = selectedCategory,
                     onValueChange = { },
                     readOnly = true,
                     label = { Text("Servicio") },
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                        IconButton(onClick = { expanded = true }) {
+                            Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Seleccionar servicio")
+                        }
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
-                ExposedDropdownMenu(
+                DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false }
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     categories.forEach { category ->
                         DropdownMenuItem(
@@ -162,12 +167,14 @@ fun GenerarCasosClientesView(navController: NavController) {
             // Botón para navegar al calendario
             Button(
                 onClick = {
-                    // Navegación hacia la vista del calendario
-                    navController.navigate("horarios_disponibles_view")
+                    if (isFormComplete) {
+                        navController.navigate("horarios_disponibles_view")
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)  // Ajusté la altura para que el botón sea más visible
+                    .height(60.dp),
+                enabled = isFormComplete  // Deshabilitado hasta que el formulario esté completo
             ) {
                 Text(text = "Siguiente")
             }

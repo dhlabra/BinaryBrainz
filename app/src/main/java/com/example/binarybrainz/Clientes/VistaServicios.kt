@@ -44,8 +44,8 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
                         painter = painterResource(id = R.drawable.clinicapenal),
                         contentDescription = "Logotipo de la Clínica Penal",
                         modifier = Modifier
-                            .size(80.dp)
-                            .padding(6.dp)
+                            .size(100.dp)
+
                     )
                 },
                 actions = {

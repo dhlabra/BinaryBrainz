@@ -128,7 +128,7 @@ fun GenerarCasosClientesView(navController: NavController) {
                     .height(120.dp),  // Ajusté la altura para que sea más manejable
                 visualTransformation = VisualTransformation.None,
                 maxLines = 4,
-                placeholder = { Text("Describe brevemente tu caso...") }
+                placeholder = { Text("(150 caractéres max)") }
             )
 
             // Check de términos y condiciones

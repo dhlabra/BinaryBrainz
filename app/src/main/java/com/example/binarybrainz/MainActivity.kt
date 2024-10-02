@@ -1,9 +1,12 @@
 package com.example.binarybrainz
 
+import HorariosDisponiblesView
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -26,14 +29,15 @@ import com.example.binarybrainz.Abogados.HistorialScreen
 import com.example.binarybrainz.Abogados.MenuCasosPendientesScreen
 import com.example.binarybrainz.Abogados.MenuPlantillas
 import com.example.binarybrainz.Extras.LoginView
-import com.example.binarybrainz.Extras.SignUpView
+import com.example.binarybrainz.Abogados.SignUpView
+import com.example.binarybrainz.Extras.UserRepository
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.StudentViews.ApartadoCasosCompartidosView
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 import com.example.binarybrainz.UserViews.MasInformacionView
-import com.example.binarybrainz.UserViews.NecesitoAyudaView
-import com.example.binarybrainz.UserViews.GenerarCasosClientesView // Importa la nueva vista aquí
+import com.example.binarybrainz.Clientes.GenerarCasosClientesView
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
-import com.example.binarybrainz.UserViews.VistaServicios
+import com.example.binarybrainz.Clientes.VistaServicios
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.SessionStatus
@@ -61,6 +65,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun UserAuthScreen(viewModel: UserViewModel) {
 
@@ -74,6 +79,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun AppNavigation(viewModel: UserViewModel) {
         val navController = rememberNavController()
@@ -85,10 +91,7 @@ class MainActivity : ComponentActivity() {
                 LoginView(navController, viewModel)
             }
             composable("signup_view") {
-                SignUpView(viewModel)
-            }
-            composable("necesito_ayuda_view") {
-                NecesitoAyudaView()
+                SignUpView(navController, viewModel)
             }
             composable("generar_casos_clientes_view") { // Añade la navegación para GenerarCasosClientesView
                 GenerarCasosClientesView(navController)
@@ -116,9 +119,18 @@ class MainActivity : ComponentActivity() {
             composable("creacion_caso_view") {
                 MenuPlantillas(navController, viewModel)
             }
+            composable("horarios_disponibles_view") {
+                HorariosDisponiblesView(navController, viewModel)
+            }
         }
     }
 }
+@Composable
+fun CalendarView(navController: NavController) {
+    // Aquí iría la lógica de la vista del calendario
+    Text("Aquí se mostrará el calendario para agendar citas.")
+}
+
 
 @Composable
 fun ImageCardVertical(imageId: Int, description: String, onClick: () -> Unit) {

@@ -1,9 +1,8 @@
-package com.example.binarybrainz
+package com.example.binarybrainz.Extras
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.binarybrainz.UserRepository
 import io.github.jan.supabase.gotrue.SessionStatus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

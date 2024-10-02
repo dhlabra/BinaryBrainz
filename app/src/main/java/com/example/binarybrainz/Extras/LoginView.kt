@@ -2,24 +2,16 @@ package com.example.binarybrainz.Extras
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,20 +21,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.R
-import com.example.binarybrainz.UserViewModel
-import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
-import io.github.jan.supabase.gotrue.SessionStatus
-
 
 @Composable
 fun LoginView(navController: NavController, viewModel: UserViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
@@ -56,40 +43,70 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        // Logo de la Clínica Penal como botón que redirige a VistaServicios.kt
         Image(
             painter = painterResource(R.drawable.clinicapenal),
             contentDescription = null,
             modifier = Modifier
                 .padding(16.dp)
+                .clickable { navController.navigate("vista_servicios") } // Redirige al menu principal al hacer clic en el logo
         )
-        EditNumberField(
-            label = R.string.correo,
-            leadingIcon = Icons.Filled.AccountCircle,
+
+        // Campo de email
+        OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Next
-            ),
-            isPasswordVisible = true,
+            label = { Text(stringResource(R.string.correo)) },
+            leadingIcon = { Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = null) },
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+            singleLine = true,
             modifier = Modifier
                 .padding(bottom = 16.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp)
         )
 
-        EditNumberField(
-            label = R.string.password,
-            leadingIcon = Icons.Filled.Lock,
+        // Campo de contraseña con visibilidad toggle
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            isPasswordVisible = false,
+            label = { Text(stringResource(id = R.string.password)) },
+            leadingIcon = {
+                Icon(imageVector = Icons.Filled.Lock, contentDescription = null)
+            },
+            trailingIcon = {
+                val image = if (passwordVisible) Icons.Filled.ThumbUp else Icons.Filled.Edit
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, contentDescription = null)
+                }
+            },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+            singleLine = true,
             modifier = Modifier
                 .padding(bottom = 16.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp)
         )
 
+        // Botón de Sign In
+        Button(
+            onClick = { viewModel.signIn(email, password) },
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            enabled = !isLoading
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                )
+            } else {
+                Text("Sign In")
+            }
+        }
+
+        // Botón para ir a Menu Abogado
         Button(
             modifier = Modifier
                 .padding(8.dp)
@@ -109,20 +126,23 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
             Text(text = "Menu Estudiantes")
         }
 
-        // Botón de Sign In
+        // Botón para regresar a VistaServicios
         Button(
-            onClick = { viewModel.signIn(email, password) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+            onClick = { navController.navigate("vista_servicios") }
         ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
+            Text(text = "Regresar al Menu Principal")
+        }
 
-                    )
-            } else {
-                Text("Sign In")
-            }
+        // Mensaje de error
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 8.dp)
+            )
         }
     }
 }

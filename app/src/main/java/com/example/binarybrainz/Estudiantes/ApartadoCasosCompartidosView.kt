@@ -33,13 +33,11 @@ fun ApartadoCasosCompartidosView(navController: NavController) {
                         fontWeight = FontWeight.Normal
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
                 actions = {
-                    IconButton(onClick = { /* Acción de perfil de usuario */ }) {
+                    IconButton(onClick = {
+                        // Redirige al login cuando se presiona el ícono de usuario
+                        navController.navigate("login_view")
+                    }) {
                         Icon(imageVector = Icons.Filled.Person, contentDescription = "Perfil de Usuario")
                     }
                 },

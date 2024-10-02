@@ -1,31 +1,14 @@
 package com.example.binarybrainz.Abogados
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.Button
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,10 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.binarybrainz.StudentViews.CaseRow
-import com.example.binarybrainz.UserViewModel
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
-
 
 @Composable
 fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewModel) {
@@ -54,10 +36,17 @@ fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewM
     ) {
         Scaffold(
             topBar = {
-                TopBarAbogados(navController = navController, drawerState = drawerState, viewModel)
+                TopBarAbogados(
+                    navController = navController,
+                    drawerState = drawerState,
+                    viewModel
+                ) {
+                    // Redirige al login cuando se presiona el ícono de usuario
+                    navController.navigate("login_view")
+                }
             }
         ) { paddingValues ->
-            // Contenido principal de MenuABGView
+            // Contenido principal de MenuCasosPendientesScreen
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -74,7 +63,7 @@ fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewM
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                CasesList(navController = navController, cases = listOf("123", "333", "475", "758") )
+                CasesList(navController = navController, cases = listOf("123", "333", "475", "758"))
             }
         }
     }

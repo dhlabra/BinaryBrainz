@@ -1,4 +1,4 @@
-package com.example.binarybrainz.UserViews
+package com.example.binarybrainz.Clientes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -29,7 +29,7 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
                 text = { Text("Necesito Ayuda") },
                 icon = { Icon(Icons.Filled.Info, contentDescription = null) },
                 modifier = modifier.padding(8.dp),
-                onClick = { navController.navigate("generar_casos_clientes_view") } // Navegación a la nueva vista
+                onClick = { navController.navigate("generar_casos_clientes_view") } // Navegación a la vista para generar casos
             )
         },
         modifier = modifier.fillMaxSize(),
@@ -44,13 +44,13 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
                         painter = painterResource(id = R.drawable.clinicapenal),
                         contentDescription = "Logotipo de la Clínica Penal",
                         modifier = Modifier
-                            .size(80.dp)
-                            .padding(6.dp)
+                            .size(100.dp)
+
                     )
                 },
                 actions = {
                     IconButton(onClick = { navController.navigate("login_view") }) {
-                        Icon(imageVector = Icons.Default.Person, contentDescription = null)
+                        Icon(imageVector = Icons.Default.Person, contentDescription = "Perfil")
                     }
                 }
             )
@@ -62,8 +62,9 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(-60.dp), // Ajuste de espacio entre los elementos
         ) {
+            // Tarjetas de servicios disponibles con navegación
             ImageCardVertical(
                 imageId = R.drawable.violenciadomestica,
                 description = "Violencia Doméstica",

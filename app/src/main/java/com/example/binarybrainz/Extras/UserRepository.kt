@@ -1,4 +1,4 @@
-package com.example.binarybrainz
+package com.example.binarybrainz.Extras
 
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.gotrue.SessionStatus

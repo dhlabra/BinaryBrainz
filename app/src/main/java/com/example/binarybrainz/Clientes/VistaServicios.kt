@@ -16,13 +16,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) {
+fun VistaServicios(navController: NavController, viewModel: UserViewModel, modifier: Modifier = Modifier) {
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -86,13 +87,5 @@ fun VistaServicios(navController: NavController, modifier: Modifier = Modifier) 
                 onClick = { navController.navigate("mas_informacion_view/pension_alimenticia") }
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun VistaServiciosPreview() {
-    BinaryBrainzTheme {
-        VistaServicios(navController = rememberNavController())
     }
 }

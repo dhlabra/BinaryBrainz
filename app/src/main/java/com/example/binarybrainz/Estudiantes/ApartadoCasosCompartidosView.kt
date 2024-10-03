@@ -18,11 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ApartadoCasosCompartidosView(navController: NavController) {
+fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -88,13 +89,5 @@ fun CaseRow(navController: NavController, caseId: String) {
         IconButton(onClick = { navController.navigate("edit_case_view/$caseId") }) {
             Icon(imageVector = Icons.Filled.Edit, contentDescription = "Editar Caso")
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ApartadoCasosCompartidosViewPreview() {
-    BinaryBrainzTheme {
-        ApartadoCasosCompartidosView(navController = rememberNavController())
     }
 }

@@ -22,6 +22,17 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
     val isLoading = mutableStateOf(false)
     val errorMessage = mutableStateOf("")
 
+    var userRole = mutableStateOf("")
+    init {
+        viewModelScope.launch {
+            sessionState.collect { status ->
+                if (status is SessionStatus.Authenticated) {
+                    userRole.value = userRepository.getUserRole()
+                }
+            }
+        }
+    }
+
     fun signIn(email: String, password: String) {
         isLoading.value = true
         errorMessage.value = ""
@@ -36,12 +47,13 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun signUp(email: String, password: String, tipo: String, nombre: String) {
+    fun signUp(email: String, password: String, role: String) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
-                userRepository.signUp(email, password, tipo, nombre)
+                userRepository.signUp(email, password)
+                userRepository.setUserRole(role)
             }catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {

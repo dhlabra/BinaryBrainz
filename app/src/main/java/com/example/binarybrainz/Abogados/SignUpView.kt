@@ -27,7 +27,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var nombre by remember { mutableStateOf("") }
-    var tipo by remember { mutableStateOf("") }
+    var rol by remember { mutableStateOf("") }
     var selectedOption by remember { mutableStateOf("") }
 
     val isLoading by viewModel.isLoading
@@ -123,7 +123,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                 Text(text = "Estudiante")
             }
 
-            tipo = selectedOption
+            rol = selectedOption
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -138,7 +138,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
-                onClick = { viewModel.signUp(email, password, tipo, nombre) },
+                onClick = { viewModel.signUp(email, password, rol) },
                 enabled = !isLoading
             ) {
                 if (isLoading) {

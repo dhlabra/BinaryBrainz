@@ -47,13 +47,12 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun signUp(email: String, password: String, role: String) {
+    fun signUp(email: String, password: String) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
                 userRepository.signUp(email, password)
-                userRepository.setUserRole(role)
             }catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {

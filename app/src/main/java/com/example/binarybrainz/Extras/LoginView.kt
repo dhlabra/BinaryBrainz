@@ -23,6 +23,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.binarybrainz.Abogados.SignUpView
 import com.example.binarybrainz.R
 
 @Composable
@@ -106,34 +107,14 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
             }
         }
 
-        // Botón para ir a Menu Abogado
-        Button(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            onClick = { navController.navigate("menu_casos_pendientes_view") }
-        ) {
-            Text(text = "Menu Abogado")
-        }
-
         // Botón adicional para "Menu Estudiantes"
         Button(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            onClick = { navController.navigate("apartado_casos_compartidos_view") }
+            onClick = { navController.navigate("signup_admin_view") }
         ) {
-            Text(text = "Menu Estudiantes")
-        }
-
-        // Botón para regresar a VistaServicios
-        Button(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            onClick = { navController.navigate("vista_servicios") }
-        ) {
-            Text(text = "Regresar al Menu Principal")
+            Text(text = "Sign Up")
         }
 
         // Mensaje de error

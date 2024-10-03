@@ -17,11 +17,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.Abogados.AbogadoView
+import com.example.binarybrainz.Clientes.ClienteView
+import com.example.binarybrainz.Clientes.VistaServicios
 import com.example.binarybrainz.Extras.LoginView
 import com.example.binarybrainz.Extras.UserRepository
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.Estudiantes.EstudianteView
+import com.example.binarybrainz.Extras.LoginInject
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.SessionStatus
@@ -60,12 +63,13 @@ class MainActivity : ComponentActivity() {
                 when (userRole) {
                     "abogado" -> AbogadoView(navController, viewModel)
                     "estudiante" -> EstudianteView(navController, viewModel)
+                    "cliente" -> ClienteView(navController, viewModel)
                     else -> LoadingScreen()
                 }
             }
             SessionStatus.LoadingFromStorage -> LoadingScreen()
             SessionStatus.NetworkError -> ErrorScreen("Network error")
-            is SessionStatus.NotAuthenticated -> LoginView(navController, viewModel)
+            is SessionStatus.NotAuthenticated -> LoginInject(navController, viewModel)
         }
     }
 

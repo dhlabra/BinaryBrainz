@@ -15,12 +15,12 @@ import com.example.binarybrainz.Extras.UserViewModel
 
 @Composable
 fun GeneralNavigation(navController: NavHostController, modifier: Modifier = Modifier, viewModel: UserViewModel) {
-    NavHost(navController = navController, startDestination = "vista_servicios") {
-        composable("vista_servicios") {
-            VistaServicios(navController, viewModel)
-        }
+    NavHost(navController = navController, startDestination = "login_view") {
         composable("login_view") {
             LoginView(navController, viewModel)
+        }
+        composable("signup_admin_view") {
+            SignUpView(navController, viewModel)
         }
     }
 }

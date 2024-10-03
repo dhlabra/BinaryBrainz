@@ -1,4 +1,4 @@
-package com.example.binarybrainz.Estudiantes
+package com.example.binarybrainz.Clientes
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,17 +17,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.binarybrainz.Extras.UserViewModel
+import com.example.binarybrainz.Navigation.ClienteNavigation
 import com.example.binarybrainz.Navigation.EstudianteNavigation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EstudianteView(navController: NavHostController, viewModel: UserViewModel) {
+fun ClienteView(navController: NavHostController, viewModel: UserViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Nombre Estudiante",
+                        text = "Nombre Cliente",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Normal
                     )
@@ -46,7 +47,7 @@ fun EstudianteView(navController: NavHostController, viewModel: UserViewModel) {
             )
         },
         content = { innerPadding ->
-            EstudianteNavigation(navController = navController, modifier = Modifier.padding(innerPadding), viewModel)
+            ClienteNavigation(navController = navController, modifier = Modifier.padding(innerPadding), viewModel)
         }
     )
 }

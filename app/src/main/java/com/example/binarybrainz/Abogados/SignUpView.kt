@@ -34,16 +34,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
     val errorMessage by viewModel.errorMessage
 
     Scaffold(
-        topBar = {
-            TopBarAbogados(
-                navController = navController,
-                drawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-                viewModel = viewModel
-            ) {
-                // Acción para el ícono de usuario que navega al login
-                navController.navigate("login_view")
-            }
-        }
+        topBar = {}
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -138,7 +129,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
-                onClick = { viewModel.signUp(email, password, rol) },
+                onClick = { viewModel.signUp(email, password) },
                 enabled = !isLoading
             ) {
                 if (isLoading) {

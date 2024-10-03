@@ -1,4 +1,3 @@
-// Menu Principal
 package com.example.binarybrainz.Clientes
 
 import androidx.compose.foundation.Image

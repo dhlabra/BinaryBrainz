@@ -24,8 +24,5 @@ fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Mod
         composable("menu_historial_view") {
             HistorialScreen(navController, viewModel)
         }
-        composable("signup_admin_view") {
-            SignUpView(navController, viewModel)
-        }
     }
 }

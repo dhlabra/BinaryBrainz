@@ -35,10 +35,7 @@ fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserVi
                     )
                 },
                 actions = {
-                    IconButton(onClick = {
-                        // Redirige al login cuando se presiona el ícono de usuario
-                        navController.navigate("login_view")
-                    }) {
+                    IconButton(onClick = { viewModel.signOut() }) {
                         Icon(imageVector = Icons.Filled.Person, contentDescription = "Perfil de Usuario")
                     }
                 },

@@ -40,9 +40,9 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState, viewM
             onClick = { navController.navigate("menu_historial_view") }
         )
         NavigationDrawerItem(
-            label = { Text(text = "Crear Usuario") },
+            label = { Text(text = "Asignar Roles") },
             selected = false,
-            onClick = { navController.navigate("signup_view") }
+            onClick = {  }
         )
     }
 }

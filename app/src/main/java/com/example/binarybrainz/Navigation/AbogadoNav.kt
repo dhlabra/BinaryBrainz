@@ -11,6 +11,7 @@ import com.example.binarybrainz.Abogados.MenuCasosPendientesScreen
 import com.example.binarybrainz.Abogados.MenuPlantillas
 import com.example.binarybrainz.Abogados.SignUpView
 import com.example.binarybrainz.Extras.UserViewModel
+import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 
 @Composable
 fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Modifier, viewModel: UserViewModel) {
@@ -23,6 +24,10 @@ fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Mod
         }
         composable("menu_historial_view") {
             HistorialScreen(navController, viewModel)
+        }
+        composable("edit_case_view/{caseId}") { backStackEntry ->
+            val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
+            EditarCasosEstudiantesView(navController, caseId)
         }
     }
 }

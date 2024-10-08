@@ -93,28 +93,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth()
             )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = (selectedOption == "Abogado"),
-                    onClick = { selectedOption = "Abogado" }
-                )
-                Text(text = "Abogado")
-            }
-
-            // Opción 2
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = (selectedOption == "Estudiante"),
-                    onClick = { selectedOption = "Estudiante" }
-                )
-                Text(text = "Estudiante")
-            }
-
-            rol = selectedOption
+            rol = "cliente"
 
             Spacer(modifier = Modifier.height(16.dp))
 

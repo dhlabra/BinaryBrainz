@@ -10,6 +10,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.binarybrainz.Clientes.GenerarCasosClientesView
 import com.example.binarybrainz.Clientes.VistaServicios
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.UserViews.MasInformacionView
@@ -30,6 +31,9 @@ fun ClienteNavigation(navController: NavHostController, modifier: Modifier = Mod
         }
         composable("horarios_disponibles_view") {
                 HorariosDisponiblesView(navController, viewModel)
+        }
+        composable("generar_casos_clientes_view") {
+                GenerarCasosClientesView(navController)
         }
     }
 }

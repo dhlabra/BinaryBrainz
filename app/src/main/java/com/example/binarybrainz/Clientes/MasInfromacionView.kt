@@ -27,32 +27,32 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
             Quadruple(
                 R.drawable.violenciadomestica, // Asegúrate de tener la imagen correcta
                 "Violencia Doméstica",
-                "Información detallada sobre violencia doméstica...",
-                listOf("Ejemplo 1", "Ejemplo 2", "Ejemplo 3")
+                "La violencia doméstica es un patrón de comportamiento utilizado para establecer poder y control sobre otra persona en el contexto de una relación doméstica. Puede tomar muchas formas, incluyendo abuso físico, emocional, sexual, psicológico y económico." ,
+                listOf("Insultos constantes y humillaciones.", "Golpear o empujar a la pareja durante una discusión.", "Controlar el dinero de la pareja.", "Amenazar con hacerle daño a la víctima o a sus seres queridos si no obedece.")
             )
         }
         "sentencia_divorcio" -> {
             Quadruple(
                 R.drawable.sentenciadedivorcio,
                 "Sentencia de Divorcio",
-                "Información detallada sobre sentencia de divorcio...",
-                listOf("Ejemplo A", "Ejemplo B", "Ejemplo C")
+                "Una sentencia de divorcio es un fallo judicial que pone fin legalmente a un matrimonio. Es el documento final emitido por un juez que establece los términos bajo los cuales los cónyuges quedan legalmente divorciados.",
+                listOf("Asignación de la custodia compartida de los hijos", "El padre se obliga a pagar una pensión alimenticia mensual para el mantenimiento de los hijos.", "Una madre obtiene la custodia física.")
             )
         }
         "testamento" -> {
             Quadruple(
                 R.drawable.testamento,
                 "Testamento",
-                "Información detallada sobre testamentos...",
-                listOf("Ejemplo X", "Ejemplo Y", "Ejemplo Z")
+                "Un testamento es un documento legal que expresa las últimas voluntades de una persona con respecto a la distribución de sus bienes y propiedades tras su fallecimiento. También puede incluir otras disposiciones importantes, como la designación de tutores para los hijos menores y la instrucción sobre el manejo de deudas pendientes.",
+                listOf("Dejar una propiedad a un hijo o familiar", "Asignar una suma de dinero a un beneficiario", "Distribuir bienes personales")
             )
         }
         "pension_alimenticia" -> {
             Quadruple(
                 R.drawable.pensionalimenticia,
                 "Pensión Alimenticia",
-                "Información detallada sobre pensión alimenticia...",
-                listOf("Ejemplo 1", "Ejemplo 2", "Ejemplo 3")
+                "La pensión alimenticia es una obligación legal que impone a una persona, generalmente un padre o madre, para contribuir al bienestar financiero de sus hijos o, en algunos casos, de su expareja. Esta pensión está destinada a cubrir necesidades básicas como alimentación, educación, vivienda, salud, y otros gastos esenciales.",
+                listOf("Pago mensual para alimentos y vivienda", "Contribución a la educación privada o universitaria", "Cobertura de gastos médicos")
             )
         }
         else -> {

@@ -23,12 +23,6 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState, viewM
         IconButton(onClick = { scope.launch { drawerState.close() } }) {
             Icon(imageVector = Icons.Filled.Close, contentDescription = "Cerrar menú")
         }
-        HorizontalDivider()
-        NavigationDrawerItem(
-            label = { Text(text = "Creación de Caso") },
-            selected = false,
-            onClick = { navController.navigate("creacion_caso_view") }
-        )
         NavigationDrawerItem(
             label = { Text(text = "Casos Pendientes") },
             selected = false,

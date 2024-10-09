@@ -1,18 +1,21 @@
 package com.example.binarybrainz.Clientes
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
@@ -21,26 +24,21 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 @Composable
 fun GenerarCasosClientesView(navController: NavController) {
     var selectedCategory by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf(TextFieldValue("")) }
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var phone by remember { mutableStateOf(TextFieldValue("")) }
     var caseDescription by remember { mutableStateOf(TextFieldValue("")) }
     var expanded by remember { mutableStateOf(false) }
     var acceptTerms by remember { mutableStateOf(false) }
     var acceptStudents by remember { mutableStateOf(false) }
 
-    // Categorías de servicio para el dropdown
-    val categories = listOf("Violencia Doméstica", "Sentencia de Divorcio", "Testamento", "Pensión Alimenticia")
+    // Servicios disponibles para el dropdown
+    val services = List(10) { "Servicio ${it + 1}" }
 
     // Condición para habilitar el botón "Siguiente"
-    val isFormComplete = name.text.isNotBlank() && email.text.isNotBlank() && phone.text.isNotBlank()
-            && caseDescription.text.isNotBlank() && selectedCategory.isNotBlank()
-            && acceptTerms && acceptStudents
+    val isFormComplete = selectedCategory.isNotBlank() && caseDescription.text.isNotBlank() && acceptTerms && acceptStudents
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Solicitud de Ayuda") },
+                title = { Text("Solicitud de Ayuda", fontWeight = FontWeight.Bold, fontSize = 22.sp) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
@@ -54,66 +52,35 @@ fun GenerarCasosClientesView(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)  // Espaciado entre los elementos
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Campo para nombre
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Nombre") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Campo para correo
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Correo") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Campo para teléfono
-            TextField(
-                value = phone,
-                onValueChange = { phone = it },
-                label = { Text("Teléfono") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            // Botón para subir identificación oficial (icono de pin)
-            OutlinedButton(
-                onClick = { /* Acción para subir identificación */ },
-                modifier = Modifier.fillMaxWidth()
+            // ExposedDropdownMenuBox para seleccionar el servicio
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded }
             ) {
-                Icon(Icons.Filled.MoreVert, contentDescription = "Subir Identificación")
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Subir Identificación Oficial")
-            }
-
-            // Botón desplegable para seleccionar una categoría de servicio
-            Box {
                 OutlinedTextField(
                     value = selectedCategory,
-                    onValueChange = { },
+                    onValueChange = {},
                     readOnly = true,
-                    label = { Text("Servicio") },
+                    label = { Text("Selecciona Servicio") },
                     trailingIcon = {
-                        IconButton(onClick = { expanded = true }) {
-                            Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Seleccionar servicio")
-                        }
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .menuAnchor() // Para que el menú aparezca directamente bajo el campo
+                        .fillMaxWidth()
                 )
-                DropdownMenu(
+                ExposedDropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.fillMaxWidth()
+                    onDismissRequest = { expanded = false }
                 ) {
-                    categories.forEach { category ->
+                    services.forEach { service ->
                         DropdownMenuItem(
-                            text = { Text(category) },
+                            text = { Text(service) },
                             onClick = {
-                                selectedCategory = category
+                                selectedCategory = service
                                 expanded = false
                             }
                         )
@@ -122,47 +89,67 @@ fun GenerarCasosClientesView(navController: NavController) {
             }
 
             // TextBox para descripción del caso (máximo 150 caracteres)
-            TextField(
+            OutlinedTextField(
                 value = caseDescription,
                 onValueChange = {
                     if (it.text.length <= 150) caseDescription = it
                 },
-                label = { Text("Breve Descripción") },
+                label = { Text("Breve Descripción", fontWeight = FontWeight.Medium) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),  // Ajusté la altura para que sea más manejable
-                visualTransformation = VisualTransformation.None,
+                    .height(120.dp)
+                    .background(Color.White, shape = RoundedCornerShape(16.dp)),
                 maxLines = 4,
-                placeholder = { Text("(150 caractéres max)") }
+
+                placeholder = { Text("(150 caracteres max)", fontSize = 14.sp) }
             )
 
             // Check de términos y condiciones
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = acceptTerms,
-                    onCheckedChange = { acceptTerms = it }
+                    onCheckedChange = { acceptTerms = it },
+                    colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
                 )
-                Text(text = "Acepto los términos y condiciones.")
+                Text(
+                    text = "Acepto los términos y condiciones.",
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
             }
 
             // Check de aceptación de estudiantes en la cita
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
                     checked = acceptStudents,
-                    onCheckedChange = { acceptStudents = it }
+                    onCheckedChange = { acceptStudents = it },
+                    colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
                 )
-                Text(text = "Acepto que alumnos estén presentes en la cita.")
+                Text(
+                    text = "Acepto que alumnos estén presentes en la cita.",
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
             }
 
-            Text(text = "Uno de nuestros abogados se pondrá en contacto para agendar la cita.")
+            Text(
+                text = "Uno de nuestros abogados se pondrá en contacto para agendar la cita.",
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(16.dp)
+            )
 
-            Spacer(modifier = Modifier.weight(1f))  // Empuja el botón hacia abajo
+            Spacer(modifier = Modifier.weight(1f))
 
             // Botón para navegar al calendario
             Button(
@@ -174,9 +161,14 @@ fun GenerarCasosClientesView(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),
-                enabled = isFormComplete  // Deshabilitado hasta que el formulario esté completo
+                enabled = isFormComplete,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isFormComplete) MaterialTheme.colorScheme.primary else Color.LightGray,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Text(text = "Siguiente")
+                Text(text = "Siguiente", fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
         }
     }

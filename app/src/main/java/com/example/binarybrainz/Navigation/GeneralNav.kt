@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.binarybrainz.Abogados.HistorialScreen
 import com.example.binarybrainz.Abogados.MenuCasosPendientesScreen
-import com.example.binarybrainz.Abogados.MenuPlantillas
 import com.example.binarybrainz.Abogados.SignUpView
 import com.example.binarybrainz.Clientes.VistaServicios
 import com.example.binarybrainz.Extras.LoginView

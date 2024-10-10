@@ -108,7 +108,10 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                 modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
-                onClick = { viewModel.signUp(email, password) },
+                onClick = {
+                    viewModel.signUp(email, password)
+                    viewModel.setRole(rol)
+                          },
                 enabled = !isLoading
             ) {
                 if (isLoading) {

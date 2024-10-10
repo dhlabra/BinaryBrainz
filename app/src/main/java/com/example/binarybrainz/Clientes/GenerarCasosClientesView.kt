@@ -1,39 +1,49 @@
-package com.example.binarybrainz.Clientes
-
-import androidx.compose.foundation.background
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
+import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun GenerarCasosClientesView(navController: NavController) {
+fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewModel: UserViewModel) {
     var selectedCategory by remember { mutableStateOf("") }
     var caseDescription by remember { mutableStateOf(TextFieldValue("")) }
-    var expanded by remember { mutableStateOf(false) }
     var acceptTerms by remember { mutableStateOf(false) }
     var acceptStudents by remember { mutableStateOf(false) }
+    var fechaSeleccionada by remember { mutableStateOf<Long?>(null) }
+    var resultado by remember { mutableStateOf("") }
+    var showDatePicker by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
 
-    // Servicios disponibles para el dropdown
     val services = List(10) { "Servicio ${it + 1}" }
-
-    // Condición para habilitar el botón "Siguiente"
     val isFormComplete = selectedCategory.isNotBlank() && caseDescription.text.isNotBlank() && acceptTerms && acceptStudents
+
+    // TimePicker state to store selected time
+    val currentTime = Calendar.getInstance()
+    val timePickerState = rememberTimePickerState(
+        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
+        initialMinute = currentTime.get(Calendar.MINUTE),
+        is24Hour = true
+    )
+
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -97,11 +107,28 @@ fun GenerarCasosClientesView(navController: NavController) {
                 label = { Text("Breve Descripción", fontWeight = FontWeight.Medium) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
-                    .background(Color.White, shape = RoundedCornerShape(16.dp)),
+                    .height(120.dp),
                 maxLines = 4,
-
                 placeholder = { Text("(150 caracteres max)", fontSize = 14.sp) }
+            )
+
+            // TimePicker para seleccionar la hora
+            TimeInput(
+                state = timePickerState,
+            )
+
+            // Botón para abrir el selector de fecha modal
+            Button(onClick = { showDatePicker = true }) {
+                Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Seleccionar Fecha")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Seleccionar Fecha")
+            }
+
+            // Mostrar la fecha seleccionada
+            Text(
+                text = fechaSeleccionada?.let {
+                    java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+                } ?: "No se ha seleccionado ninguna fecha"
             )
 
             // Check de términos y condiciones
@@ -142,42 +169,78 @@ fun GenerarCasosClientesView(navController: NavController) {
                 )
             }
 
-            Text(
-                text = "Uno de nuestros abogados se pondrá en contacto para agendar la cita.",
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(16.dp)
-            )
-
             Spacer(modifier = Modifier.weight(1f))
 
-            // Botón para navegar al calendario
-            Button(
-                onClick = {
-                    if (isFormComplete) {
-                        navController.navigate("horarios_disponibles_view")
+            // Botón para mandar la solicitud
+            Button(onClick = {
+                scope.launch {
+                    if (isFormComplete && fechaSeleccionada != null) {
+                        resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${timePickerState.hour}:${timePickerState.minute}"
+                        // Aquí puedes mandar la información a tu base de datos
+                        navController.navigateUp()
+                    } else {
+                        resultado = "Por favor, completa todos los espacios"
                     }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                enabled = isFormComplete,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isFormComplete) MaterialTheme.colorScheme.primary else Color.LightGray,
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text(text = "Siguiente", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                }
+            }) {
+                Text("Mandar Solicitud")
             }
+
+            // Mostrar resultado
+            Text(resultado)
         }
+    }
+
+    // Mostrar el DatePickerModal cuando se presione el botón de "Seleccionar fecha"
+    if (showDatePicker) {
+        DatePickerModalGenerarCasos(
+            onDateSelected = { fecha ->
+                fechaSeleccionada = fecha
+                showDatePicker = false
+            },
+            onDismiss = { showDatePicker = false }
+        )
     }
 }
 
+// Renombrar la función DatePickerModal para evitar conflictos
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerModalGenerarCasos(
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val datePickerState = rememberDatePickerState()
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = {
+                onDateSelected(datePickerState.selectedDateMillis)
+                onDismiss()
+            }) {
+                Text("OK")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancelar")
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun GenerarCasosClientesViewPreview() {
     BinaryBrainzTheme {
-        GenerarCasosClientesView(navController = rememberNavController())
+        GenerarCasosClientesView(navController = rememberNavController(), viewModel = UserViewModel())
     }
+}
+
+fun UserViewModel() {
+
 }

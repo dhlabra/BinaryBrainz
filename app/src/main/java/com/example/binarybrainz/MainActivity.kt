@@ -1,10 +1,12 @@
 // Prueba1
 package com.example.binarybrainz
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -17,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.Abogados.AbogadoView
+import com.example.binarybrainz.Abogados.SignUpView2
 import com.example.binarybrainz.Clientes.ClienteView
 import com.example.binarybrainz.Clientes.VistaServicios
 import com.example.binarybrainz.Extras.LoginView
@@ -42,6 +45,7 @@ class MainActivity : ComponentActivity() {
         install(Postgrest)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -52,6 +56,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun UserAuthScreen(viewModel: UserViewModel) {
         val navController = rememberNavController()
@@ -64,7 +69,7 @@ class MainActivity : ComponentActivity() {
                     "abogado" -> AbogadoView(navController, viewModel)
                     "estudiante" -> EstudianteView(navController, viewModel)
                     "cliente" -> ClienteView(navController, viewModel)
-                    else -> LoadingScreen()
+                    else -> SignUpView2(navController, viewModel)
                 }
             }
             SessionStatus.LoadingFromStorage -> LoadingScreen()

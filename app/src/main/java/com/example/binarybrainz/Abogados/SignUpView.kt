@@ -1,5 +1,7 @@
 package com.example.binarybrainz.Abogados
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,6 +19,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.binarybrainz.Clientes.ClienteView
 import com.example.binarybrainz.Extras.EditNumberField
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.R
@@ -142,8 +146,110 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth(),
                 onClick = {
                     viewModel.signUp(email, password)
-                    viewModel.setUser(rol, nombre, apellido, celular)
                           },
+                enabled = !isLoading
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp)
+                    )
+                } else {
+                    Text("Next")
+                }
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun SignUpView2(navController: NavController, viewModel: UserViewModel) {
+
+    var nombre by remember { mutableStateOf("") }
+    var rol by remember { mutableStateOf("") }
+    var apellido by remember { mutableStateOf("") }
+    var celular by remember { mutableStateOf("") }
+
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
+
+    val navController = rememberNavController()
+
+    Scaffold(
+        topBar = {}
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .statusBarsPadding()
+                .fillMaxSize()
+                .padding(horizontal = 40.dp)
+                .padding(paddingValues)
+                .safeDrawingPadding(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            EditNumberField(
+                label = R.string.nombre,
+                leadingIcon = Icons.Filled.Face,
+                value = nombre,
+                onValueChange = { nombre = it },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                isPasswordVisible = true,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+
+            EditNumberField(
+                label = R.string.apellido,
+                leadingIcon = Icons.Filled.Face,
+                value = apellido,
+                onValueChange = { apellido = it },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                isPasswordVisible = true,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+
+            EditNumberField(
+                label = R.string.celular,
+                leadingIcon = Icons.Filled.Phone,
+                value = celular,
+                onValueChange = { celular = it },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Done
+                ),
+                isPasswordVisible = true,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+
+            rol = "cliente"
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Muestra un mensaje de error si existe
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage
+                )
+            }
+
+            Button(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                onClick = {
+                    viewModel.setUser(rol, nombre, apellido, celular)
+                    viewModel.signOut()
+                    navController.navigate("login_view")
+                },
                 enabled = !isLoading
             ) {
                 if (isLoading) {

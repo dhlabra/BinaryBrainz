@@ -37,7 +37,7 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
     suspend fun signUp(userEmail: String, userPassword: String) {
         // 1. Registrar al nuevo usuario en la tabla `users`
-        val authResponse = supabase.auth.signUpWith(Email) {
+        supabase.auth.signUpWith(Email) {
             email = userEmail
             password = userPassword
         }
@@ -46,7 +46,7 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
     suspend fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String) {
         val user = supabase.auth.retrieveUserForCurrentSession()
-        val setRole = mapOf("role" to userRole, "nombre" to userName, "apellido" to userLasName, "celular" to userPhone)
+        val setRole = mapOf("id" to user.id, "role" to userRole, "nombre" to userName, "apellido" to userLasName, "celular" to userPhone)
         supabase.from("perfil")
             .insert(setRole)
     }

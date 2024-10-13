@@ -36,7 +36,8 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState, viewM
         NavigationDrawerItem(
             label = { Text(text = "Asignar Roles") },
             selected = false,
-            onClick = {  }
+            onClick = { navController.navigate("asignar_roles") }
         )
+
     }
 }

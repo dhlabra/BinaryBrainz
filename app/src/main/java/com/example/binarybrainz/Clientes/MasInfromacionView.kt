@@ -22,46 +22,73 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 @Composable
 fun MasInformacionView(navController: NavController, servicioDescription: String?) {
     // Cambiando a una estructura que devuelve cuatro valores
-    val (imageId, title, description, examples) = when (servicioDescription) {
+    val (imageId, title, description, examples, consequences) = when (servicioDescription) {
         "violencia_domestica" -> {
-            Quadruple(
+            Quintuple(
                 R.drawable.violenciadomestica, // Asegúrate de tener la imagen correcta
                 "Violencia Doméstica",
-                "La violencia doméstica es un patrón de comportamiento utilizado para establecer poder y control sobre otra persona en el contexto de una relación doméstica. Puede tomar muchas formas, incluyendo abuso físico, emocional, sexual, psicológico y económico." ,
-                listOf("Insultos constantes y humillaciones.", "Golpear o empujar a la pareja durante una discusión.", "Controlar el dinero de la pareja.", "Amenazar con hacerle daño a la víctima o a sus seres queridos si no obedece.")
+                "La violencia doméstica es un patrón de comportamiento utilizado para establecer poder y control sobre otra persona en el contexto de una relación doméstica. Puede tomar muchas formas, incluyendo abuso físico, emocional, sexual, psicológico y económico.",
+                listOf(
+                    "Insultos constantes y humillaciones.",
+                    "Golpear o empujar a la pareja durante una discusión.",
+                    "Controlar el dinero de la pareja.",
+                    "Amenazar con hacerle daño a la víctima o a sus seres queridos si no obedece."
+                ),
+                "La violencia doméstica puede ser castigada con multas, órdenes de alejamiento, pérdida de la custodia de los hijos y penas de prisión dependiendo de la gravedad del caso."
             )
         }
+
         "sentencia_divorcio" -> {
-            Quadruple(
+            Quintuple(
                 R.drawable.sentenciadedivorcio,
                 "Sentencia de Divorcio",
                 "Una sentencia de divorcio es un fallo judicial que pone fin legalmente a un matrimonio. Es el documento final emitido por un juez que establece los términos bajo los cuales los cónyuges quedan legalmente divorciados.",
-                listOf("Asignación de la custodia compartida de los hijos", "El padre se obliga a pagar una pensión alimenticia mensual para el mantenimiento de los hijos.", "Una madre obtiene la custodia física.")
+                listOf(
+                    "Asignación de la custodia compartida de los hijos",
+                    "El padre se obliga a pagar una pensión alimenticia mensual para el mantenimiento de los hijos.",
+                    "Una madre obtiene la custodia física."
+                ),
+                "Las consecuencias de una sentencia de divorcio pueden incluir la división de bienes, la asignación de la custodia de los hijos, el establecimiento de pensiones alimenticias y la pérdida de ciertos derechos matrimoniales."
             )
         }
+
         "testamento" -> {
-            Quadruple(
+            Quintuple(
                 R.drawable.testamento,
                 "Testamento",
                 "Un testamento es un documento legal que expresa las últimas voluntades de una persona con respecto a la distribución de sus bienes y propiedades tras su fallecimiento. También puede incluir otras disposiciones importantes, como la designación de tutores para los hijos menores y la instrucción sobre el manejo de deudas pendientes.",
-                listOf("Dejar una propiedad a un hijo o familiar", "Asignar una suma de dinero a un beneficiario", "Distribuir bienes personales")
+                listOf(
+                    "Dejar una propiedad a un hijo o familiar",
+                    "Asignar una suma de dinero a un beneficiario",
+                    "Distribuir bienes personales"
+                ),
+                "Las consecuencias de un testamento incluyen la ejecución de los deseos del fallecido de acuerdo con lo estipulado, el reparto de los bienes según lo indicado, la posible liquidación de deudas pendientes, y en caso de disputas entre los herederos, puede dar lugar a litigios judiciales."
             )
         }
+
         "pension_alimenticia" -> {
-            Quadruple(
+            Quintuple(
                 R.drawable.pensionalimenticia,
                 "Pensión Alimenticia",
                 "La pensión alimenticia es una obligación legal que impone a una persona, generalmente un padre o madre, para contribuir al bienestar financiero de sus hijos o, en algunos casos, de su expareja. Esta pensión está destinada a cubrir necesidades básicas como alimentación, educación, vivienda, salud, y otros gastos esenciales.",
-                listOf("Pago mensual para alimentos y vivienda", "Contribución a la educación privada o universitaria", "Cobertura de gastos médicos")
+                listOf(
+                    "Pago mensual para alimentos y vivienda",
+                    "Contribución a la educación privada o universitaria",
+                    "Cobertura de gastos médicos"
+                ),
+                "Las consecuencias de no cumplir con el pago de la pensión alimenticia pueden incluir sanciones legales como multas, embargos salariales, restricciones a ciertos derechos (como la renovación de pasaportes o licencias), e incluso penas de cárcel en casos graves de incumplimiento."
             )
         }
+
         else -> {
-            Quadruple(
+            Quintuple(
                 R.drawable.clinicapenal,
                 "Categoría Desconocida",
                 "No se pudo cargar la información.",
-                emptyList()
+                emptyList(),
+                "No se pudo cargar la consecuencia"
             )
+
         }
     }
 
@@ -102,16 +129,21 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
                 Text(text = example, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(8.dp))
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Consecuencias legales:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(text = consequences, fontSize = 16.sp)
+
         }
     }
 }
 
-// Función auxiliar para manejar cuatro valores en la estructura de retorno
-data class Quadruple<out A, out B, out C, out D>(
+// Función auxiliar para manejar cinco valores en la estructura de retorno
+data class Quintuple<out A, out B, out C, out D, out E>(
     val first: A,
     val second: B,
     val third: C,
-    val fourth: D
+    val fourth: D,
+    val fifth: E
 )
 
 @Preview(showBackground = true)

@@ -1,7 +1,6 @@
 package com.example.binarybrainz.Navigation
 
 import GenerarCasosClientesView
-import HorariosDisponiblesView
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -28,9 +27,6 @@ fun ClienteNavigation(navController: NavHostController, modifier: Modifier = Mod
             ) { backStackEntry ->
                 val servicioDescription = backStackEntry.arguments?.getString("servicioDescription")
                 MasInformacionView(navController, servicioDescription)
-        }
-        composable("horarios_disponibles_view") {
-                HorariosDisponiblesView(navController, viewModel)
         }
         composable("generar_casos_clientes_view") {
                 GenerarCasosClientesView(navController, viewModel)

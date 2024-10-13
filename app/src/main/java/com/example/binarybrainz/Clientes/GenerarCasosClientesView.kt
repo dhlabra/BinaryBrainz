@@ -1,5 +1,4 @@
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,7 +23,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewModel: UserViewModel) {
     var selectedCategory by remember { mutableStateOf("") }
@@ -397,7 +395,6 @@ fun DatePickerModalGenerarCasos(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun GenerarCasosClientesViewPreview() {

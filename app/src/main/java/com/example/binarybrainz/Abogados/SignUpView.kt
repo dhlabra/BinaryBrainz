@@ -7,12 +7,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.binarybrainz.Extras.EditNumberField
@@ -20,7 +22,6 @@ import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.R
 import com.example.binarybrainz.components.TopBarAbogados
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpView(navController: NavController, viewModel: UserViewModel) {
 
@@ -28,7 +29,8 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
     var password by remember { mutableStateOf("") }
     var nombre by remember { mutableStateOf("") }
     var rol by remember { mutableStateOf("") }
-    var selectedOption by remember { mutableStateOf("") }
+    var apellido by remember { mutableStateOf("") }
+    var celular by remember { mutableStateOf("") }
 
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
@@ -57,6 +59,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                 value = email,
                 onValueChange = { email = it },
                 keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
                 ),
                 isPasswordVisible = true,
@@ -85,6 +88,35 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                 value = nombre,
                 onValueChange = { nombre = it },
                 keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                isPasswordVisible = true,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+
+            EditNumberField(
+                label = R.string.apellido,
+                leadingIcon = Icons.Filled.Face,
+                value = apellido,
+                onValueChange = { apellido = it },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                isPasswordVisible = true,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+            )
+
+            EditNumberField(
+                label = R.string.celular,
+                leadingIcon = Icons.Filled.Phone,
+                value = celular,
+                onValueChange = { celular = it },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Phone,
                     imeAction = ImeAction.Done
                 ),
                 isPasswordVisible = true,
@@ -110,7 +142,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth(),
                 onClick = {
                     viewModel.signUp(email, password)
-                    viewModel.setRole(rol)
+                    viewModel.setUser(rol, nombre, apellido, celular)
                           },
                 enabled = !isLoading
             ) {

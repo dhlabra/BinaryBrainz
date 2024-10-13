@@ -8,4 +8,5 @@ data class User(
     val role: String,
     val nombre: String,
     val apellido: String,
+    val celular: String
 )

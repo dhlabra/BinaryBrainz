@@ -9,6 +9,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.sql.Date
+import java.sql.Time
 
 class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope) {
 
@@ -35,14 +37,21 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
     suspend fun signUp(userEmail: String, userPassword: String) {
         // 1. Registrar al nuevo usuario en la tabla `users`
-        supabase.auth.signUpWith(Email) {
+        val authResponse = supabase.auth.signUpWith(Email) {
             email = userEmail
             password = userPassword
         }
 
     }
 
-    suspend fun setUserRole(userRole: String) {
+    suspend fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String) {
+        val user = supabase.auth.retrieveUserForCurrentSession()
+        val setRole = mapOf("role" to userRole, "nombre" to userName, "apellido" to userLasName, "celular" to userPhone)
+        supabase.from("perfil")
+            .insert(setRole)
+    }
+
+    suspend fun setRole(userRole: String) {
         val user = supabase.auth.retrieveUserForCurrentSession()
         val setRole = mapOf("role" to userRole)
         supabase.from("perfil")
@@ -64,6 +73,11 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
         return result.role
     }
+
+//    suspend fun setCita(fecha: Date, horario: Time, citaStatus: String) {
+//        val user = supabase.auth.retrieveUserForCurrentSession()
+//            mapOf("date" to fecha, "time_slot" to horario, "status" to citaStatus)
+//    }
 
     suspend fun signOut() {
         supabase.auth.signOut()

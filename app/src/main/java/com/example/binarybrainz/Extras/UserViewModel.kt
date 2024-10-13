@@ -61,12 +61,26 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
+    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String) {
+        isLoading.value = true
+        errorMessage.value = ""
+        viewModelScope.launch {
+            try {
+                userRepository.setUser(userRole, userName, userLasName, userPhone)
+            }catch (e: Exception) {
+                errorMessage.value = e.message ?: "Unknown error"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
     fun setRole(role: String) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
-                userRepository.setUserRole(role)
+                userRepository.setRole(role)
             }catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unkown error"
             } finally {

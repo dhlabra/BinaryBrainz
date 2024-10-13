@@ -1,6 +1,8 @@
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
@@ -13,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
@@ -30,16 +33,24 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
     var fechaSeleccionada by remember { mutableStateOf<Long?>(null) }
     var resultado by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
+    var showTimePicker by remember { mutableStateOf(false) }
+    var showTimeErrorDialog by remember { mutableStateOf(false) }
+    var showDateErrorDialog by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
+
+    // Estado para la hora seleccionada y minutos
+    var selectedHour by remember { mutableStateOf(10) }
+    var selectedMinute by remember { mutableStateOf(0) }
 
     val services = List(10) { "Servicio ${it + 1}" }
     val isFormComplete = selectedCategory.isNotBlank() && caseDescription.text.isNotBlank() && acceptTerms && acceptStudents
 
-    // TimePicker state to store selected time
     val currentTime = Calendar.getInstance()
+
+    // TimePicker state to store selected time
     val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
+        initialHour = selectedHour,
+        initialMinute = selectedMinute,
         is24Hour = true
     )
 
@@ -61,7 +72,8 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()), // Agregar scroll vertical
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -112,10 +124,57 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
                 placeholder = { Text("(150 caracteres max)", fontSize = 14.sp) }
             )
 
-            // TimePicker para seleccionar la hora
-            TimeInput(
-                state = timePickerState,
-            )
+            // Mostrar el TimePicker modal al hacer clic en el botón
+            Button(onClick = { showTimePicker = true }) {
+                Text("Seleccionar Hora")
+            }
+
+            if (showTimePicker) {
+                Dialog(onDismissRequest = { showTimePicker = false }) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        shape = MaterialTheme.shapes.medium,
+                        tonalElevation = 8.dp
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            TimePicker(
+                                state = timePickerState
+                            )
+                            val selectedHour = timePickerState.hour
+                            val selectedMinute = timePickerState.minute
+
+                            // Validar y ajustar la hora seleccionada entre 10 AM y 4 PM
+                            val isValidTime = selectedHour in 10..16
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Button(onClick = { showTimePicker = false }) {
+                                    Text("Cancelar")
+                                }
+                                Button(onClick = {
+                                    if (isValidTime) {
+                                        showTimePicker = false
+                                    } else {
+                                        // Mostrar pop-up si la hora no es válida
+                                        showTimePicker = false
+                                        showTimeErrorDialog = true
+                                    }
+                                }) {
+                                    Text("Confirmar")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             // Botón para abrir el selector de fecha modal
             Button(onClick = { showDatePicker = true }) {
@@ -174,12 +233,20 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
             // Botón para mandar la solicitud
             Button(onClick = {
                 scope.launch {
-                    if (isFormComplete && fechaSeleccionada != null) {
-                        resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${timePickerState.hour}:${timePickerState.minute}"
-                        // Aquí puedes mandar la información a tu base de datos
-                        navController.navigateUp()
+                    val selectedDate = Calendar.getInstance().apply {
+                        timeInMillis = fechaSeleccionada ?: 0L
+                    }
+                    val today = Calendar.getInstance()
+
+                    if (isFormComplete && fechaSeleccionada != null && selectedHour in 10..16) {
+                        if (selectedDate.before(today)) {
+                            showDateErrorDialog = true // Mostrar error si la fecha es pasada
+                        } else {
+                            resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}:${selectedMinute}"
+                            navController.navigateUp()
+                        }
                     } else {
-                        resultado = "Por favor, completa todos los espacios"
+                        resultado = "Por favor, completa todos los espacios."
                     }
                 }
             }) {
@@ -195,15 +262,51 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
     if (showDatePicker) {
         DatePickerModalGenerarCasos(
             onDateSelected = { fecha ->
-                fechaSeleccionada = fecha
-                showDatePicker = false
+                val today = Calendar.getInstance()
+                val selectedDate = Calendar.getInstance().apply {
+                    timeInMillis = fecha ?: 0L
+                }
+
+                if (selectedDate.before(today)) {
+                    showDateErrorDialog = true // Mostrar error si la fecha seleccionada es anterior a hoy
+                } else {
+                    fechaSeleccionada = fecha
+                    showDatePicker = false
+                }
             },
             onDismiss = { showDatePicker = false }
         )
     }
+
+    // Mostrar diálogo de error para hora no válida
+    if (showTimeErrorDialog) {
+        AlertDialog(
+            onDismissRequest = { showTimeErrorDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showTimeErrorDialog = false }) {
+                    Text("OK")
+                }
+            },
+            title = { Text("Hora no válida") },
+            text = { Text("Solo puedes seleccionar horas entre 10 AM y 4 PM.") }
+        )
+    }
+
+    // Mostrar diálogo de error para fecha no válida
+    if (showDateErrorDialog) {
+        AlertDialog(
+            onDismissRequest = { showDateErrorDialog = false },
+            confirmButton = {
+                TextButton(onClick = { showDateErrorDialog = false }) {
+                    Text("OK")
+                }
+            },
+            title = { Text("Fecha no válida") },
+            text = { Text("Fecha Invalida, selecciona otra porfavor.") }
+        )
+    }
 }
 
-// Renombrar la función DatePickerModal para evitar conflictos
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerModalGenerarCasos(
@@ -241,6 +344,4 @@ fun GenerarCasosClientesViewPreview() {
     }
 }
 
-fun UserViewModel() {
-
-}
+fun UserViewModel() {}

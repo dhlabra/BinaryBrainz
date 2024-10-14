@@ -5,6 +5,7 @@ import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -69,15 +70,15 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
             filter {
                 eq("id", user.id )
             }
-        }.decodeSingle<User>()
-
-        return result.role
+        }.decodeSingleOrNull<User>()
+        return result?.role?: "empty"
     }
 
-//    suspend fun setCita(fecha: Date, horario: Time, citaStatus: String) {
-//        val user = supabase.auth.retrieveUserForCurrentSession()
-//            mapOf("date" to fecha, "time_slot" to horario, "status" to citaStatus)
-//    }
+    suspend fun getUserNameList(): List<User> {
+        val nameList = supabase.from("perfil").select(columns = Columns.list("id, role, nombre, apellido, celular")).decodeList<User>()
+        return nameList
+    }
+
 
     suspend fun signOut() {
         supabase.auth.signOut()

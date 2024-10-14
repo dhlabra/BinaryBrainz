@@ -3,6 +3,7 @@ package com.example.binarybrainz.Extras
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import io.github.jan.supabase.gotrue.SessionStatus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -47,13 +48,14 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun signUp(email: String, password: String) {
+    fun signUp(email: String, password: String, navController: NavController) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
                 userRepository.signUp(email, password)
-            }catch (e: Exception) {
+                navController.navigate("signup_admin_view_2")
+            } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {
                 isLoading.value = false
@@ -61,12 +63,13 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String) {
+    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String, onSuccess: () -> Unit) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
                 userRepository.setUser(userRole, userName, userLasName, userPhone)
+                onSuccess()
             }catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {
@@ -89,9 +92,22 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun signOut() {
+    private val _userList = mutableStateOf<List<User>>(emptyList())
+    val userList: List<User> get() = _userList.value
+
+    // Función para obtener la lista de usuarios desde Supabase
+    suspend fun loadUserNameList() {
+        _userList.value = userRepository.getUserNameList()  // Usar la función existente en el repositorio
+    }
+
+    fun signOut(navController: NavController) {
         viewModelScope.launch {
             userRepository.signOut()
+            navController.navigate("login_view") {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+            }
         }
     }
 

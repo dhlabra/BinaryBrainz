@@ -31,10 +31,6 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var nombre by remember { mutableStateOf("") }
-    var rol by remember { mutableStateOf("") }
-    var apellido by remember { mutableStateOf("") }
-    var celular by remember { mutableStateOf("") }
 
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
@@ -86,51 +82,6 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth()
             )
 
-            EditNumberField(
-                label = R.string.nombre,
-                leadingIcon = Icons.Filled.Face,
-                value = nombre,
-                onValueChange = { nombre = it },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next
-                ),
-                isPasswordVisible = true,
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-
-            EditNumberField(
-                label = R.string.apellido,
-                leadingIcon = Icons.Filled.Face,
-                value = apellido,
-                onValueChange = { apellido = it },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Next
-                ),
-                isPasswordVisible = true,
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-
-            EditNumberField(
-                label = R.string.celular,
-                leadingIcon = Icons.Filled.Phone,
-                value = celular,
-                onValueChange = { celular = it },
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Phone,
-                    imeAction = ImeAction.Done
-                ),
-                isPasswordVisible = true,
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth()
-            )
-
-            rol = "cliente"
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // Muestra un mensaje de error si existe
@@ -145,7 +96,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    viewModel.signUp(email, password)
+                    viewModel.signUp(email, password, navController)
                           },
                 enabled = !isLoading
             ) {
@@ -172,8 +123,6 @@ fun SignUpView2(navController: NavController, viewModel: UserViewModel) {
 
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
-
-    val navController = rememberNavController()
 
     Scaffold(
         topBar = {}
@@ -246,9 +195,13 @@ fun SignUpView2(navController: NavController, viewModel: UserViewModel) {
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    viewModel.setUser(rol, nombre, apellido, celular)
-                    viewModel.signOut()
-                    navController.navigate("login_view")
+                    viewModel.setUser(rol, nombre, apellido, celular){
+                        navController.navigate("cliente_view") {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                        }
+                    }
                 },
                 enabled = !isLoading
             ) {

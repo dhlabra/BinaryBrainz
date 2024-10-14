@@ -85,5 +85,9 @@ dependencies {
 
     implementation("androidx.compose.material3:material3:1.3.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+
+
 
 }

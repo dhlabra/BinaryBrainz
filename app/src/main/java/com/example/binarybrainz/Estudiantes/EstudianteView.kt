@@ -35,7 +35,7 @@ fun EstudianteView(navController: NavHostController, viewModel: UserViewModel) {
                 actions = {
                     IconButton(onClick = {
                         // Redirige al login cuando se presiona el ícono de usuario
-                        viewModel.signOut()
+                        viewModel.signOut(navController)
                     }) {
                         Icon(imageVector = Icons.Filled.Person, contentDescription = "Perfil de Usuario")
                     }

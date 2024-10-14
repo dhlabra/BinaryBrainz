@@ -51,7 +51,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BinaryBrainzTheme {
-                UserAuthScreen(UserViewModel(UserRepository(supabase, CoroutineScope(Dispatchers.IO))))
+                UserAuthScreen(
+                    UserViewModel(
+                        UserRepository(
+                            supabase,
+                            CoroutineScope(Dispatchers.IO)
+                        )
+                    )
+                )
             }
         }
     }
@@ -69,162 +76,25 @@ class MainActivity : ComponentActivity() {
                     "abogado" -> AbogadoView(navController, viewModel)
                     "estudiante" -> EstudianteView(navController, viewModel)
                     "cliente" -> ClienteView(navController, viewModel)
-                    else -> SignUpView2(navController, viewModel)
+                    "empty" -> SignUpView2(navController, viewModel)
+                    else -> LoadingScreen()
                 }
             }
+
             SessionStatus.LoadingFromStorage -> LoadingScreen()
             SessionStatus.NetworkError -> ErrorScreen("Network error")
             is SessionStatus.NotAuthenticated -> LoginInject(navController, viewModel)
         }
     }
 
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    @Composable
-//    fun AppNavigation(viewModel: UserViewModel) {
-//        val navController = rememberNavController()
-//        NavHost(navController = navController, startDestination = "vista_servicios") {
-//            composable("vista_servicios") {
-//                VistaServicios(navController)
-//            }
-//            composable("login_view") {
-//                LoginView(navController, viewModel)
-//            }
-//            composable("signup_view") {
-//                SignUpView(navController, viewModel)
-//            }
-//            composable("generar_casos_clientes_view") { // Añade la navegación para GenerarCasosClientesView
-//                GenerarCasosClientesView(navController)
-//            }
-//            composable("apartado_casos_compartidos_view") {
-//                ApartadoCasosCompartidosView(navController, viewModel)
-//            }
-//            composable("edit_case_view/{caseId}") { backStackEntry ->
-//                val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
-//                EditarCasosEstudiantesView(navController, caseId)
-//            }
-//            composable(
-//                "mas_informacion_view/{servicioDescription}",
-//                arguments = listOf(navArgument("servicioDescription") { type = NavType.StringType })
-//            ) { backStackEntry ->
-//                val servicioDescription = backStackEntry.arguments?.getString("servicioDescription")
-//                MasInformacionView(navController, servicioDescription)
-//            }
-//            composable("menu_historial_view") {
-//                HistorialScreen(navController, viewModel)
-//            }
-//            composable("menu_casos_pendientes_view") {
-//                MenuCasosPendientesScreen(navController, viewModel)
-//            }
-//            composable("creacion_caso_view") {
-//                MenuPlantillas(navController, viewModel)
-//            }
-//            composable("horarios_disponibles_view") {
-//                HorariosDisponiblesView(navController, viewModel)
-//            }
-//        }
-//    }
-}
+    @Composable
+    fun ErrorScreen(message: String) {
+        Text(message)
+    }
 
 
-@Composable
-fun ImageCardVertical(imageId: Int, description: String, onClick: () -> Unit) {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        modifier = Modifier
-            .padding(16.dp)
-            .safeDrawingPadding(),
-        onClick = onClick
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Image(
-                    painter = painterResource(id = imageId),
-                    contentDescription = description,
-                    modifier = Modifier
-                        .padding(16.dp)
-                )
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = description
-                )
-                Button(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = onClick
-                ) {
-                    Text(text = "Más información")
-                }
-            }
-        }
+    @Composable
+    fun LoadingScreen() {
+        CircularProgressIndicator()
     }
 }
-
-@Composable
-fun ImageCardHorizontal(imageId: Int, description: String, onClick: () -> Unit) {
-    ElevatedCard(
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        modifier = Modifier
-            .padding(12.dp)
-            .padding(vertical = 16.dp)
-            .width(300.dp)
-            .safeDrawingPadding(),
-        onClick = onClick
-    ) {
-        Box(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Image(
-                    painter = painterResource(id = imageId),
-                    contentDescription = description,
-                    modifier = Modifier
-                        .padding(16.dp)
-                )
-                Text(
-                    modifier = Modifier.padding(8.dp),
-                    text = description
-                )
-                Button(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = onClick
-                ) {
-                    Text(text = "Crear")
-                }
-            }
-        }
-    }
-}
-
-
-
-@Composable
-fun ErrorScreen(message: String) {
-    Text(message)
-}
-
-
-@Composable
-fun LoadingScreen() {
-    CircularProgressIndicator()
-}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun VistaServiciosPreview() {
-//    BinaryBrainzTheme {
-//        VistaServicios(navController = rememberNavController())
-//    }
-//}

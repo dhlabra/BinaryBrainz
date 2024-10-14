@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.binarybrainz.Extras.User
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
@@ -23,10 +24,17 @@ import com.example.binarybrainz.components.TopBarAbogados
 @Composable
 fun AsignarRolesScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val usuarios = listOf("Juan Pérez", "Ana García", "Carlos Sánchez", "Laura Rodríguez")
+    var usuarios by remember { mutableStateOf<List<User>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(false) }
     var showRoleDialog by remember { mutableStateOf(false) }
-    var selectedUser by remember { mutableStateOf("") }
-    var roles = remember { mutableStateMapOf<String, String>() } // Mapa para almacenar roles asignados
+    var selectedUser by remember { mutableStateOf<User?>(null) }
+
+    LaunchedEffect(Unit) {
+        isLoading = true
+        viewModel.loadUserNameList()
+        usuarios = viewModel.userList
+        isLoading = false
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -69,30 +77,35 @@ fun AsignarRolesScreen(navController: NavController, viewModel: UserViewModel) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                LazyColumn {
-                    items(usuarios) { usuario ->
-                        UsuarioRow(
-                            navController,
-                            usuario,
-                            role = roles[usuario] ?: "SA", // Mostrar rol asignado o "SA" si no hay rol
-                            onEditClick = {
-                                selectedUser = usuario
-                                showRoleDialog = true
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                } else {
+
+                    LazyColumn {
+                        items(usuarios) { user ->
+                            UsuarioRow(
+                                navController,
+                                usuario = "${user.nombre} ${user.apellido}",
+                                role = user.role,
+                                onEditClick = {
+                                    selectedUser = user
+                                    showRoleDialog = true
+                                }
+                            )
+                            HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+                        }
+                    }
+
+                    if (showRoleDialog) {
+                        AsignarRoleDialog(
+                            usuario = "${selectedUser?.nombre} ${selectedUser?.apellido}",
+                            onDismiss = { showRoleDialog = false },
+                            onRoleSelected = { role ->
+                                selectedUser?.let { it.role = role }
+                                showRoleDialog = false
                             }
                         )
-                        Divider(thickness = 1.dp, color = Color.Gray)
                     }
-                }
-
-                if (showRoleDialog) {
-                    AsignarRoleDialog(
-                        selectedUser,
-                        onDismiss = { showRoleDialog = false },
-                        onRoleSelected = { role ->
-                            roles[selectedUser] = role
-                            showRoleDialog = false
-                        }
-                    )
                 }
             }
         }
@@ -173,5 +186,25 @@ fun RoleButton(role: String, onRoleSelected: () -> Unit) {
         )
     ) {
         Text(text = role)
+    }
+}
+
+@Composable
+fun UserItem(user: User) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(text = "${user.nombre} ${user.apellido}")
+    }
+}
+
+@Composable
+fun UserList(userList: List<User>) {
+    LazyColumn {
+        items(userList) { user ->
+            UserItem(user = user)
+        }
     }
 }

@@ -27,7 +27,7 @@ fun TopBarClientes(navController: NavController, clientName: String, viewModel: 
         actions = {
             IconButton(
                 onClick = {
-                    viewModel.signOut()
+                    viewModel.signOut(navController)
                 }
             ) {
                 Icon(Icons.Default.Person, contentDescription = "Perfil de Cliente")

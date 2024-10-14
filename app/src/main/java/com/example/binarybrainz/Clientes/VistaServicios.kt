@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.Extras.UserViewModel
-import com.example.binarybrainz.ImageCardVertical
 import com.example.binarybrainz.R
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
@@ -86,6 +85,46 @@ fun VistaServicios(navController: NavController, viewModel: UserViewModel, modif
                 description = "Pensión Alimenticia",
                 onClick = { navController.navigate("mas_informacion_view/pension_alimenticia") }
             )
+        }
+    }
+}
+
+@Composable
+fun ImageCardVertical(imageId: Int, description: String, onClick: () -> Unit) {
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        modifier = Modifier
+            .padding(16.dp)
+            .safeDrawingPadding(),
+        onClick = onClick
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Image(
+                    painter = painterResource(id = imageId),
+                    contentDescription = description,
+                    modifier = Modifier
+                        .padding(16.dp)
+                )
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = description
+                )
+                Button(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = onClick
+                ) {
+                    Text(text = "Más información")
+                }
+            }
         }
     }
 }

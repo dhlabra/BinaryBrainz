@@ -1,5 +1,7 @@
 package com.example.binarybrainz.Extras
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -13,6 +15,7 @@ import com.example.binarybrainz.Navigation.GeneralNavigation
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginInject(navController:NavHostController, viewModel: UserViewModel) {
     Scaffold(
@@ -21,7 +24,7 @@ fun LoginInject(navController:NavHostController, viewModel: UserViewModel) {
             GeneralNavigation(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
-                viewModel
+                viewModel = viewModel
             )
         }
     )

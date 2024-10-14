@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.sql.Date
 import java.sql.Time
+import java.util.UUID
 
 class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope) {
 
@@ -85,7 +86,17 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
     suspend fun setCita() {
         val idClient = supabase.auth.retrieveUserForCurrentSession().id
-        val citaInfo = mapOf("id" to "1", "client_phone" to "123456789", "asesoria_id" to "1", "date" to "16/10/2024", "time_slot" to "16:00", "status" to "pendiente", "client_id" to idClient)
+        val idPhone = supabase.from("perfil").select(){
+            filter {
+                eq("id", idClient)
+            }
+        }
+        val idAsesoria = supabase.from("asesorias").select(){
+            filter {
+                eq("cliente_id", idClient)
+            }
+        }
+        val citaInfo = mapOf("client_phone" to idPhone, "asesoria_id" to idAsesoria, "date" to "16/10/2024", "time_slot" to "16:00", "status" to "pendiente", "client_id" to idClient)
         supabase.from("citas")
             .insert(citaInfo)
     }

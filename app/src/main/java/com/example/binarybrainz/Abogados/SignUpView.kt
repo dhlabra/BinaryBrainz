@@ -97,7 +97,6 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth(),
                 onClick = {
                     viewModel.signUp(email, password, navController)
-                    navController.navigate("signup_admin_view_2")
                           },
                 enabled = !isLoading
             ) {
@@ -195,7 +194,7 @@ fun SignUpView2(navController: NavController, viewModel: UserViewModel) {
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    viewModel.setUser(rol, nombre, apellido, celular, navController)
+                    viewModel.setUser(rol, nombre, apellido, celular)
                     navController.navigate("cliente_view")
                 },
                 enabled = !isLoading

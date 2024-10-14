@@ -304,6 +304,7 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
                         } else {
                             resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}:${selectedMinute}"
                             navController.navigateUp()
+
                         }
                     } else {
                         resultado = "Por favor, completa todos los espacios."

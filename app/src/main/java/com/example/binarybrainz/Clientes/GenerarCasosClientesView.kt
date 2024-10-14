@@ -292,6 +292,7 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
 
             // Botón para mandar la solicitud
             Button(onClick = {
+                scope.launch {
                     val selectedDate = Calendar.getInstance().apply {
                         timeInMillis = fechaSeleccionada ?: 0L
                     }
@@ -301,14 +302,16 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                         if (selectedDate.before(today)) {
                             showDateErrorDialog = true // Mostrar error si la fecha es pasada
                         } else {
-                            viewModel.setCita(fechaSeleccionada, "${selectedHour}:${selectedMinute}")
+                            viewModel.setCita()
                             viewModel.setAsesoria(caseDescription.text, selectedCategory, currentTime.time.toString(), "pendiente")
                             resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}:${selectedMinute}"
+                            println("IF FUNCIONA")
                             //navController.navigateUp()
                         }
                     } else {
                         resultado = "Por favor, completa todos los espacios."
                     }
+                }
             }) {
                 Text("Mandar Solicitud")
             }

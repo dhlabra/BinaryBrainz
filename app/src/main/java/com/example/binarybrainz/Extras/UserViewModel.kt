@@ -105,12 +105,13 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun setCita(date: Long?, time_slot: String) {
+    fun setCita() {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
-                userRepository.setCita(date, time_slot)
+                println("BASE DE DATOS FUNCIONA")
+                userRepository.setCita()
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {

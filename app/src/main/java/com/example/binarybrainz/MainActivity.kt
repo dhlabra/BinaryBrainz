@@ -45,7 +45,6 @@ class MainActivity : ComponentActivity() {
         install(Postgrest)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -63,7 +62,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @Composable
     fun UserAuthScreen(viewModel: UserViewModel) {
         val navController = rememberNavController()

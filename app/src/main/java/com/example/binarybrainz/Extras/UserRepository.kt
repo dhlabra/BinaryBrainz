@@ -83,11 +83,11 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
         supabase.auth.signOut()
     }
 
-    suspend fun setCita(date: Long?, time_slot: String) {
+    suspend fun setCita() {
         val idClient = supabase.auth.retrieveUserForCurrentSession().id
-        val setCita = mapOf("id" to "1", "client_id" to idClient, "client_phone" to "123456789", "date" to date, "time_slot" to time_slot, "status" to "pendiente")
+        val citaInfo = mapOf("id" to "1", "client_phone" to "123456789", "asesoria_id" to "1", "date" to "16/10/2024", "time_slot" to "16:00", "status" to "pendiente", "client_id" to idClient)
         supabase.from("citas")
-            .insert(setCita)
+            .insert(citaInfo)
     }
 
     suspend fun getCita(): Cita? {

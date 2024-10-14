@@ -1,5 +1,4 @@
-package com.example.binarybrainz.Abogados
-
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,7 +62,6 @@ fun AsignarRolesScreen(navController: NavController, viewModel: UserViewModel) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
                         .padding(16.dp),
                     contentAlignment = Alignment.Center
                 ) {
@@ -92,18 +89,21 @@ fun AsignarRolesScreen(navController: NavController, viewModel: UserViewModel) {
                                     showRoleDialog = true
                                 }
                             )
-                            HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+                            Divider(thickness = 1.dp, color = Color.Gray)
                         }
                     }
 
                     if (showRoleDialog) {
                         AsignarRoleDialog(
                             usuario = "${selectedUser?.nombre} ${selectedUser?.apellido}",
+                            id = "${selectedUser?.id}",
+                            currentRole = selectedUser?.role ?: "Sin rol",
                             onDismiss = { showRoleDialog = false },
                             onRoleSelected = { role ->
                                 selectedUser?.let { it.role = role }
                                 showRoleDialog = false
-                            }
+                            },
+                            viewModel = viewModel
                         )
                     }
                 }
@@ -135,8 +135,7 @@ fun UsuarioRow(navController: NavController, usuario: String, role: String, onEd
         }
 
         Surface(
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.clip(RoundedCornerShape(16.dp))
+            shape = RoundedCornerShape(16.dp)
         ) {
             IconButton(onClick = { onEditClick() }) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = null)
@@ -148,9 +147,14 @@ fun UsuarioRow(navController: NavController, usuario: String, role: String, onEd
 @Composable
 fun AsignarRoleDialog(
     usuario: String,
+    id: String,
+    currentRole: String,
     onDismiss: () -> Unit,
-    onRoleSelected: (String) -> Unit
+    onRoleSelected: (String) -> Unit,
+    viewModel: UserViewModel
 ) {
+    var selectedRole by remember { mutableStateOf(currentRole) }
+
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = {
@@ -158,53 +162,58 @@ fun AsignarRoleDialog(
         },
         text = {
             Column {
-                RoleButton(role = "Abogado", onRoleSelected = { onRoleSelected("abogado") })
-                RoleButton(role = "estudiante", onRoleSelected = { onRoleSelected("Estudiante") })
-                RoleButton(role = "Cliente", onRoleSelected = { onRoleSelected("Cliente") })
+                RoleRadioButton(
+                    role = "Abogado",
+                    selectedRole = selectedRole,
+                    onRoleSelected = { selectedRole = "Abogado" }
+                )
+                RoleRadioButton(
+                    role = "Estudiante",
+                    selectedRole = selectedRole,
+                    onRoleSelected = { selectedRole = "Estudiante" }
+                )
+                RoleRadioButton(
+                    role = "Cliente",
+                    selectedRole = selectedRole,
+                    onRoleSelected = { selectedRole = "Cliente" }
+                )
             }
         },
         confirmButton = {
+            TextButton(onClick = {
+                viewModel.setRole(selectedRole, id)
+                onRoleSelected(selectedRole)
+            }) {
+                Text("Asignar")
+            }
+        },
+        dismissButton = {
             TextButton(onClick = { onDismiss() }) {
-                Text("Cerrar")
+                Text("Cancelar")
             }
         }
+
     )
 }
 
 @Composable
-fun RoleButton(role: String, onRoleSelected: () -> Unit) {
-    Button(
+fun RoleRadioButton(role: String, selectedRole: String, onRoleSelected: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        onClick = {
-            onRoleSelected()
-        },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.DarkGray,
-            contentColor = Color.White
+            .padding(vertical = 4.dp)
+            .clickable(onClick = { onRoleSelected() })
+    ) {
+        RadioButton(
+            selected = (role == selectedRole),
+            onClick = { onRoleSelected() },
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color.Black, // Color negro para el botón seleccionado
+                unselectedColor = Color.Gray
+            )
         )
-    ) {
-        Text(text = role)
-    }
-}
-
-@Composable
-fun UserItem(user: User) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(text = "${user.nombre} ${user.apellido}")
-    }
-}
-
-@Composable
-fun UserList(userList: List<User>) {
-    LazyColumn {
-        items(userList) { user ->
-            UserItem(user = user)
-        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = role, fontSize = 16.sp)
     }
 }

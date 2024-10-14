@@ -52,13 +52,12 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
             .insert(setRole)
     }
 
-    suspend fun setRole(userRole: String) {
-        val user = supabase.auth.retrieveUserForCurrentSession()
+    suspend fun setRole(userRole: String, userid: String) {
         val setRole = mapOf("role" to userRole)
         supabase.from("perfil")
             .update(setRole) {
                 filter {
-                    eq("id", user)
+                    eq("id", userid)
                 }
             }
     }

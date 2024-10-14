@@ -124,7 +124,7 @@ fun ProfileClienteView(navController: NavController, viewModel: UserViewModel) {
                 // Botón para cerrar sesión
                 Button(
                     onClick = {
-                        viewModel.signOut(navController)
+                        viewModel.signOut()
                     },
                     modifier = Modifier
                         .fillMaxWidth()

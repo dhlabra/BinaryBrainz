@@ -73,9 +73,9 @@ class MainActivity : ComponentActivity() {
         when (sessionState) {
             is SessionStatus.Authenticated -> {
                 when (userRole) {
-                    "abogado" -> AbogadoView(navController, viewModel)
-                    "estudiante" -> EstudianteView(navController, viewModel)
-                    "cliente" -> ClienteView(navController, viewModel)
+                    "Abogado" -> AbogadoView(navController, viewModel)
+                    "Estudiante" -> EstudianteView(navController, viewModel)
+                    "Cliente" -> ClienteView(navController, viewModel)
                     "empty" -> SignUpView2(navController, viewModel)
                     else -> LoadingScreen()
                 }

@@ -158,8 +158,8 @@ fun AsignarRoleDialog(
         },
         text = {
             Column {
-                RoleButton(role = "Abogado", onRoleSelected = { onRoleSelected("Abogado") })
-                RoleButton(role = "Estudiante", onRoleSelected = { onRoleSelected("Estudiante") })
+                RoleButton(role = "Abogado", onRoleSelected = { onRoleSelected("abogado") })
+                RoleButton(role = "estudiante", onRoleSelected = { onRoleSelected("Estudiante") })
                 RoleButton(role = "Cliente", onRoleSelected = { onRoleSelected("Cliente") })
             }
         },

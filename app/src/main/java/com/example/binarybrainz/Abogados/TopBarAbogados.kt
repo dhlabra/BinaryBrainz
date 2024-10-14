@@ -43,7 +43,7 @@ fun TopBarAbogados(
         },
         actions = {
             IconButton(onClick = {
-                viewModel.signOut(navController) // Navega a la pantalla de inicio de sesión // Acción cuando se presiona el ícono de usuario
+                viewModel.signOut() // Navega a la pantalla de inicio de sesión // Acción cuando se presiona el ícono de usuario
             }) {
                 Icon(
                     imageVector = Icons.Filled.Person,

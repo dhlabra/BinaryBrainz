@@ -97,6 +97,7 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth(),
                 onClick = {
                     viewModel.signUp(email, password, navController)
+                    navController.navigate("signup_admin_view_2")
                           },
                 enabled = !isLoading
             ) {
@@ -112,7 +113,6 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SignUpView2(navController: NavController, viewModel: UserViewModel) {
 
@@ -179,7 +179,7 @@ fun SignUpView2(navController: NavController, viewModel: UserViewModel) {
                     .fillMaxWidth()
             )
 
-            rol = "cliente"
+            rol = "Cliente"
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -195,13 +195,8 @@ fun SignUpView2(navController: NavController, viewModel: UserViewModel) {
                     .padding(8.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    viewModel.setUser(rol, nombre, apellido, celular){
-                        navController.navigate("cliente_view") {
-                            popUpTo(navController.graph.startDestinationId) {
-                                inclusive = true
-                            }
-                        }
-                    }
+                    viewModel.setUser(rol, nombre, apellido, celular, navController)
+                    navController.navigate("cliente_view")
                 },
                 enabled = !isLoading
             ) {

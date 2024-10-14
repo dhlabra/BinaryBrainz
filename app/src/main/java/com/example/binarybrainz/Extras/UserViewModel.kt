@@ -54,7 +54,6 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         viewModelScope.launch {
             try {
                 userRepository.signUp(email, password)
-                navController.navigate("signup_admin_view_2")
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {
@@ -63,13 +62,12 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String, onSuccess: () -> Unit) {
+    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String, navController: NavController) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
                 userRepository.setUser(userRole, userName, userLasName, userPhone)
-                onSuccess()
             }catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {
@@ -100,14 +98,9 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         _userList.value = userRepository.getUserNameList()  // Usar la función existente en el repositorio
     }
 
-    fun signOut(navController: NavController) {
+    fun signOut() {
         viewModelScope.launch {
             userRepository.signOut()
-            navController.navigate("login_view") {
-                popUpTo(navController.graph.startDestinationId) {
-                    inclusive = true
-                }
-            }
         }
     }
 

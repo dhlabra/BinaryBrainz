@@ -54,6 +54,7 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         viewModelScope.launch {
             try {
                 userRepository.signUp(email, password)
+                navController.navigate("signup_admin_view_2")
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {
@@ -62,7 +63,7 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String, navController: NavController) {
+    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {

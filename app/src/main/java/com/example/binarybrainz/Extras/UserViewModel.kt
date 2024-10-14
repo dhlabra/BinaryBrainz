@@ -105,4 +105,32 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
+    fun setCita(date: Long?, time_slot: String) {
+        isLoading.value = true
+        errorMessage.value = ""
+        viewModelScope.launch {
+            try {
+                userRepository.setCita(date, time_slot)
+            } catch (e: Exception) {
+                errorMessage.value = e.message ?: "Unknown error"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
+    fun setAsesoria(description: String, category: String, created_at: String, status: String){
+        isLoading.value = true
+        errorMessage.value = " "
+        viewModelScope.launch {
+            try {
+                userRepository.setAsesoria(description, category, created_at, status)
+            } catch (e: Exception) {
+                errorMessage.value = e.message ?: "Unknown error"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
 }

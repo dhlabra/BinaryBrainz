@@ -1,4 +1,3 @@
-import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,13 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import kotlinx.coroutines.launch
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewModel: UserViewModel) {
+fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewModel) {
     var selectedCategory by remember { mutableStateOf("") }
     var caseDescription by remember { mutableStateOf(TextFieldValue("")) }
     var acceptTerms by remember { mutableStateOf(false) }
@@ -292,7 +292,6 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
 
             // Botón para mandar la solicitud
             Button(onClick = {
-                scope.launch {
                     val selectedDate = Calendar.getInstance().apply {
                         timeInMillis = fechaSeleccionada ?: 0L
                     }
@@ -302,14 +301,14 @@ fun <UserViewModel> GenerarCasosClientesView(navController: NavController, viewM
                         if (selectedDate.before(today)) {
                             showDateErrorDialog = true // Mostrar error si la fecha es pasada
                         } else {
+                            viewModel.setCita(fechaSeleccionada, "${selectedHour}:${selectedMinute}")
+                            viewModel.setAsesoria(caseDescription.text, selectedCategory, currentTime.time.toString(), "pendiente")
                             resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}:${selectedMinute}"
-                            navController.navigateUp()
-
+                            //navController.navigateUp()
                         }
                     } else {
                         resultado = "Por favor, completa todos los espacios."
                     }
-                }
             }) {
                 Text("Mandar Solicitud")
             }
@@ -395,13 +394,3 @@ fun DatePickerModalGenerarCasos(
         DatePicker(state = datePickerState)
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun GenerarCasosClientesViewPreview() {
-    BinaryBrainzTheme {
-        GenerarCasosClientesView(navController = rememberNavController(), viewModel = UserViewModel())
-    }
-}
-
-fun UserViewModel() {}

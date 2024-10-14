@@ -1,8 +1,6 @@
 package com.example.binarybrainz.Navigation
 
 import GenerarCasosClientesView
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -14,7 +12,6 @@ import com.example.binarybrainz.Clientes.VistaServicios
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.UserViews.MasInformacionView
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ClienteNavigation(navController: NavHostController, modifier: Modifier = Modifier, viewModel: UserViewModel) {
     NavHost(navController = navController, startDestination = "vista_servicios") {

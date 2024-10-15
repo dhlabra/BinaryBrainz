@@ -41,13 +41,13 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
         }
     }
 
-    suspend fun signUp(userEmail: String, userPassword: String) {
+    suspend fun signUp(userEmail: String, userPassword: String, role: String, name: String, lastName: String, phone: String) {
         // 1. Registrar al nuevo usuario en la tabla `users`
         supabase.auth.signUpWith(Email) {
             email = userEmail
             password = userPassword
         }
-
+        setUser(role, name, lastName, phone)
     }
 
     suspend fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String) {
@@ -104,8 +104,6 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
                     eq("cliente_id", idClient)
                 }
             }
-        println("Si lee la funcion")
-        println("David: " + idAsesoria.decodeSingleOrNull<Asesoria>()?.id)
         val citaInfo = mapOf("client_phone" to (idPhone.decodeSingleOrNull<User>()?.celular), "asesoria_id" to (idAsesoria.decodeSingleOrNull<Asesoria>()?.id), "status" to "pendiente", "client_id" to idClient, "date" to fecha, "time" to hora)
         supabase.from("citas")
             .insert(citaInfo)

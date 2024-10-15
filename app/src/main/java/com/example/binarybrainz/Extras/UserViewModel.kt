@@ -48,13 +48,13 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun signUp(email: String, password: String, navController: NavController) {
+    fun signUp(email: String, password: String, role: String, name: String, lastName: String, phone: String) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
-                userRepository.signUp(email, password)
-                navController.navigate("signup_admin_view_2")
+                userRepository.signUp(email, password, role, name, lastName, phone)
+                //navController.navigate("signup_admin_view_2")
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {
@@ -63,12 +63,12 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun setUser(userRole: String, userName: String, userLasName: String, userPhone: String) {
+    fun setUser(userRole: String, userName: String, userLastName: String, userPhone: String) {
         isLoading.value = true
         errorMessage.value = ""
         viewModelScope.launch {
             try {
-                userRepository.setUser(userRole, userName, userLasName, userPhone)
+                userRepository.setUser(userRole, userName, userLastName, userPhone)
             }catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {

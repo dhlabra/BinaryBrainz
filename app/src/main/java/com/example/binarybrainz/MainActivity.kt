@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                     "Abogado" -> AbogadoView(navController, viewModel)
                     "Estudiante" -> EstudianteView(navController, viewModel)
                     "Cliente" -> ClienteView(navController, viewModel)
-                    "empty" -> SignUpView2(navController, viewModel)
+                    "empty" -> ClienteView(navController, viewModel)
                     else -> LoadingScreen()
                 }
             }

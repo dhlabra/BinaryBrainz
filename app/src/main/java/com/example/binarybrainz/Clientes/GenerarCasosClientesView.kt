@@ -303,13 +303,13 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                         if (selectedDate.before(today)) {
                             showDateErrorDialog = true // Mostrar error si la fecha es pasada
                         } else {
-                            val horaCita = String.format("%02d:%02d:00", selectedHour, selectedMinute)
+                            val horaCita = String.format("%02d:%02d", selectedHour, selectedMinute)
                             val fechaCita = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(fechaSeleccionada)
 
                             println(horaCita)
                             println(fechaCita)
 
-                            viewModel.setCita(horaCita, fechaCita)
+                            viewModel.setCita(fechaCita, horaCita)
                             viewModel.setAsesoria(caseDescription.text, selectedCategory, currentTime.time.toString(), "pendiente")
                             resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}:${selectedMinute}"
                             println("IF FUNCIONA")

@@ -97,13 +97,13 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
                 eq("id", idClient)
             }
         }
-        println("David " + idPhone.decodeSingleOrNull<User>()?.celular)
+        println(hora)
         val idAsesoria = supabase.from("asesorias").select(){
             filter {
                 eq("cliente_id", idClient)
             }
         }
-        val citaInfo = mapOf("client_phone" to idPhone.decodeSingleOrNull<User>()?.celular, "asesoria_id" to "2", "status" to "pendiente", "client_id" to idClient, "date" to fecha, "time" to hora)
+        val citaInfo = mapOf("client_phone" to idPhone.decodeSingleOrNull<User>()?.celular, "asesoria_id" to "2", "status" to "pendiente", "client_id" to idClient, "date" to "2024-10-19", "time" to hora)
         supabase.from("citas")
             .insert(citaInfo)
     }

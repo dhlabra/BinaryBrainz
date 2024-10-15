@@ -43,7 +43,19 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
     var selectedHour by remember { mutableStateOf(10) }
     var selectedMinute by remember { mutableStateOf(0) }
 
-    val services = List(10) { "Servicio ${it + 1}" }
+    val services = listOf(
+        "Violencia Doméstica",
+        "Sentencia de Divorcio",
+        "Testamento",
+        "Pensión Alimenticia",
+        "Acoso Laboral",
+        "Custodia de Hijos",
+        "Abuso Sexual",
+        "Desalojo Ilegal",
+        "Derecho Laboral",
+        "Fraude Financiero"
+    )
+
     val isFormComplete = selectedCategory.isNotBlank() && caseDescription.text.isNotBlank() && acceptTerms && acceptStudents
 
     val currentTime = Calendar.getInstance()

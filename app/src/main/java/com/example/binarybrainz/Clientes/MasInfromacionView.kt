@@ -21,11 +21,10 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MasInformacionView(navController: NavController, servicioDescription: String?) {
-    // Cambiando a una estructura que devuelve cuatro valores
     val (imageId, title, description, examples, consequences) = when (servicioDescription) {
         "violencia_domestica" -> {
             Quintuple(
-                R.drawable.violenciadomestica, // Asegúrate de tener la imagen correcta
+                R.drawable.violenciadomestica,
                 "Violencia Doméstica",
                 "La violencia doméstica es un patrón de comportamiento utilizado para establecer poder y control sobre otra persona en el contexto de una relación doméstica. Puede tomar muchas formas, incluyendo abuso físico, emocional, sexual, psicológico y económico.",
                 listOf(
@@ -37,7 +36,6 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
                 "La violencia doméstica puede ser castigada con multas, órdenes de alejamiento, pérdida de la custodia de los hijos y penas de prisión dependiendo de la gravedad del caso."
             )
         }
-
         "sentencia_divorcio" -> {
             Quintuple(
                 R.drawable.sentenciadedivorcio,
@@ -51,7 +49,6 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
                 "Las consecuencias de una sentencia de divorcio pueden incluir la división de bienes, la asignación de la custodia de los hijos, el establecimiento de pensiones alimenticias y la pérdida de ciertos derechos matrimoniales."
             )
         }
-
         "testamento" -> {
             Quintuple(
                 R.drawable.testamento,
@@ -65,7 +62,6 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
                 "Las consecuencias de un testamento incluyen la ejecución de los deseos del fallecido de acuerdo con lo estipulado, el reparto de los bienes según lo indicado, la posible liquidación de deudas pendientes, y en caso de disputas entre los herederos, puede dar lugar a litigios judiciales."
             )
         }
-
         "pension_alimenticia" -> {
             Quintuple(
                 R.drawable.pensionalimenticia,
@@ -79,7 +75,97 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
                 "Las consecuencias de no cumplir con el pago de la pensión alimenticia pueden incluir sanciones legales como multas, embargos salariales, restricciones a ciertos derechos (como la renovación de pasaportes o licencias), e incluso penas de cárcel en casos graves de incumplimiento."
             )
         }
-
+        "acosolaboral" -> {
+            Quintuple(
+                R.drawable.acosolaboral,
+                "Acoso Laboral",
+                "El acoso laboral es un comportamiento hostil y no deseado en el lugar de trabajo que tiene como objetivo intimidar, humillar, o perjudicar a una persona.",
+                listOf(
+                    "Comentarios ofensivos o humillantes",
+                    "Amenazas o intimidación constante",
+                    "Exclusión deliberada de actividades laborales"
+                ),
+                "El acoso laboral puede llevar a sanciones laborales para el acosador, multas, e incluso acciones penales dependiendo de la gravedad del caso."
+            )
+        }
+        "adopcion" -> {
+            Quintuple(
+                R.drawable.adopcion,
+                "Adopción",
+                "La adopción es un proceso legal que establece una relación parental entre un adulto y un niño que no es biológicamente suyo, otorgándole todos los derechos y responsabilidades de un padre biológico.",
+                listOf(
+                    "Proceso de evaluación de idoneidad para los adoptantes",
+                    "Audiencias judiciales para la formalización de la adopción",
+                    "Asignación de tutores legales"
+                ),
+                "Las consecuencias legales de la adopción incluyen la transferencia completa de la responsabilidad parental a los adoptantes, y el reconocimiento legal del niño como miembro de la familia adoptiva."
+            )
+        }
+        "contratos_arrendamientos" -> {
+            Quintuple(
+                R.drawable.contratosarrendamientos,
+                "Contratos de Arrendamiento",
+                "Un contrato de arrendamiento es un acuerdo legal entre un arrendador y un arrendatario para el uso de una propiedad por un período específico a cambio de un pago.",
+                listOf(
+                    "Pago mensual de renta",
+                    "Términos de uso de la propiedad",
+                    "Cláusulas de renovación o terminación anticipada"
+                ),
+                "El incumplimiento de un contrato de arrendamiento puede resultar en desalojos, multas, y demandas judiciales para el pago de rentas atrasadas o daños a la propiedad."
+            )
+        }
+        "custodia_menores" -> {
+            Quintuple(
+                R.drawable.custodiamenores,
+                "Custodia de Menores",
+                "La custodia de menores se refiere al derecho legal de un padre o tutor de cuidar y tomar decisiones sobre el bienestar de un niño.",
+                listOf(
+                    "Asignación de custodia exclusiva a un padre",
+                    "Custodia compartida entre ambos padres",
+                    "Visitas supervisadas para un padre"
+                ),
+                "Las decisiones de custodia pueden afectar los derechos de los padres a visitar al menor y tomar decisiones importantes sobre su educación y salud."
+            )
+        }
+        "despido_injustificado" -> {
+            Quintuple(
+                R.drawable.despidoinjustificado,
+                "Despido Injustificado",
+                "El despido injustificado ocurre cuando un empleado es despedido sin una causa justa o sin seguir el debido proceso legal.",
+                listOf(
+                    "Despedir a un empleado sin previo aviso",
+                    "Despido basado en discriminación",
+                    "Incumplimiento de los términos del contrato laboral"
+                ),
+                "Las consecuencias de un despido injustificado pueden incluir indemnización para el trabajador, la reincorporación al puesto de trabajo, o sanciones para el empleador."
+            )
+        }
+        "herencia_sucesion" -> {
+            Quintuple(
+                R.drawable.herenciasucesion,
+                "Herencia y Sucesión",
+                "La herencia y sucesión se refieren al proceso legal mediante el cual los bienes de una persona fallecida son distribuidos a sus herederos.",
+                listOf(
+                    "Distribuir propiedades según el testamento",
+                    "Asignación de bienes a herederos legales",
+                    "Resolución de deudas pendientes del fallecido"
+                ),
+                "La falta de un testamento puede llevar a una sucesión intestada, en la cual los bienes se distribuyen según las leyes locales, lo cual puede resultar en disputas entre los herederos."
+            )
+        }
+        "clinica_penal" -> {
+            Quintuple(
+                R.drawable.clinicapenal,
+                "Clínica Penal",
+                "La Clínica Penal ofrece asesoría legal especializada en derecho penal, ayudando a los clientes a entender sus derechos y opciones legales en casos criminales.",
+                listOf(
+                    "Defensa en casos de acusaciones criminales",
+                    "Asesoramiento sobre derechos del acusado",
+                    "Gestión de fianzas y representación en audiencias"
+                ),
+                "Las consecuencias legales en casos penales pueden incluir multas, penas de cárcel, libertad condicional, o la absolución del acusado dependiendo del caso."
+            )
+        }
         else -> {
             Quintuple(
                 R.drawable.clinicapenal,
@@ -88,7 +174,6 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
                 emptyList(),
                 "No se pudo cargar la consecuencia"
             )
-
         }
     }
 
@@ -132,7 +217,6 @@ fun MasInformacionView(navController: NavController, servicioDescription: String
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Consecuencias legales:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
             Text(text = consequences, fontSize = 16.sp)
-
         }
     }
 }

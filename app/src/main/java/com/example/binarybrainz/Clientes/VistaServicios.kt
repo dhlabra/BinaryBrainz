@@ -1,5 +1,5 @@
 package com.example.binarybrainz.Clientes
-// a
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -26,6 +27,7 @@ fun VistaServicios(navController: NavController, viewModel: UserViewModel, modif
                 text = { Text("Necesito Ayuda") },
                 icon = { Icon(Icons.Filled.Info, contentDescription = null) },
                 modifier = modifier.padding(8.dp),
+                containerColor = Color.LightGray,
                 onClick = { navController.navigate("generar_casos_clientes_view") } // Navegación a la vista para generar casos
             )
         },
@@ -42,7 +44,6 @@ fun VistaServicios(navController: NavController, viewModel: UserViewModel, modif
                         contentDescription = "Logotipo de la Clínica Penal",
                         modifier = Modifier
                             .size(100.dp)
-
                     )
                 },
                 actions = {
@@ -82,6 +83,36 @@ fun VistaServicios(navController: NavController, viewModel: UserViewModel, modif
                 description = "Pensión Alimenticia",
                 onClick = { navController.navigate("mas_informacion_view/pension_alimenticia") }
             )
+            ImageCardVertical(
+                imageId = R.drawable.acosolaboral,
+                description = "Acoso Laboral",
+                onClick = { navController.navigate("mas_informacion_view/acosolaboral") }
+            )
+            ImageCardVertical(
+                imageId = R.drawable.adopcion,
+                description = "Adopción",
+                onClick = { navController.navigate("mas_informacion_view/adopcion") }
+            )
+            ImageCardVertical(
+                imageId = R.drawable.contratosarrendamientos,
+                description = "Contratos de Arrendamiento",
+                onClick = { navController.navigate("mas_informacion_view/contratos_arrendamientos") }
+            )
+            ImageCardVertical(
+                imageId = R.drawable.custodiamenores,
+                description = "Custodia de Menores",
+                onClick = { navController.navigate("mas_informacion_view/custodia_menores") }
+            )
+            ImageCardVertical(
+                imageId = R.drawable.despidoinjustificado,
+                description = "Despido Injustificado",
+                onClick = { navController.navigate("mas_informacion_view/despido_injustificado") }
+            )
+            ImageCardVertical(
+                imageId = R.drawable.herenciasucesion,
+                description = "Herencia y Sucesión",
+                onClick = { navController.navigate("mas_informacion_view/herencia_sucesion") }
+            )
         }
     }
 }
@@ -117,10 +148,12 @@ fun ImageCardVertical(imageId: Int, description: String, onClick: () -> Unit) {
                 )
                 Button(
                     modifier = Modifier.padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
                     onClick = onClick
                 ) {
                     Text(text = "Más información")
                 }
+
             }
         }
     }

@@ -97,13 +97,16 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
                 eq("id", idClient)
             }
         }
-        println(hora)
-        val idAsesoria = supabase.from("asesorias").select(){
-            filter {
-                eq("cliente_id", idClient)
+        val idAsesoria = supabase
+            .from("asesorias")
+            .select(){
+                filter {
+                    eq("cliente_id", idClient)
+                }
             }
-        }
-        val citaInfo = mapOf("client_phone" to idPhone.decodeSingleOrNull<User>()?.celular, "asesoria_id" to "2", "status" to "pendiente", "client_id" to idClient, "date" to "2024-10-19", "time" to hora)
+        println("Si lee la funcion")
+        println("David: " + idAsesoria.decodeSingleOrNull<Asesoria>()?.id)
+        val citaInfo = mapOf("client_phone" to (idPhone.decodeSingleOrNull<User>()?.celular), "asesoria_id" to (idAsesoria.decodeSingleOrNull<Asesoria>()?.id), "status" to "pendiente", "client_id" to idClient, "date" to fecha, "time" to hora)
         supabase.from("citas")
             .insert(citaInfo)
     }
@@ -120,29 +123,17 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
     suspend fun setAsesoria(
         description: String,
-        category: String,
-        created_at: String,
-        status: String
+        category: String
     ) {
+        val idClient = supabase.auth.retrieveUserForCurrentSession().id
         val setAsesoria = mapOf(
+            "cliente_id" to idClient,
             "description" to description,
             "category" to category,
-            "created_at" to created_at,
-            "status" to status
+            "status" to "pendiente"
         )
         supabase.from("asesorias")
             .insert(setAsesoria)
-    }
-
-    // Función para obtener las asesorías del usuario actual
-    suspend fun getAsesorias(): List<Asesoria> {
-        val id = supabase.auth.retrieveUserForCurrentSession().id
-        val result = supabase.from("asesorias").select() {
-            filter {
-                eq("id", id)
-            }
-        }.decodeList<Asesoria>()
-        return result
     }
 
     // Función para editar la fecha y hora de una asesoría

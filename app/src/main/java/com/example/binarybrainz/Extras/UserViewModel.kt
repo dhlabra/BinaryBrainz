@@ -94,9 +94,16 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
     private val _userList = mutableStateOf<List<User>>(emptyList())
     val userList: List<User> get() = _userList.value
 
+    private val _asesoriaList = mutableStateOf<List<Asesoria>>(emptyList())
+    val asesoriaList: List<Asesoria> get() = _asesoriaList.value
+
     // Función para obtener la lista de usuarios desde Supabase
     suspend fun loadUserNameList() {
         _userList.value = userRepository.getUserNameList()  // Usar la función existente en el repositorio
+    }
+
+    suspend fun loadAsesoriaList() {
+        _asesoriaList.value = userRepository.getAsesoriaList()  // Usar la función existente en el repositorio
     }
 
     fun signOut() {
@@ -119,12 +126,12 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
-    fun setAsesoria(description: String, category: String, created_at: String, status: String){
+    fun setAsesoria(description: String, category: String){
         isLoading.value = true
         errorMessage.value = " "
         viewModelScope.launch {
             try {
-                userRepository.setAsesoria(description, category, created_at, status)
+                userRepository.setAsesoria(description, category)
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {

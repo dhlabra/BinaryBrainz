@@ -2,6 +2,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.List
@@ -62,7 +63,7 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                 title = { Text("Solicitud de Ayuda", fontWeight = FontWeight.Bold, fontSize = 22.sp) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                     }
                 }
             )
@@ -302,7 +303,13 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                         if (selectedDate.before(today)) {
                             showDateErrorDialog = true // Mostrar error si la fecha es pasada
                         } else {
-                            viewModel.setCita()
+                            val horaCita = String.format("%02d:%02d:00", selectedHour, selectedMinute)
+                            val fechaCita = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(fechaSeleccionada)
+
+                            println(horaCita)
+                            println(fechaCita)
+
+                            viewModel.setCita(horaCita, fechaCita)
                             viewModel.setAsesoria(caseDescription.text, selectedCategory, currentTime.time.toString(), "pendiente")
                             resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}:${selectedMinute}"
                             println("IF FUNCIONA")

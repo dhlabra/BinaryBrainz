@@ -7,11 +7,15 @@ import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.sql.Date
 import java.sql.Time
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope) {
@@ -84,19 +88,22 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
         supabase.auth.signOut()
     }
 
-    suspend fun setCita() {
+    suspend fun setCita(fecha: String, hora: String) {
         val idClient = supabase.auth.retrieveUserForCurrentSession().id
-        val idPhone = supabase.from("perfil").select(){
+        val idPhone = supabase
+            .from("perfil")
+            .select(){
             filter {
                 eq("id", idClient)
             }
         }
+        println("David " + idPhone.decodeSingleOrNull<User>()?.celular)
         val idAsesoria = supabase.from("asesorias").select(){
             filter {
                 eq("cliente_id", idClient)
             }
         }
-        val citaInfo = mapOf("client_phone" to idPhone, "asesoria_id" to idAsesoria, "date" to "16/10/2024", "time_slot" to "16:00", "status" to "pendiente", "client_id" to idClient)
+        val citaInfo = mapOf("client_phone" to idPhone.decodeSingleOrNull<User>()?.celular, "asesoria_id" to "2", "status" to "pendiente", "client_id" to idClient, "date" to fecha, "time" to hora)
         supabase.from("citas")
             .insert(citaInfo)
     }

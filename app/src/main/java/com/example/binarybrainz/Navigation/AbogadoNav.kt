@@ -1,7 +1,7 @@
 package com.example.binarybrainz.Navigation
 
 import AsignarRolesScreen
-import MenuCasosPendientesScreen
+import MenuAsesoriasPendientesScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -17,7 +17,7 @@ import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Modifier, viewModel: UserViewModel) {
     NavHost(navController = navController, startDestination = "menu_casos_pendientes_view") {
         composable("menu_casos_pendientes_view") {
-            MenuCasosPendientesScreen(navController, viewModel)
+            MenuAsesoriasPendientesScreen(navController, viewModel)
         }
         composable("menu_historial_view") {
             HistorialScreen(navController, viewModel)

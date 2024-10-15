@@ -19,43 +19,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.example.binarybrainz.Extras.Asesoria
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class Case(
-    val id: String,
-    var date: Date = Date(),
-    var severity: Int? = null
-)
 
 @Composable
-fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewModel) {
+fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var filterType by remember { mutableStateOf("Por Gravedad") }  // Estado para el tipo de filtro
+    var filterType by remember { mutableStateOf("Por Categoría") }  // Estado para el tipo de filtro
     var expanded by remember { mutableStateOf(false) }  // Estado para el menú desplegable
-    var showSeverityDialog by remember { mutableStateOf(false) }
-    var selectedCase by remember { mutableStateOf<Case?>(null) }  // Caso seleccionado para cambiar gravedad
+    var showStatusDialog by remember { mutableStateOf(false) }
+    var selectedAsesoria by remember { mutableStateOf<Asesoria?>(null) }  // Asesoría seleccionada para cambiar estado
 
-    var cases by remember {
-        mutableStateOf(
-            listOf(
-                Case("123", Date(), 7),
-                Case("333", Date(), null),
-                Case("475", Date(), 9),
-                Case("758", Date(), 5)
-            )
-        )
-    } // Lista de casos
+    var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
 
-    // Aplicar el filtro a la lista de casos
-    val sortedCases = when (filterType) {
-        "Gravedad" -> cases.filter { it.severity != null }.sortedByDescending { it.severity }  // Orden por gravedad
-        "Fecha" -> cases.sortedBy { it.date }  // Orden por fecha
-        "Ambos" -> cases.filter { it.severity != null }.sortedWith(compareByDescending<Case> { it.severity }.thenBy { it.date }) // Orden por gravedad y fecha
-        else -> cases
+    // Cargar asesorías desde el ViewModel
+    LaunchedEffect(Unit) {
+        viewModel.loadAsesoriaList() // Supongamos que ya tienes una función para cargar asesorías
+        asesorias =
+            viewModel.asesoriaList // `asesoriaList` proviene del ViewModel y está conectado a Supabase
+    }
+
+    // Aplicar el filtro a la lista de asesorías
+    val filteredAsesorias = when (filterType) {
+        "Categoría" -> asesorias.groupBy { it.category }.values.flatten()
+        "Fecha" -> asesorias.sortedBy { it.created_at }
+        else -> asesorias
     }
 
     ModalNavigationDrawer(
@@ -83,7 +76,7 @@ fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewM
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
-                TitleSection()
+                TitleSection(title = "Asesorías Pendientes")
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -99,27 +92,28 @@ fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewM
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                CasesList(
+                AsesoriasList(
                     navController = navController,
-                    cases = sortedCases,
-                    onEditSeverityClick = { case ->
-                        selectedCase = case
-                        showSeverityDialog = true
+                    asesorias = filteredAsesorias,
+                    onEditStatusClick = { asesoria ->
+                        selectedAsesoria = asesoria
+                        showStatusDialog = true
                     }
                 )
             }
         }
     }
 
-    // Mostrar dialog para seleccionar la gravedad del caso
-    if (showSeverityDialog && selectedCase != null) {
-        SeverityDialog(
-            case = selectedCase!!,
-            onDismiss = { showSeverityDialog = false },
-            onSeveritySelected = { severity ->
-                selectedCase?.let {
-                    it.severity = severity
-                    showSeverityDialog = false
+    // Mostrar dialog para seleccionar el estado de la asesoría
+    if (showStatusDialog && selectedAsesoria != null) {
+        StatusDialog(
+            asesoria = selectedAsesoria!!,
+            onDismiss = { showStatusDialog = false },
+            onStatusSelected = { status ->
+                selectedAsesoria?.let {
+                    it.status = status
+                    showStatusDialog = false
+                    //viewModel.updateAsesoria(it)  // Actualizar en Supabase a través del ViewModel
                 }
             }
         )
@@ -127,7 +121,7 @@ fun MenuCasosPendientesScreen(navController: NavController, viewModel: UserViewM
 }
 
 @Composable
-fun TitleSection() {
+fun TitleSection(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -136,7 +130,7 @@ fun TitleSection() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Casos Pendientes",
+            text = title,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -206,17 +200,17 @@ fun FilterSection(
 }
 
 @Composable
-fun CasesList(navController: NavController, cases: List<Case>, onEditSeverityClick: (Case) -> Unit) {
+fun AsesoriasList(navController: NavController, asesorias: List<Asesoria>, onEditStatusClick: (Asesoria) -> Unit) {
     LazyColumn {
-        items(cases) { case ->
-            CaseRow(navController = navController, case = case, onEditSeverityClick = onEditSeverityClick)
+        items(asesorias) { asesoria ->
+            AsesoriaRow(navController = navController, asesoria = asesoria, onEditStatusClick = onEditStatusClick)
             Divider(thickness = 1.dp, color = Color.Gray)
         }
     }
 }
 
 @Composable
-fun CaseRow(navController: NavController, case: Case, onEditSeverityClick: (Case) -> Unit) {
+fun AsesoriaRow(navController: NavController, asesoria: Asesoria, onEditStatusClick: (Asesoria) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -231,39 +225,44 @@ fun CaseRow(navController: NavController, case: Case, onEditSeverityClick: (Case
         ) {
             Column {
                 Text(
-                    text = "Caso #${case.id}",
+                    text = "Asesoría de ${asesoria.category}",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Fecha: ${SimpleDateFormat("dd/MM/yyyy").format(case.date)}",
+                    text = "Categoría: ${asesoria.category}",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Gravedad: ${case.severity?.toString() ?: "Sin asignar"}",
+                    text = "Estado: ${asesoria.status}",
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "Cliente ID: ${asesoria.cliente_id}",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
             }
 
             Row {
-                // Icono para editar la gravedad del caso
+                // Icono para editar el estado de la asesoría
                 Icon(
                     imageVector = Icons.Default.Warning,
-                    contentDescription = "Editar Gravedad",
+                    contentDescription = "Editar Estado",
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { onEditSeverityClick(case) }
+                        .clickable { onEditStatusClick(asesoria) }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                // Icono para editar el caso (ya existente)
+                // Icono para navegar a la vista de detalles/editar la asesoría
                 Icon(
                     imageVector = Icons.Default.Edit,
-                    contentDescription = "Editar Caso",
+                    contentDescription = "Editar Asesoría",
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { navController.navigate("edit_case_view/${case.id}") }
+                        .clickable { navController.navigate("edit_asesoria_view/${asesoria.id}") }
                 )
             }
         }
@@ -271,8 +270,8 @@ fun CaseRow(navController: NavController, case: Case, onEditSeverityClick: (Case
 }
 
 @Composable
-fun SeverityDialog(case: Case, onDismiss: () -> Unit, onSeveritySelected: (Int) -> Unit) {
-    var severity by remember { mutableStateOf(case.severity ?: 5) } // Mantener el estado actual de gravedad
+fun StatusDialog(asesoria: Asesoria, onDismiss: () -> Unit, onStatusSelected: (String) -> Unit) {
+    var status by remember { mutableStateOf(asesoria.status) }
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -287,21 +286,43 @@ fun SeverityDialog(case: Case, onDismiss: () -> Unit, onSeveritySelected: (Int) 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Asignar Gravedad al Caso #${case.id}",
+                    text = "Asignar Estado a la Asesoría #${asesoria.id}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Slider(
-                    value = severity.toFloat(),
-                    onValueChange = { severity = it.toInt() },
-                    valueRange = 1f..10f,
-                    steps = 9
-                )
-                Text(text = "Gravedad: $severity")
+
+                DropdownMenu(
+                    expanded = true,
+                    onDismissRequest = onDismiss
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Pendiente") },
+                        onClick = {
+                            status = "Pendiente"
+                            onStatusSelected(status)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("En proceso") },
+                        onClick = {
+                            status = "En proceso"
+                            onStatusSelected(status)
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Finalizado") },
+                        onClick = {
+                            status = "Finalizado"
+                            onStatusSelected(status)
+                        }
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = { onSeveritySelected(severity) }) {
-                    Text("Asignar Gravedad")
+
+                Button(onClick = { onStatusSelected(status) }) {
+                    Text("Asignar Estado")
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(onClick = onDismiss) {
@@ -311,3 +332,4 @@ fun SeverityDialog(case: Case, onDismiss: () -> Unit, onSeveritySelected: (Int) 
         }
     }
 }
+

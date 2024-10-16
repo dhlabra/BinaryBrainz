@@ -28,16 +28,22 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState, viewM
             selected = false,
             onClick = { navController.navigate("menu_casos_pendientes_view") }
         )
+        Divider()
+
         NavigationDrawerItem(
             label = { Text(text = "Historial") },
             selected = false,
             onClick = { navController.navigate("menu_historial_view") }
         )
+        Divider()
+
         NavigationDrawerItem(
             label = { Text(text = "Asignar Roles") },
             selected = false,
             onClick = { navController.navigate("asignar_roles") }
         )
+        Divider()
+
 
     }
 }

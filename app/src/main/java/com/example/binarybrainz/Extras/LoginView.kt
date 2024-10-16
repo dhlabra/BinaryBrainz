@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.binarybrainz.Abogados.SignUpView
 import com.example.binarybrainz.R
+import com.example.binarybrainz.ui.theme.DarkGrey
 
 @Composable
 fun LoginView(navController: NavController, viewModel: UserViewModel) {
@@ -96,25 +97,27 @@ fun LoginView(navController: NavController, viewModel: UserViewModel) {
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            enabled = !isLoading
+            enabled = !isLoading,
+            colors = ButtonDefaults.buttonColors(containerColor = DarkGrey) // Cambiar el color a DarkGrey
         ) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
                 )
             } else {
-                Text("Sign In")
+                Text("Sign In", color = MaterialTheme.colorScheme.onPrimary) // Texto en contraste con DarkGrey
             }
         }
 
-        // Botón adicional para "Menu Estudiantes"
+        // Botón adicional para "Sign Up"
         Button(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            onClick = { navController.navigate("signup_admin_view") }
+            onClick = { navController.navigate("signup_admin_view") },
+            colors = ButtonDefaults.buttonColors(containerColor = DarkGrey) // Cambiar el color a DarkGrey
         ) {
-            Text(text = "Sign Up")
+            Text(text = "Sign Up", color = MaterialTheme.colorScheme.onPrimary) // Texto en contraste con DarkGrey
         }
 
         // Mensaje de error

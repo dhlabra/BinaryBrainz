@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,29 +18,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
+import com.example.binarybrainz.Estudiantes.TopBarEstudiante // Importa el nuevo TopBarEstudiante
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserViewModel) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Nombre Estudiante",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                },
-                actions = {
-                    IconButton(onClick = { viewModel.signOut() }) {
-                        Icon(imageVector = Icons.Filled.Person, contentDescription = "Perfil de Usuario")
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
+            TopBarEstudiante(viewModel = viewModel, studentName = "Nombre Estudiante") // Utiliza el nuevo TopBarEstudiante
         }
     ) { paddingValues ->
         Column(

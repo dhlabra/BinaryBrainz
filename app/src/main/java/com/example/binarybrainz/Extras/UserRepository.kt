@@ -93,11 +93,10 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
         return user
     }
 
-    suspend fun updateUser(fieldName: String, fieldValue: String) {
-        val userUpdate = mapOf(fieldName to fieldValue)
+    suspend fun updateUser(updates: Map<String, String>) {
         val userId = supabase.auth.retrieveUserForCurrentSession().id
         supabase.from("perfil")
-            .update(userUpdate) {
+            .update(updates) {
                 filter {
                     eq("id", userId)
                 }

@@ -1,6 +1,8 @@
 package com.example.binarybrainz.Extras
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -110,6 +112,22 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
             user.value = fetchedUser
         } catch (e: Exception) {
             user.value = null
+        }
+    }
+
+    suspend fun updateUser(updates: Map<String, String>) {
+        try {
+            if (updates.isNotEmpty()) {
+                userRepository.updateUser(updates)
+
+                user.value = user.value?.copy(
+                    nombre = updates["nombre"] ?: user.value?.nombre ?: "",
+                    apellido = updates["apellido"] ?: user.value?.apellido ?: "",
+                    celular = updates["celular"] ?: user.value?.celular ?: ""
+                )
+            }
+        } catch (e: Exception){
+
         }
     }
 

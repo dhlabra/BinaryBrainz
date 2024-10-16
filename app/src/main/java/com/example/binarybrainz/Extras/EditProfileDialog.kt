@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.binarybrainz.ui.theme.DarkGrey
+import kotlinx.coroutines.launch
 
 @Composable
 fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, onDismiss: () -> Unit) {
@@ -40,6 +42,8 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
     var email by remember { mutableStateOf("") }
     var editingField by remember { mutableStateOf<String?>(null) } // Almacena el campo que se está editando
     var isLoading by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
 
     LaunchedEffect(Unit) {
         isLoading = true
@@ -116,7 +120,28 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
                     // Botón de Cerrar Sesión (cierra sesión y redirige)
                     Button(
                         onClick = {
+                            val updates = mutableMapOf<String, String>()
 
+                            // Agregar al mapa solo los campos que han cambiado
+                            if (name != viewModel.user.value?.nombre) {
+                                updates["nombre"] = name
+                            }
+                            if (surname != viewModel.user.value?.apellido) {
+                                updates["apellido"] = surname
+                            }
+                            if (phone != viewModel.user.value?.celular) {
+                                updates["celular"] = phone
+                            }
+
+                            if (updates.isNotEmpty()) {
+                                coroutineScope.launch {
+                                    viewModel.updateUser(updates)
+                                    editingField = null
+                                    onDismiss()
+                                }
+                            } else {
+                                onDismiss() // Si no hay cambios, solo cerrar el diálogo
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = DarkGrey)
                     ) {

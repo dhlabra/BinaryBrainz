@@ -83,6 +83,15 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
         return nameList
     }
 
+    suspend fun getUserName(): User {
+        val user = supabase.auth.retrieveUserForCurrentSession().id
+        val nameList = supabase.from("perfil").select(){
+            filter {
+                eq("id", user)
+            }
+        }.decodeSingle<User>()
+        return nameList
+    }
 
     suspend fun signOut() {
         supabase.auth.signOut()

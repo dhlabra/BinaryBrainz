@@ -124,7 +124,10 @@ fun ImageCardVertical(imageId: Int, description: String, onClick: () -> Unit) {
         modifier = Modifier
             .padding(16.dp)
             .safeDrawingPadding(),
-        onClick = onClick
+        onClick = onClick,
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
     ) {
         Box(
             modifier = Modifier

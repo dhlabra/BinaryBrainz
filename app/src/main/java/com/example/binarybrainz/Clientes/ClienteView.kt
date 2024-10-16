@@ -10,12 +10,11 @@ import androidx.navigation.NavHostController
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.Navigation.ClienteNavigation
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ClienteView(navController: NavHostController, viewModel: UserViewModel) {
     Scaffold(
         topBar = {
-            TopBarClientes(navController,"David Labra", viewModel)
+            TopBarClientes(navController, viewModel)
         },
         content = { innerPadding ->
             ClienteNavigation(navController = navController, modifier = Modifier.padding(innerPadding), viewModel)

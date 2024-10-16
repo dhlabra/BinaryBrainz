@@ -5,7 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,17 +24,24 @@ import com.example.binarybrainz.ui.theme.DarkGrey
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarClientes(navController: NavController, clientName: String, viewModel: UserViewModel) {
-    var showDialog by remember { mutableStateOf(false) } // Controlar el pop-up
+fun TopBarClientes(navController: NavController, viewModel: UserViewModel) {
+    var isLoading by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isLoading = true
+        viewModel.loadUserName()
+        isLoading = false
+    }
 
     TopAppBar(
         title = {
             Text(
-                text = clientName,
+                text =viewModel.userName.value,
                 fontSize = 20.sp,
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary // Aplica el color adecuado para el texto
             )
         },
         actions = {
@@ -41,14 +53,14 @@ fun TopBarClientes(navController: NavController, clientName: String, viewModel: 
                 Icon(
                     Icons.Default.Person,
                     contentDescription = "Perfil de Cliente",
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary // Aplica el color adecuado para el ícono
                 )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = DarkGrey
+            containerColor = DarkGrey // Aplica el color DarkGrey al fondo
         ),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth() // Elimina el padding para ocupar todo el ancho
     )
 
     // Si showDialog es true, mostrar el pop-up

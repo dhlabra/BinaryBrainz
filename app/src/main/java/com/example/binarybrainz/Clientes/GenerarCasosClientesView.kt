@@ -89,9 +89,12 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false }
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier
+                        .heightIn(max = 200.dp)
+                        .background(MaterialTheme.colorScheme.background)
                 ) {
-                    services.forEach { service ->
+                    services.forEachIndexed { index, service ->
                         DropdownMenuItem(
                             text = { Text(service) },
                             onClick = {
@@ -99,6 +102,9 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                                 expanded = false
                             }
                         )
+                        if (index < services.size - 1) {
+                            Divider()
+                        }
                     }
                 }
             }

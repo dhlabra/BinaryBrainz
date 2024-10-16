@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,13 +34,24 @@ import com.example.binarybrainz.ui.theme.DarkGrey
 
 @Composable
 fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, onDismiss: () -> Unit) {
-    var name by remember { mutableStateOf("Ricardo") }
-    var surname by remember { mutableStateOf("Chapa") }
-    var phone by remember { mutableStateOf("123-456-7890") }
-    var email by remember { mutableStateOf("ricardo@ejemplo.com") }
+    var name by remember { mutableStateOf("") }
+    var surname by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var editingField by remember { mutableStateOf<String?>(null) } // Almacena el campo que se está editando
+    var isLoading by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isLoading = true
+        viewModel.loadUser()
+        isLoading = false
+    }
 
     Dialog(onDismissRequest = { onDismiss() }) {
+        val user = viewModel.user.value
+        name = user?.nombre ?: ""
+        surname = user?.apellido ?: ""
+        phone = user?.celular ?: ""
         Surface(
             shape = MaterialTheme.shapes.medium,
             tonalElevation = 8.dp,
@@ -85,17 +97,6 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
                     onEditClick = { editingField = if (editingField == "phone") null else "phone" },
                     onValueChange = { phone = it }
                 )
-                Divider() // Agrega un separador
-
-                ProfileItem(
-                    label = "Correo",
-                    value = email,
-                    isEditing = editingField == "email",
-                    onEditClick = { editingField = if (editingField == "email") null else "email" },
-                    onValueChange = { email = it }
-                )
-                Divider() // Agrega un separador
-
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -115,12 +116,25 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
                     // Botón de Cerrar Sesión (cierra sesión y redirige)
                     Button(
                         onClick = {
-                            viewModel.signOut()
+
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = DarkGrey)
                     ) {
-                        Text(text = "Cerrar Sesión", color = Color.White)
+                        Text(text = "Guardar", color = Color.White)
                     }
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.signOut()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = DarkGrey)
+                ) {
+                    Text(
+                        text = "Cerrar Sesión",
+                        color = Color.White,
+                        modifier = Modifier
+                    )
                 }
             }
         }

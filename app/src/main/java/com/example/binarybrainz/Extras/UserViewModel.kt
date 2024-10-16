@@ -97,19 +97,19 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
     private val _asesoriaList = mutableStateOf<List<Asesoria>>(emptyList())
     val asesoriaList: List<Asesoria> get() = _asesoriaList.value
 
-    val userName = mutableStateOf("")
+    val user = mutableStateOf<User?>(null)
 
     // Función para obtener la lista de usuarios desde Supabase
     suspend fun loadUserNameList() {
         _userList.value = userRepository.getUserNameList()  // Usar la función existente en el repositorio
     }
 
-    suspend fun loadUserName() {
+    suspend fun loadUser() {
         try {
-            val user = userRepository.getUserName()
-            userName.value = "Bienvenido ${user.nombre}"
+            val fetchedUser = userRepository.getUser()
+            user.value = fetchedUser
         } catch (e: Exception) {
-            userName.value = "Error al cargar el nombre del usuario"
+            user.value = null
         }
     }
 

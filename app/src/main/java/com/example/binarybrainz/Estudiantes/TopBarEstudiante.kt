@@ -25,14 +25,15 @@ fun TopBarEstudiante(navController: NavController, studentName: String, viewMode
 
     LaunchedEffect(Unit) {
         isLoading = true
-        viewModel.loadUserName()
+        viewModel.loadUser()
         isLoading = false
     }
 
     TopAppBar(
         title = {
+            val user = viewModel.user.value
             Text(
-                text = viewModel.userName.value, // Puedes ajustar el nombre del estudiante aquí
+                text = if (user != null) "Bienvenido ${user.nombre}" else "", // Puedes ajustar el nombre del estudiante aquí
                 fontSize = 20.sp,
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.titleMedium,

@@ -83,14 +83,25 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
         return nameList
     }
 
-    suspend fun getUserName(): User {
-        val user = supabase.auth.retrieveUserForCurrentSession().id
-        val nameList = supabase.from("perfil").select(){
+    suspend fun getUser(): User {
+        val userId = supabase.auth.retrieveUserForCurrentSession().id
+        val user = supabase.from("perfil").select(){
             filter {
-                eq("id", user)
+                eq("id", userId)
             }
         }.decodeSingle<User>()
-        return nameList
+        return user
+    }
+
+    suspend fun updateUser(fieldName: String, fieldValue: String) {
+        val userUpdate = mapOf(fieldName to fieldValue)
+        val userId = supabase.auth.retrieveUserForCurrentSession().id
+        supabase.from("perfil")
+            .update(userUpdate) {
+                filter {
+                    eq("id", userId)
+                }
+            }
     }
 
     suspend fun signOut() {

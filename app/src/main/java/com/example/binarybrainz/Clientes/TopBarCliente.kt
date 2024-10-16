@@ -31,14 +31,15 @@ fun TopBarClientes(navController: NavController, viewModel: UserViewModel) {
 
     LaunchedEffect(Unit) {
         isLoading = true
-        viewModel.loadUserName()
+        viewModel.loadUser()
         isLoading = false
     }
 
     TopAppBar(
         title = {
+            val user = viewModel.user.value
             Text(
-                text =viewModel.userName.value,
+                text = if (user != null) "Bienvenido ${user.nombre}" else "",
                 fontSize = 20.sp,
                 modifier = Modifier.fillMaxWidth(),
                 style = MaterialTheme.typography.titleMedium,

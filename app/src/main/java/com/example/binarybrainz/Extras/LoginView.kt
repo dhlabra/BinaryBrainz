@@ -23,7 +23,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.binarybrainz.Abogados.SignUpView
 import com.example.binarybrainz.R
 import com.example.binarybrainz.ui.theme.DarkGrey
 

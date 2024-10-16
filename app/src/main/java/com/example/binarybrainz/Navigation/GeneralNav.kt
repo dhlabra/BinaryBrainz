@@ -5,8 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.binarybrainz.Abogados.SignUpView
-import com.example.binarybrainz.Abogados.SignUpView2
+import com.example.binarybrainz.Extras.SignUpView
 import com.example.binarybrainz.Extras.LoginView
 import com.example.binarybrainz.Extras.UserViewModel
 
@@ -18,9 +17,6 @@ fun GeneralNavigation(navController: NavHostController, modifier: Modifier = Mod
         }
         composable("signup_admin_view") {
             SignUpView(navController, viewModel)
-        }
-        composable("signup_admin_view2") {
-            SignUpView2(navController, viewModel)
         }
     }
 }

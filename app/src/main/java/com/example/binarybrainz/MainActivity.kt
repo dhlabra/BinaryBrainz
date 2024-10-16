@@ -1,7 +1,6 @@
 // Prueba1
 package com.example.binarybrainz
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,10 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.Abogados.AbogadoView
-import com.example.binarybrainz.Abogados.SignUpView2
 import com.example.binarybrainz.Clientes.ClienteView
-import com.example.binarybrainz.Clientes.VistaServicios
-import com.example.binarybrainz.Extras.LoginView
 import com.example.binarybrainz.Extras.UserRepository
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme

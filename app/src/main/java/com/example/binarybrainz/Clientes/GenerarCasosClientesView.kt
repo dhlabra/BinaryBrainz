@@ -6,7 +6,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,12 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.Extras.UserViewModel
-import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -30,12 +25,9 @@ import java.util.*
 fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewModel) {
     var selectedCategory by remember { mutableStateOf("") }
     var caseDescription by remember { mutableStateOf(TextFieldValue("")) }
-    var acceptTerms by remember { mutableStateOf(false) }
     var acceptStudents by remember { mutableStateOf(false) }
     var resultado by remember { mutableStateOf("") }
-    var showTermsDialog by remember { mutableStateOf(false) } // Estado para el pop-up de términos
     var expanded by remember { mutableStateOf(false) }
-    val services = List(10) { "Servicio ${it + 1}" }
     val currentTime = Calendar.getInstance()
     val scope = rememberCoroutineScope()
     var expandedHour by remember { mutableStateOf(false) }
@@ -45,10 +37,19 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
     var showDatePicker by remember { mutableStateOf(false) }
     var showDateErrorDialog by remember { mutableStateOf(false) }
 
-    val isFormComplete = selectedCategory.isNotBlank() && caseDescription.text.isNotBlank() && acceptTerms && acceptStudents && selectedHour.isNotBlank()
-
-
-
+    val isFormComplete = selectedCategory.isNotBlank() && caseDescription.text.isNotBlank() && acceptStudents && selectedHour.isNotBlank()
+    val services = listOf(
+        "Consulta General",
+        "Divorcio",
+        "Herencias y Testamentos",
+        "Accidentes de Tráfico",
+        "Defensa Penal",
+        "Custodia de Hijos",
+        "Demandas Civiles",
+        "Derecho Laboral",
+        "Arrendamientos",
+        "Mediación Familiar"
+    )
     Scaffold(
         topBar = {
             TopAppBar(
@@ -165,9 +166,7 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                         }
                     }
                 }
-
             }
-
 
             // Botón para abrir el selector de fecha modal
             Button(onClick = { showDatePicker = true }) {
@@ -182,29 +181,6 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                     java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
                 } ?: "No se ha seleccionado ninguna fecha"
             )
-
-            // Check de términos y condiciones con el ícono de interrogación
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(
-                    checked = acceptTerms,
-                    onCheckedChange = { acceptTerms = it },
-                    colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
-                )
-                Text(
-                    text = "Acepto los términos y condiciones.",
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(onClick = { showTermsDialog = true }) {
-                    Icon(imageVector = Icons.Filled.List, contentDescription = "Términos y Condiciones")
-                }
-            }
 
             // Check para aceptar estudiantes en la cita
             Row(
@@ -223,64 +199,6 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                     fontSize = 14.sp,
                     modifier = Modifier.padding(start = 8.dp)
                 )
-            }
-
-            // Pop-up de términos y condiciones
-            if (showTermsDialog) {
-                Dialog(onDismissRequest = { showTermsDialog = false }) {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        shape = MaterialTheme.shapes.medium,
-                        tonalElevation = 8.dp
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .verticalScroll(rememberScrollState()),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = "Términos y Condiciones de Uso",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp
-                            )
-                            Text(
-                                text = """
-                                    1. Aceptación de los Términos
-                                    Al acceder y utilizar nuestra aplicación, aceptas cumplir con estos Términos y Condiciones de Uso, así como con cualquier ley y regulación aplicable. Si no estás de acuerdo con estos términos, te pedimos que no utilices nuestra aplicación.
-                                    
-                                    2. Uso de la Aplicación
-                                    Nuestra aplicación está diseñada para proporcionar servicios de gestión de casos y asesorías. El uso de la aplicación debe ser para fines lícitos y está prohibido cualquier uso que viole las leyes aplicables.
-                                    
-                                    3. Creación y Gestión de Casos
-                                    El usuario es responsable de la información ingresada al crear y gestionar casos dentro de la aplicación. Es fundamental que todos los datos proporcionados sean precisos y verídicos para garantizar el correcto funcionamiento de la plataforma.
-                                    
-                                    4. Privacidad
-                                    Nos comprometemos a proteger tu privacidad y la confidencialidad de la información proporcionada a través de la aplicación. Los datos personales se manejarán de acuerdo con nuestra Política de Privacidad, la cual puedes consultar en el apartado correspondiente.
-                                    
-                                    5. Responsabilidades del Usuario
-                                    El usuario acepta utilizar la aplicación de manera responsable y ética, evitando cualquier actividad que comprometa la seguridad, integridad o funcionamiento de la aplicación.
-                                    
-                                    6. Limitación de Responsabilidad
-                                    No somos responsables de daños directos, indirectos o consecuentes que resulten del uso o la incapacidad de utilizar la aplicación. El uso de la aplicación es bajo tu propio riesgo.
-                                    
-                                    7. Cambios en los Términos
-                                    Nos reservamos el derecho de modificar estos términos en cualquier momento. Te recomendamos revisar esta página periódicamente para mantenerte informado sobre cualquier actualización.
-                                    
-                                    8. Contacto
-                                    Si tienes alguna pregunta sobre estos términos, puedes contactarnos a través de los medios disponibles en la aplicación.
-                                """.trimIndent(),
-                                fontSize = 12.sp // Texto más pequeño para que quepa en el pop-up
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Button(onClick = { showTermsDialog = false }) {
-                                Text("Cerrar")
-                            }
-                        }
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.weight(1f))

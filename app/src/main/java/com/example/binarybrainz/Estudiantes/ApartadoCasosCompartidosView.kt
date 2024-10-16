@@ -20,13 +20,11 @@ import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.Estudiantes.TopBarEstudiante // Importa el nuevo TopBarEstudiante
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserViewModel) {
     Scaffold(
         topBar = {
-            TopBarEstudiante(viewModel = viewModel, studentName = "Nombre Estudiante") // Utiliza el nuevo TopBarEstudiante
-        }
+            TopBarEstudiante(viewModel = viewModel, navController = navController, studentName = "Chapa")}
     ) { paddingValues ->
         Column(
             modifier = Modifier

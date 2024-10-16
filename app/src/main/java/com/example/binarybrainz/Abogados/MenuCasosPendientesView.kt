@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Warning
@@ -23,10 +24,9 @@ import com.example.binarybrainz.Extras.Asesoria
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
-import java.text.SimpleDateFormat
-import java.util.*
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -59,13 +59,14 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
     ) {
         Scaffold(
             topBar = {
-                TopBarAbogados(
-                    navController = navController,
-                    drawerState = drawerState,
-                    viewModel
-                ) {
-                    navController.navigate("login_view")
-                }
+                TopAppBar(
+                    title = { Text("Solicitud de Ayuda", fontWeight = FontWeight.Bold, fontSize = 22.sp) },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                        }
+                    }
+                )
             }
         ) { paddingValues ->
             Column(

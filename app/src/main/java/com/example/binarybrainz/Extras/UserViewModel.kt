@@ -1,11 +1,8 @@
 package com.example.binarybrainz.Extras
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import io.github.jan.supabase.gotrue.SessionStatus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -168,6 +165,20 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         viewModelScope.launch {
             try {
                 userRepository.setAsesoria(description, category)
+            } catch (e: Exception) {
+                errorMessage.value = e.message ?: "Unknown error"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
+    fun updateAsesoriaGravedad(gravedad: String, asesoriaId: String) {
+        isLoading.value = true
+        errorMessage.value = " "
+        viewModelScope.launch {
+            try {
+                userRepository.updateAsesoriaGravedad(gravedad, asesoriaId)
             } catch (e: Exception) {
                 errorMessage.value = e.message ?: "Unknown error"
             } finally {

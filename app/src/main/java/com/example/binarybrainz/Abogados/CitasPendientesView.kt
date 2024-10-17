@@ -42,7 +42,7 @@ fun CitasPendientesScreen(navController: NavController, viewModel: UserViewModel
     LaunchedEffect(Unit) {
         isLoading = true
         viewModel.loadCitaList()
-        citas = viewModel.citaList.filter { it.status == "Pendiente" }
+        citas = viewModel.citaList.filter { it.status == "pendiente" }
         isLoading = false
     }
 
@@ -135,9 +135,6 @@ fun CitasPendientesFilterSection() {
         }
     }
 }
-
-// Model class to hold pending case data
-data class CitaPendiente(val caseId: String, val date: String, val time: String)
 
 @Composable
 fun CitasPendientesList(navController: NavController, citas: List<Cita>) {

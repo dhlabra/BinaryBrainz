@@ -150,12 +150,13 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
             .insert(setAsesoria)
     }
 
-    suspend fun updateAsesoria(updates: Map<String, String>) {
-        val userId = supabase.auth.retrieveUserForCurrentSession().id
-        supabase.from("perfil")
-            .update(updates) {
+    suspend fun updateAsesoriaGravedad(gravedad: String, asesoriaId: String) {
+        println("gravedad: $gravedad, asesoriaId: $asesoriaId")
+        val setGravedad = mapOf("gravedad" to gravedad)
+        supabase.from("asesorias")
+            .update(setGravedad) {
                 filter {
-                    eq("id", userId)
+                    eq("id", asesoriaId)
                 }
             }
     }

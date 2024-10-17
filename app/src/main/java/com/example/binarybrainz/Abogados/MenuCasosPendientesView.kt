@@ -1,8 +1,6 @@
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -15,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,7 +24,6 @@ import com.example.binarybrainz.Extras.Asesoria
 import com.example.binarybrainz.Extras.User
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
-import com.example.binarybrainz.components.TopBarAbogados
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -166,7 +162,8 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
                     it.status = status
                     showStatusDialog = false
                 }
-            }
+            },
+            viewModel = viewModel
         )
     }
 }
@@ -239,7 +236,7 @@ fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List
 }
 
 @Composable
-fun StatusDialog(asesoria: Asesoria, onDismiss: () -> Unit, onStatusSelected: (String) -> Unit) {
+fun StatusDialog(asesoria: Asesoria, onDismiss: () -> Unit, onStatusSelected: (String) -> Unit, viewModel: UserViewModel) {
     var status by remember { mutableStateOf(asesoria.status) }
     var sliderValue by remember { mutableStateOf(1f) } // Gravedad del caso
 
@@ -299,7 +296,10 @@ fun StatusDialog(asesoria: Asesoria, onDismiss: () -> Unit, onStatusSelected: (S
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { onStatusSelected(status) },
+                    onClick = {
+                        onStatusSelected(status)
+                        viewModel.updateAsesoriaGravedad(sliderValue.toString(), asesoria.id.toString())
+                              },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     Text("Asignar Estado", color = Color.White)

@@ -1,5 +1,6 @@
 package com.example.binarybrainz.StudentViews
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -17,8 +18,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,22 +59,27 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
 
     val caseDetail = casesDetail.find { it.id == caseId }
 
-    val students = listOf("Estudiante A", "Estudiante B", "Estudiante Cccccccccccccccccccccc")
+    val students = listOf("Estudiante A", "Estudiante B", "Estudiante C")
 
     var expanded by remember { mutableStateOf(false) }
     var selectedStudent by remember { mutableStateOf("") }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = "Caso #$caseId", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Go Back")
+        bottomBar = {
+            BottomAppBar(
+                content = {
+                    IconButton(
+                        onClick = { navController.popBackStack() } // Acción para regresar a la vista anterior
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Regresar",
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 },
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = Color.White
             )
         }
     ) { paddingValues ->
@@ -101,13 +105,13 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                             text = "NOMBRE:",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Gray // Cambiado a dark grey
+                            color = Color.Gray
                         )
                         Text(
                             text = detail.name,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
-                            color = Color.Black,  // Cambiado a negro
+                            color = Color.Black,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
@@ -127,7 +131,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
-                        // Información del teléfono
+
                         Text(
                             text = "TELÉFONO:",
                             fontSize = 14.sp,
@@ -143,7 +147,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
-                        // Información del servicio
+
                         Text(
                             text = "SERVICIO:",
                             fontSize = 14.sp,
@@ -180,7 +184,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
 
                 Button(
                     onClick = { /* Acción de editar caso */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -190,7 +194,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
 
                 Button(
                     onClick = { /* Acción de descargar como PDF */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)

@@ -67,9 +67,7 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
 
     val caseDetail = casesDetail.find { it.id == caseId }
 
-    val students = listOf("Estudiante A", "Estudiante B", "Estudiante Cccccccccccccccccccccc")
 
-    var expanded by remember { mutableStateOf(false) }
     var selectedStudent by remember { mutableStateOf("") }
 
     Scaffold(
@@ -212,28 +210,7 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                         .padding(8.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Button(
-                        onClick = { expanded = !expanded },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(text = "Compartir Caso", color = Color.White)
-                    }
 
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        students.forEach { student ->
-                            DropdownMenuItem(
-                                text = { Text(student) },
-                                onClick = {
-                                    selectedStudent = student
-                                    expanded = false
-                                }
-                            )
-                        }
-                    }
                 }
 
                 if (selectedStudent.isNotEmpty()) {

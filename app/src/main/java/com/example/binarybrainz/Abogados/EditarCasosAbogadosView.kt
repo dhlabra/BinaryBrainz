@@ -24,12 +24,11 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel: UserViewModel) {
     var isLoading by remember { mutableStateOf(false) }
-
+    var showDialog by remember { mutableStateOf(false) }  // Para controlar el diálogo de finalizar caso
     var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
     var users by remember { mutableStateOf<List<User>>(emptyList()) }
 
@@ -57,6 +56,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel
         asesorias.firstOrNull()?.let { detail ->
             val cliente = users.firstOrNull { it.id == detail.cliente_id }
             val students = users.filter { it.role == "Estudiante" }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -198,6 +198,19 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel
                         color = Color.DarkGray
                     )
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Botón para finalizar caso
+                Button(
+                    onClick = { showDialog = true },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(text = "Finalizar Caso", color = Color.White)
+                }
             }
         } ?: run {
             // Si no se encuentra el caso, muestra un mensaje
@@ -208,5 +221,35 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel
                 Text("Caso no encontrado.")
             }
         }
+    }
+
+    // Mostrar diálogo para finalizar caso
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = "¿Finalizar el caso?") },
+            text = { Text("Esta acción cerrará el caso permanentemente. ¿Estás seguro?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // Lógica para cerrar el caso
+                       // viewModel.finalizarCaso(caseId)
+                        showDialog = false
+                        navController.popBackStack() // Vuelve a la vista anterior
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) {
+                    Text("Sí, finalizar")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("Todavía no")
+                }
+            }
+        )
     }
 }

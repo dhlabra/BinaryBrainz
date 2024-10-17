@@ -185,7 +185,7 @@ fun HistorialCaseItem(caseId: String, navController: NavController) {
         ) {
             Button(
                 modifier = Modifier.padding(8.dp),
-                onClick = { navController.navigate("edit_case_view/$caseId") }
+                onClick = { navController.navigate("editar_casos_abogados/$caseId") }
             ) {
                 Icon(imageVector = Icons.Default.Edit, contentDescription = null)
             }

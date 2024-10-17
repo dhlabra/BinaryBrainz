@@ -176,7 +176,7 @@ fun CitasPendientesItem(navController: NavController, cita: Cita) {
                 color = Color.Gray,
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { navController.navigate("cita_detalle_view/${cita.asesoria_id}") }
+                    .clickable { navController.navigate("editar_casos_abogados/${cita.asesoria_id}") }
             )
         }
 

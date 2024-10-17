@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.binarybrainz.Abogados.CitasPendientesScreen
 import com.example.binarybrainz.Abogados.HistorialScreen
 import com.example.binarybrainz.Extras.UserViewModel
+import com.example.binarybrainz.StudentViews.EditarCasosAbogadosView
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
 
 @Composable
@@ -30,6 +31,10 @@ fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Mod
         }
         composable("citas_pendientes") {
             CitasPendientesScreen(navController, viewModel)
+        }
+        composable("editar_casos_abogados/{caseId}") { backStackEntry ->
+            val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
+            EditarCasosAbogadosView(navController, caseId)
         }
     }
 }

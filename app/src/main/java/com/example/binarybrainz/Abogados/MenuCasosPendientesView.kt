@@ -231,7 +231,7 @@ fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List
                     contentDescription = "Editar Asesoría",
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { navController.navigate("edit_case_view/${asesoria.id}") }
+                        .clickable { navController.navigate("editar_casos_abogados/${asesoria.id}") }
                 )
             }
         }

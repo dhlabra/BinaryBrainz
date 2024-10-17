@@ -161,6 +161,16 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
             }
     }
 
+    suspend fun updateAsesoriaStatus(asesoriaId: String) {
+        val setGravedad = mapOf("status" to "Finalizado")
+        supabase.from("asesorias")
+            .update(setGravedad) {
+                filter {
+                    eq("id", asesoriaId)
+                }
+            }
+    }
+
     // Función para obtener la lista completa de asesorías (para abogados)
     suspend fun getAsesoriaList(): List<Asesoria> {
         return supabase.from("asesorias").select().decodeList<Asesoria>()

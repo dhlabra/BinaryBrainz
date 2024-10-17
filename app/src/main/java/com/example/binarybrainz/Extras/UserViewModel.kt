@@ -187,6 +187,20 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
+    fun updateAsesoriaStatus(asesoriaId: String) {
+        isLoading.value = true
+        errorMessage.value = " "
+        viewModelScope.launch {
+            try {
+                userRepository.updateAsesoriaStatus(asesoriaId)
+            } catch (e: Exception) {
+                errorMessage.value = e.message ?: "Unknown error"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
     fun setAsesoriaCompartida(asesoriaId: String, estudianteId: String) {
         isLoading.value = true
         errorMessage.value = " "

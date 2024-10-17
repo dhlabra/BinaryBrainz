@@ -233,7 +233,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel
                 Button(
                     onClick = {
                         // Lógica para cerrar el caso
-                       // viewModel.finalizarCaso(caseId)
+                        viewModel.updateAsesoriaStatus(caseId.toString())
                         showDialog = false
                         navController.popBackStack() // Vuelve a la vista anterior
                     },

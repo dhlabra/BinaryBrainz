@@ -23,6 +23,7 @@ import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel: UserViewModel) {
@@ -44,21 +45,11 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel
     var selectedStudent by remember { mutableStateOf<User?>(null) }
 
     Scaffold(
-        bottomBar = {
-            BottomAppBar(
-                content = {
-                    IconButton(
-                        onClick = { navController.popBackStack() } // Acción para regresar a la vista anterior
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Regresar",
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                containerColor = Color.White
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "Caso #$caseId", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                }
             )
         }
     ) { paddingValues ->
@@ -73,6 +64,24 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Flecha de salida en la parte superior de la vista
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.TopStart
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Salir",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable {
+                                navController.popBackStack() // Acción para salir de la vista
+                            }
+                    )
+                }
+
                 // Tarjeta de información
                 Card(
                     modifier = Modifier

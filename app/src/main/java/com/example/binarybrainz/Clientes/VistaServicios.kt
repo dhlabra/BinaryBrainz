@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.R
@@ -62,6 +64,16 @@ fun VistaServicios(navController: NavController, viewModel: UserViewModel, modif
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(-60.dp), // Ajuste de espacio entre los elementos
         ) {
+            // Título centrado con estilo "bubble" y letras negras
+            Text(
+                text = "Infórmate de nuestros servicios",
+                fontWeight = FontWeight.Bold, // Estilo "bubble"
+                fontSize = 23.sp, // Tamaño de letra mayor
+                color = Color.Black, // Letras negras
+                modifier = Modifier
+                    .padding(19.dp)
+                    .align(Alignment.CenterHorizontally), // Alineación centrada
+            )
             // Tarjetas de servicios disponibles con navegación
             ImageCardVertical(
                 imageId = R.drawable.violenciadomestica,

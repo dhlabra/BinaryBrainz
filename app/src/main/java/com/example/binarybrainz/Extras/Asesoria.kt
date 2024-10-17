@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Asesoria(
-    val id: String,
+    val id: Int,
     var description: String,
     var category: String,
     var cliente_id: String,

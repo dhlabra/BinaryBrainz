@@ -7,16 +7,9 @@ import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.sql.Date
-import java.sql.Time
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.UUID
 
 class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope) {
 
@@ -109,21 +102,25 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
     suspend fun setCita(fecha: String, hora: String) {
         val idClient = supabase.auth.retrieveUserForCurrentSession().id
-        val idPhone = supabase
+        val userInfo = supabase
             .from("perfil")
             .select(){
             filter {
                 eq("id", idClient)
             }
-        }
-        val idAsesoria = supabase
+        }.decodeSingleOrNull<User>()
+        val phone = userInfo?.celular
+        val asesoriaInfo = supabase
             .from("asesorias")
             .select(){
                 filter {
                     eq("cliente_id", idClient)
                 }
-            }
-        val citaInfo = mapOf("client_phone" to (idPhone.decodeSingleOrNull<User>()?.celular), "asesoria_id" to (idAsesoria.decodeSingleOrNull<Asesoria>()?.id), "status" to "pendiente", "client_id" to idClient, "date" to fecha, "time" to hora)
+            }.decodeSingleOrNull<Asesoria>()
+
+        val idAsesoria = asesoriaInfo?.id.toString()
+
+        val citaInfo = mapOf("client_phone" to phone, "status" to "pendiente", "client_id" to idClient, "date" to fecha, "time" to hora, "asesoria_id" to idAsesoria)
         supabase.from("citas")
             .insert(citaInfo)
     }
@@ -153,13 +150,12 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
             .insert(setAsesoria)
     }
 
-    // Función para editar la fecha y hora de una asesoría
-    suspend fun updateAsesoriaDateTime(asesoriaId: String, newDate: String, newTime: String) {
-        val updateAsesoria = mapOf("date" to newDate, "time" to newTime)
-        supabase.from("asesorias")
-            .update(updateAsesoria) {
+    suspend fun updateAsesoria(updates: Map<String, String>) {
+        val userId = supabase.auth.retrieveUserForCurrentSession().id
+        supabase.from("perfil")
+            .update(updates) {
                 filter {
-                    eq("id", asesoriaId)
+                    eq("id", userId)
                 }
             }
     }

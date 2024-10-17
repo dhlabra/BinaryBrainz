@@ -2,6 +2,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -45,8 +46,7 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
         isLoading = true
         viewModel.loadAsesoriaList()
         viewModel.loadUserNameList()
-        asesorias =
-            viewModel.asesoriaList
+        asesorias = viewModel.asesoriaList
         usuarios = viewModel.userList
         isLoading = false
     }
@@ -211,9 +211,16 @@ fun FilterSection(
 @Composable
 fun AsesoriasList(navController: NavController, asesorias: List<Asesoria>, usuarios: List<User>, onEditStatusClick: (Asesoria) -> Unit) {
     LazyColumn {
-        items(asesorias) { asesoria ->
-            AsesoriaRow(navController = navController, asesoria = asesoria, usuarios = usuarios, onEditStatusClick = onEditStatusClick)
-            Divider(thickness = 1.dp, color = Color.Gray)
+        itemsIndexed(asesorias) { index, asesoria ->
+            AsesoriaRow(
+                navController = navController,
+                asesoria = asesoria,
+                usuarios = usuarios,
+                onEditStatusClick = onEditStatusClick
+            )
+            if (index < asesorias.size - 1) {
+                Divider(thickness = 1.dp, color = Color.Gray)
+            }
         }
     }
 }
@@ -221,9 +228,6 @@ fun AsesoriasList(navController: NavController, asesorias: List<Asesoria>, usuar
 @Composable
 fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List<User>, onEditStatusClick: (Asesoria) -> Unit) {
     val cliente = usuarios.find { it.id == asesoria.cliente_id }
-    println("AQUI ESTA ASESORIAS: ${asesoria.cliente_id}")
-    println("AQUI ESTA USUARIOS: ${usuarios}")
-
     val nombreCliente = cliente?.nombre ?: "Desconocido"
     val apellidoCliente = cliente?.apellido ?: ""
 

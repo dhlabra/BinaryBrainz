@@ -2,6 +2,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -79,7 +80,7 @@ fun AsignarRolesScreen(navController: NavController, viewModel: UserViewModel) {
                 } else {
 
                     LazyColumn {
-                        items(usuarios) { user ->
+                        itemsIndexed(usuarios) { index, user ->
                             UsuarioRow(
                                 navController,
                                 usuario = "${user.nombre} ${user.apellido}",
@@ -89,7 +90,9 @@ fun AsignarRolesScreen(navController: NavController, viewModel: UserViewModel) {
                                     showRoleDialog = true
                                 }
                             )
-                            Divider(thickness = 1.dp, color = Color.Gray)
+                            if (index < usuarios.size - 1) {
+                                Divider(thickness = 1.dp, color = Color.Gray)
+                            }
                         }
                     }
 

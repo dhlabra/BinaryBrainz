@@ -7,6 +7,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,9 +24,21 @@ import androidx.navigation.compose.rememberNavController
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.Estudiantes.TopBarEstudiante // Importa el nuevo TopBarEstudiante
+import com.example.binarybrainz.Extras.Asesoria
 
 @Composable
 fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserViewModel) {
+    var isLoading by remember { mutableStateOf(false) }
+
+    var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        isLoading = true
+        viewModel.loadAsesoriaList()
+        asesorias = viewModel.asesoriaList
+        isLoading = false
+    }
+
     Scaffold(
         topBar = {
             TopBarEstudiante(viewModel = viewModel, navController = navController, studentName = "Chapa")}
@@ -39,23 +56,23 @@ fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserVi
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
-            CaseList(navController = navController, cases = listOf("123", "333", "475", "758"))
+            CaseList(navController = navController, cases = asesorias)
         }
     }
 }
 
 @Composable
-fun CaseList(navController: NavController, cases: List<String>) {
+fun CaseList(navController: NavController, cases: List<Asesoria>) {
     LazyColumn {
         items(cases) { caseId ->
-            CaseRow(navController = navController, caseId = caseId)
+            CaseRow(navController = navController, caseId = caseId.id)
             HorizontalDivider(thickness = 1.dp, color = Color.Gray)
         }
     }
 }
 
 @Composable
-fun CaseRow(navController: NavController, caseId: String) {
+fun CaseRow(navController: NavController, caseId: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

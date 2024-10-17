@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -27,7 +28,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.binarybrainz.Extras.Asesoria
+import com.example.binarybrainz.Extras.User
 import com.example.binarybrainz.StudentViews.CaseRow
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
@@ -46,6 +54,16 @@ import com.example.binarybrainz.components.TopBarAbogados
 fun HistorialScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
+
+    var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        isLoading = true
+        viewModel.loadAsesoriaList()
+        asesorias = viewModel.asesoriaList.filter { it.status == "Finalizado" }
+        isLoading = false
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -81,7 +99,7 @@ fun HistorialScreen(navController: NavController, viewModel: UserViewModel) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                HistorialCasesList(navController = navController, cases = listOf("123", "333", "475", "758"))
+                HistorialCasesList(navController = navController, cases = asesorias)
             }
         }
     }
@@ -136,11 +154,13 @@ fun HistorialFilterSection() {
 }
 
 @Composable
-fun HistorialCasesList(navController: NavController, cases: List<String>) {
+fun HistorialCasesList(navController: NavController, cases: List<Asesoria>) {
     LazyColumn {
-        items(cases) { caseId ->
-            CaseRow(navController = navController, caseId = caseId)
-            HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+        itemsIndexed(cases) { index, case ->
+            CaseRow(navController = navController, caseId = case.id)
+            if (index < cases.size - 1) {
+                HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+            }
         }
     }
 }

@@ -120,7 +120,7 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
         val idAsesoria = asesoriaInfo?.id.toString()
 
-        val citaInfo = mapOf("client_phone" to phone, "status" to "pendiente", "client_id" to idClient, "date" to fecha, "time" to hora, "asesoria_id" to idAsesoria)
+        val citaInfo = mapOf("client_phone" to phone, "status" to "Pendiente", "client_id" to idClient, "date" to fecha, "time" to hora, "asesoria_id" to idAsesoria)
         supabase.from("citas")
             .insert(citaInfo)
     }
@@ -144,7 +144,7 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
             "cliente_id" to idClient,
             "description" to description,
             "category" to category,
-            "status" to "pendiente"
+            "status" to "Pendiente"
         )
         supabase.from("asesorias")
             .insert(setAsesoria)
@@ -165,41 +165,22 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
         return supabase.from("asesorias").select().decodeList<Asesoria>()
     }
 
-    // Función para obtener las asesorías pendientes
-    suspend fun getAsesoriasPendientes(): List<Asesoria> {
-        return supabase.from("asesorias").select() {
-            filter {
-                eq("status", "pendiente")
-            }
-        }.decodeList<Asesoria>()
+    suspend fun getCitaList(): List<Cita> {
+        return supabase.from("citas").select().decodeList<Cita>()
     }
 
-    // Función para obtener las asesorías terminadas
-    suspend fun getAsesoriasTerminadas(): List<Asesoria> {
-        return supabase.from("asesorias").select() {
-            filter {
-                eq("status", "terminada")
-            }
-        }.decodeList<Asesoria>()
+    suspend fun setAsesoriaCompartida(asesoriaId: String, estudianteId: String) {
+        supabase.from("citas_compartidas").insert(mapOf("asesoria_id" to asesoriaId, "estudiante_id" to estudianteId))
     }
 
-    // Función para obtener todas las asesorías con estatus "pendiente"
-    suspend fun getEstatusPendiente(): List<Asesoria> {
-        return supabase.from("asesorias").select() {
+    suspend fun getAsesoriaCompartidaList(): List<CitaCompartida> {
+        val userId = supabase.auth.retrieveUserForCurrentSession().id
+        val citasCompartidas = supabase.from("citas_compartidas").select(){
             filter {
-                eq("status", "pendiente")
+                eq("estudiante_id", userId)
             }
-        }.decodeList<Asesoria>()
+        }.decodeList<CitaCompartida>()
+        return citasCompartidas
     }
-
-    // Función para obtener todas las asesorías con estatus completo
-    suspend fun getEstatusCompleto(): List<Asesoria> {
-        return supabase.from("asesorias").select() {
-            filter {
-                eq("status", "completo")
-            }
-        }.decodeList<Asesoria>()
-    }
-
 }
 

@@ -26,29 +26,40 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState, viewM
         NavigationDrawerItem(
             label = { Text(text = "Casos Pendientes") },
             selected = false,
-            onClick = { navController.navigate("menu_casos_pendientes_view") }
+            onClick = {
+                navController.navigate("menu_casos_pendientes_view")
+                scope.launch { drawerState.close() }
+            }
         )
         Divider()
 
         NavigationDrawerItem(
             label = { Text(text = "Historial") },
             selected = false,
-            onClick = { navController.navigate("menu_historial_view") }
+            onClick = {
+                navController.navigate("menu_historial_view")
+                scope.launch { drawerState.close() }
+            }
         )
         Divider()
 
         NavigationDrawerItem(
             label = { Text(text = "Asignar Roles") },
             selected = false,
-            onClick = { navController.navigate("asignar_roles") }
+            onClick = {
+                navController.navigate("asignar_roles")
+                scope.launch { drawerState.close() }
+            }
         )
         Divider()
         NavigationDrawerItem(
             label = { Text(text = "Citas Pendientes") },
             selected = false,
-            onClick = { navController.navigate("citas_pendientes") }
+            onClick = {
+                navController.navigate("citas_pendientes")
+                scope.launch { drawerState.close() }
+            }
         )
-        Divider()
 
 
     }

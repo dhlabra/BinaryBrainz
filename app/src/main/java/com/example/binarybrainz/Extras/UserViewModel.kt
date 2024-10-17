@@ -135,6 +135,13 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         _asesoriaList.value = userRepository.getAsesoriaList()  // Usar la función existente en el repositorio
     }
 
+
+    private val _citaList = mutableStateOf<List<Cita>>(emptyList())
+    val citaList: List<Cita> get() = _citaList.value
+    suspend fun loadCitaList() {
+        _citaList.value = userRepository.getCitaList()  // Usar la función existente en el repositorio
+    }
+
     fun signOut() {
         viewModelScope.launch {
             userRepository.signOut()

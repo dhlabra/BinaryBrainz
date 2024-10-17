@@ -4,12 +4,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.binarybrainz.Extras.Asesoria
+import com.example.binarybrainz.Extras.Cita
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
@@ -27,6 +35,16 @@ import com.example.binarybrainz.components.TopBarAbogados
 fun CitasPendientesScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    var isLoading by remember { mutableStateOf(false) }
+
+    var citas by remember { mutableStateOf<List<Cita>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        isLoading = true
+        viewModel.loadCitaList()
+        citas = viewModel.citaList.filter { it.status == "Pendiente" }
+        isLoading = false
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -64,12 +82,7 @@ fun CitasPendientesScreen(navController: NavController, viewModel: UserViewModel
 
                 CitasPendientesList(
                     navController = navController,
-                    citas = listOf(
-                        CitaPendiente("123", "2023-10-15", "10:00 AM"),
-                        CitaPendiente("333", "2023-10-16", "11:00 AM"),
-                        CitaPendiente("475", "2023-10-17", "02:00 PM"),
-                        CitaPendiente("758", "2023-10-18", "04:00 PM")
-                    )
+                    citas = citas
                 )
             }
         }
@@ -127,17 +140,19 @@ fun CitasPendientesFilterSection() {
 data class CitaPendiente(val caseId: String, val date: String, val time: String)
 
 @Composable
-fun CitasPendientesList(navController: NavController, citas: List<CitaPendiente>) {
+fun CitasPendientesList(navController: NavController, citas: List<Cita>) {
     LazyColumn {
-        items(citas) { cita ->
+        itemsIndexed(citas) { index, cita ->
             CitasPendientesItem(navController = navController, cita = cita)
-            Divider(thickness = 1.dp, color = Color.Gray)
+            if (index < citas.size - 1) {
+                Divider(thickness = 1.dp, color = Color.Gray)
+            }
         }
     }
 }
 
 @Composable
-fun CitasPendientesItem(navController: NavController, cita: CitaPendiente) {
+fun CitasPendientesItem(navController: NavController, cita: Cita) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -151,7 +166,7 @@ fun CitasPendientesItem(navController: NavController, cita: CitaPendiente) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Caso #${cita.caseId}",
+                text = "Caso #${cita.asesoria_id}",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -161,7 +176,7 @@ fun CitasPendientesItem(navController: NavController, cita: CitaPendiente) {
                 color = Color.Gray,
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { navController.navigate("cita_detalle_view/${cita.caseId}") }
+                    .clickable { navController.navigate("cita_detalle_view/${cita.asesoria_id}") }
             )
         }
 

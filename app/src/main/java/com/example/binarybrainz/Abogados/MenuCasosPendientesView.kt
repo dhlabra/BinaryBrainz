@@ -86,11 +86,7 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
                 Spacer(modifier = Modifier.height(24.dp))
 
                 // Título de la sección
-                TitleSection(title = "Asesorías Pendientes")
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                TitleSection(title = "Asesorías Pendientes")
+                TitleSection(title = "Casos Pendientes")
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -276,7 +272,7 @@ fun StatusDialog(asesoria: Asesoria, onDismiss: () -> Unit, onStatusSelected: (S
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Asignar Estado a la Asesoría #${asesoria.id}",
+                    text = "Asignar Estado a el Caso #${asesoria.id}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )

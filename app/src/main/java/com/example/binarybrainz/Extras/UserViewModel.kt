@@ -190,4 +190,10 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
+    private val _asesoriasCompartidasList = mutableStateOf<List<CitaCompartida>>(emptyList())
+    val asesoriasCompartidasList: List<CitaCompartida> get() = _asesoriasCompartidasList.value
+    suspend fun loadAsesoriasCompartidasList() {
+        _asesoriasCompartidasList.value = userRepository.getAsesoriaCompartidaList()  // Usar la función existente en el repositorio
+    }
+
 }

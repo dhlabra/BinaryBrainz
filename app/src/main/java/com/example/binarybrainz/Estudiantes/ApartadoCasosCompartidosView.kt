@@ -3,6 +3,7 @@ package com.example.binarybrainz.StudentViews
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
@@ -25,17 +26,18 @@ import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
 import com.example.binarybrainz.Estudiantes.TopBarEstudiante // Importa el nuevo TopBarEstudiante
 import com.example.binarybrainz.Extras.Asesoria
+import com.example.binarybrainz.Extras.CitaCompartida
 
 @Composable
 fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserViewModel) {
     var isLoading by remember { mutableStateOf(false) }
 
-    var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
+    var asesorias by remember { mutableStateOf<List<CitaCompartida>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         isLoading = true
-        viewModel.loadAsesoriaList()
-        asesorias = viewModel.asesoriaList
+        viewModel.loadAsesoriasCompartidasList()
+        asesorias = viewModel.asesoriasCompartidasList
         isLoading = false
     }
 
@@ -62,11 +64,13 @@ fun ApartadoCasosCompartidosView(navController: NavController, viewModel: UserVi
 }
 
 @Composable
-fun CaseList(navController: NavController, cases: List<Asesoria>) {
+fun CaseList(navController: NavController, cases: List<CitaCompartida>) {
     LazyColumn {
-        items(cases) { caseId ->
-            CaseRow(navController = navController, caseId = caseId.id)
-            HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+        itemsIndexed(cases) { index, caseId ->
+            CaseRow(navController = navController, caseId = caseId.asesoria_id)
+            if (index < cases.size - 1) {
+                HorizontalDivider(thickness = 1.dp, color = Color.Gray)
+            }
         }
     }
 }

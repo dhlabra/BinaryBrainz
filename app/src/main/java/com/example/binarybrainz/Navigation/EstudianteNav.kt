@@ -16,8 +16,8 @@ fun EstudianteNavigation(navController: NavHostController, modifier: Modifier = 
             ApartadoCasosCompartidosView(navController, viewModel)
         }
         composable("edit_case_view/{caseId}") { backStackEntry ->
-            val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
-            EditarCasosEstudiantesView(navController, caseId)
+            val caseId = backStackEntry.arguments?.getString("caseId")?.toIntOrNull() ?: -1
+            EditarCasosEstudiantesView(navController, caseId, viewModel)
         }
     }
 }

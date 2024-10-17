@@ -156,26 +156,6 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel
                     }
                 }
 
-                Button(
-                    onClick = { /* Acción de editar caso */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text(text = "Editar Caso", color = Color.White)
-                }
-
-                Button(
-                    onClick = { /* Acción de descargar como PDF */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text(text = "Descargar como PDF", color = Color.White)
-                }
-
                 // Botón de "Compartir" con lista desplegable
                 Box(
                     modifier = Modifier

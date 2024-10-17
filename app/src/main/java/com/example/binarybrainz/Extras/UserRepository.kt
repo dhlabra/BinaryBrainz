@@ -170,6 +170,7 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
     }
 
     suspend fun setAsesoriaCompartida(asesoriaId: String, estudianteId: String) {
+        println("asesoriaId: $asesoriaId, estudianteId: $estudianteId")
         supabase.from("citas_compartidas").insert(mapOf("asesoria_id" to asesoriaId, "estudiante_id" to estudianteId))
     }
 

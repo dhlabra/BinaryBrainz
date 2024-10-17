@@ -1,6 +1,5 @@
 package com.example.binarybrainz.StudentViews
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -17,52 +16,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.binarybrainz.Extras.Asesoria
+import com.example.binarybrainz.Extras.User
+import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.ui.theme.BinaryBrainzTheme
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
-    val casesDetail = listOf(
-        CaseDetail(
-            id = "123",
-            name = "Fernando González Cárdenas",
-            email = "Fgzz01@outlook.com",
-            phone = "8124013672",
-            service = "Testamento",
-            description = "Mi padre murió y quiero recuperar su herencia pero no sé cómo, quisiera ayuda. Gracias."
-        ),
-        CaseDetail(
-            id = "333",
-            name = "Ricardo Chapa",
-            email = "rchapa@correo.com",
-            phone = "8124020304",
-            service = "Divorcio",
-            description = "Necesito asesoría para el proceso de divorcio."
-        ),
-        CaseDetail(
-            id = "475",
-            name = "Rodrigo González",
-            email = "rodrigo@gmail.com",
-            phone = "8111234567",
-            service = "Custodia de menores",
-            description = "Estoy buscando la custodia de mi hijo."
-        ),
-        CaseDetail(
-            id = "758",
-            name = "Marcelo Cárdenas",
-            email = "marcelo@hotmail.com",
-            phone = "8123344556",
-            service = "Defensa penal",
-            description = "Necesito defensa legal en un caso penal."
-        )
-    )
+fun EditarCasosAbogadosView(navController: NavController, caseId: Int, viewModel: UserViewModel) {
+    var isLoading by remember { mutableStateOf(false) }
 
-    val caseDetail = casesDetail.find { it.id == caseId }
+    var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
+    var users by remember { mutableStateOf<List<User>>(emptyList()) }
 
-    val students = listOf("Estudiante A", "Estudiante B", "Estudiante C")
+    LaunchedEffect(Unit) {
+        isLoading = true
+        viewModel.loadAsesoriaList()
+        viewModel.loadUserNameList()
+        asesorias = viewModel.asesoriaList.filter { it.id == caseId }
+        users = viewModel.userList
+        isLoading = false
+    }
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedStudent by remember { mutableStateOf("") }
+    var selectedStudent by remember { mutableStateOf<User?>(null) }
 
     Scaffold(
         bottomBar = {
@@ -83,7 +62,9 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
             )
         }
     ) { paddingValues ->
-        caseDetail?.let { detail ->
+        asesorias.firstOrNull()?.let { detail ->
+            val cliente = users.firstOrNull { it.id == detail.cliente_id }
+            val students = users.filter { it.role == "Estudiante" }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -100,15 +81,14 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        // Información del nombre
                         Text(
-                            text = "NOMBRE:",
+                            text = "CLIENTE:",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Gray
                         )
                         Text(
-                            text = detail.name,
+                            text = "${cliente?.nombre} ${cliente?.apellido}",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
                             color = Color.Black,
@@ -116,22 +96,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
 
-                        Text(
-                            text = "CORREO:",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                        Text(
-                            text = detail.email,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.Black,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                        Divider(color = Color.Gray, thickness = 0.5.dp)
-
+                        // Información del teléfono
                         Text(
                             text = "TELÉFONO:",
                             fontSize = 14.sp,
@@ -140,7 +105,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         Text(
-                            text = detail.phone,
+                            text = cliente?.celular ?: "No disponible",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
                             color = Color.Black,
@@ -156,7 +121,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         Text(
-                            text = detail.service,
+                            text = detail.category,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
                             color = Color.Black,
@@ -184,7 +149,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
 
                 Button(
                     onClick = { /* Acción de editar caso */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -194,7 +159,7 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
 
                 Button(
                     onClick = { /* Acción de descargar como PDF */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -223,19 +188,21 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                     ) {
                         students.forEach { student ->
                             DropdownMenuItem(
-                                text = { Text(student) },
+                                text = { Text("${student.nombre} ${student.apellido}") },
                                 onClick = {
                                     selectedStudent = student
                                     expanded = false
+
+                                    viewModel.setAsesoriaCompartida(caseId.toString(), student.id)
                                 }
                             )
                         }
                     }
                 }
 
-                if (selectedStudent.isNotEmpty()) {
+                if (selectedStudent != null) {
                     Text(
-                        text = "Caso asignado a: $selectedStudent",
+                        text = "Caso asignado a: ${selectedStudent?.nombre} ${selectedStudent?.apellido}",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.DarkGray
@@ -251,13 +218,5 @@ fun EditarCasosAbogadosView(navController: NavController, caseId: String) {
                 Text("Caso no encontrado.")
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EditarCasosAbogadosViewPreview() {
-    BinaryBrainzTheme {
-        EditarCasosAbogadosView(navController = rememberNavController(), caseId = "123")
     }
 }

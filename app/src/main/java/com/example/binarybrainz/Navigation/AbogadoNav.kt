@@ -22,6 +22,10 @@ fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Mod
         composable("menu_historial_view") {
             HistorialScreen(navController, viewModel)
         }
+        composable("edit_case_view/{caseId}") { backStackEntry ->
+            val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
+            EditarCasosEstudiantesView(navController, caseId)
+        }
         composable("asignar_roles") {
             AsignarRolesScreen(navController, viewModel)
         }
@@ -29,8 +33,8 @@ fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Mod
             CitasPendientesScreen(navController, viewModel)
         }
         composable("editar_casos_abogados/{caseId}") { backStackEntry ->
-            val caseId = backStackEntry.arguments?.getString("caseId") ?: "N/A"
-            EditarCasosAbogadosView(navController, caseId)
+            val caseId = backStackEntry.arguments?.getString("caseId")?.toIntOrNull() ?: -1
+            EditarCasosAbogadosView(navController, caseId, viewModel)
         }
     }
 }

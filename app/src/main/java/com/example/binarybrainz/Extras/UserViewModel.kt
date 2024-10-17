@@ -176,4 +176,18 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
         }
     }
 
+    fun setAsesoriaCompartida(asesoriaId: String, estudianteId: String) {
+        isLoading.value = true
+        errorMessage.value = " "
+        viewModelScope.launch {
+            try {
+                userRepository.setAsesoriaCompartida(asesoriaId, estudianteId)
+            } catch (e: Exception) {
+                errorMessage.value = e.message ?: "Unknown error"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
 }

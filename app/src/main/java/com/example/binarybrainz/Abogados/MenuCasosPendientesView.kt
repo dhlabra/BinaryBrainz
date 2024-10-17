@@ -47,7 +47,7 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
         isLoading = true
         viewModel.loadAsesoriaList()
         viewModel.loadUserNameList()
-        asesorias = viewModel.asesoriaList
+        asesorias = viewModel.asesoriaList.filter { it.status == "Pendiente" }
         usuarios = viewModel.userList
         isLoading = false
     }

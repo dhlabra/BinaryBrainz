@@ -1,21 +1,10 @@
 package com.example.binarybrainz.Extras
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,11 +28,9 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var editingField by remember { mutableStateOf<String?>(null) } // Almacena el campo que se está editando
+    var editingField by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-
 
     LaunchedEffect(Unit) {
         isLoading = true
@@ -56,6 +43,7 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
         name = user?.nombre ?: ""
         surname = user?.apellido ?: ""
         phone = user?.celular ?: ""
+
         Surface(
             shape = MaterialTheme.shapes.medium,
             tonalElevation = 8.dp,
@@ -67,6 +55,20 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // Ícono de tacha para cerrar el diálogo
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Cerrar",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { onDismiss() }
+                    )
+                }
+
                 // Título
                 Text(
                     text = "Editar Perfil",
@@ -83,7 +85,7 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
                     onEditClick = { editingField = if (editingField == "name") null else "name" },
                     onValueChange = { name = it }
                 )
-                Divider() // Agrega un separador
+                Divider()
 
                 ProfileItem(
                     label = "Apellido",
@@ -92,7 +94,7 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
                     onEditClick = { editingField = if (editingField == "surname") null else "surname" },
                     onValueChange = { surname = it }
                 )
-                Divider() // Agrega un separador
+                Divider()
 
                 ProfileItem(
                     label = "Teléfono",
@@ -104,34 +106,18 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botones de Cerrar y Cerrar Sesión
+                // Botones de Guardar y Cerrar Sesión
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.align(Alignment.End)
                 ) {
-                    // Botón de Cerrar (solo cierra el pop-up)
-                    Button(
-                        onClick = { onDismiss() },
-                        colors = ButtonDefaults.buttonColors(containerColor = DarkGrey)
-                    ) {
-                        Text(text = "Cerrar", color = Color.White)
-                    }
-
-                    // Botón de Cerrar Sesión (cierra sesión y redirige)
+                    // Botón de Guardar
                     Button(
                         onClick = {
                             val updates = mutableMapOf<String, String>()
-
-                            // Agregar al mapa solo los campos que han cambiado
-                            if (name != viewModel.user.value?.nombre) {
-                                updates["nombre"] = name
-                            }
-                            if (surname != viewModel.user.value?.apellido) {
-                                updates["apellido"] = surname
-                            }
-                            if (phone != viewModel.user.value?.celular) {
-                                updates["celular"] = phone
-                            }
+                            if (name != viewModel.user.value?.nombre) updates["nombre"] = name
+                            if (surname != viewModel.user.value?.apellido) updates["apellido"] = surname
+                            if (phone != viewModel.user.value?.celular) updates["celular"] = phone
 
                             if (updates.isNotEmpty()) {
                                 coroutineScope.launch {
@@ -147,19 +133,16 @@ fun EditProfileDialog(navController: NavController, viewModel: UserViewModel, on
                     ) {
                         Text(text = "Guardar", color = Color.White)
                     }
-                }
 
-                Button(
-                    onClick = {
-                        viewModel.signOut()
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = DarkGrey)
-                ) {
-                    Text(
-                        text = "Cerrar Sesión",
-                        color = Color.White,
-                        modifier = Modifier
-                    )
+                    // Botón de Cerrar Sesión
+                    Button(
+                        onClick = {
+                            viewModel.signOut()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = DarkGrey)
+                    ) {
+                        Text(text = "Cerrar Sesión", color = Color.White)
+                    }
                 }
             }
         }

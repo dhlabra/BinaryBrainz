@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.binarybrainz.Abogados.CitasPendientesScreen
 import com.example.binarybrainz.Abogados.HistorialScreen
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.StudentViews.EditarCasosEstudiantesView
@@ -26,6 +27,9 @@ fun AbogadoNavigation(navController: NavHostController, modifier: Modifier = Mod
         }
         composable("asignar_roles") {
             AsignarRolesScreen(navController, viewModel)
+        }
+        composable("citas_pendientes") {
+            CitasPendientesScreen(navController, viewModel)
         }
     }
 }

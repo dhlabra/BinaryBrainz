@@ -43,6 +43,12 @@ fun DrawerAbogados(navController: NavController, drawerState: DrawerState, viewM
             onClick = { navController.navigate("asignar_roles") }
         )
         Divider()
+        NavigationDrawerItem(
+            label = { Text(text = "Citas Pendientes") },
+            selected = false,
+            onClick = { navController.navigate("citas_pendientes") }
+        )
+        Divider()
 
 
     }

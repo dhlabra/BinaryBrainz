@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.binarybrainz.Extras.Asesoria
+import com.example.binarybrainz.Extras.User
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
 import com.example.binarybrainz.components.TopBarAbogados
@@ -33,15 +34,21 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
     var filterType by remember { mutableStateOf("Por Categoría") }  // Estado para el tipo de filtro
     var expanded by remember { mutableStateOf(false) }  // Estado para el menú desplegable
     var showStatusDialog by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
     var selectedAsesoria by remember { mutableStateOf<Asesoria?>(null) }  // Asesoría seleccionada para cambiar estado
 
     var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
+    var usuarios by remember { mutableStateOf<List<User>>(emptyList()) }
 
     // Cargar asesorías desde el ViewModel
     LaunchedEffect(Unit) {
-        viewModel.loadAsesoriaList() // Supongamos que ya tienes una función para cargar asesorías
+        isLoading = true
+        viewModel.loadAsesoriaList()
+        viewModel.loadUserNameList()
         asesorias =
-            viewModel.asesoriaList // `asesoriaList` proviene del ViewModel y está conectado a Supabase
+            viewModel.asesoriaList
+        usuarios = viewModel.userList
+        isLoading = false
     }
 
     // Aplicar el filtro a la lista de asesorías
@@ -96,6 +103,7 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
                 AsesoriasList(
                     navController = navController,
                     asesorias = filteredAsesorias,
+                    usuarios = usuarios,
                     onEditStatusClick = { asesoria ->
                         selectedAsesoria = asesoria
                         showStatusDialog = true
@@ -201,17 +209,24 @@ fun FilterSection(
 }
 
 @Composable
-fun AsesoriasList(navController: NavController, asesorias: List<Asesoria>, onEditStatusClick: (Asesoria) -> Unit) {
+fun AsesoriasList(navController: NavController, asesorias: List<Asesoria>, usuarios: List<User>, onEditStatusClick: (Asesoria) -> Unit) {
     LazyColumn {
         items(asesorias) { asesoria ->
-            AsesoriaRow(navController = navController, asesoria = asesoria, onEditStatusClick = onEditStatusClick)
+            AsesoriaRow(navController = navController, asesoria = asesoria, usuarios = usuarios, onEditStatusClick = onEditStatusClick)
             Divider(thickness = 1.dp, color = Color.Gray)
         }
     }
 }
 
 @Composable
-fun AsesoriaRow(navController: NavController, asesoria: Asesoria, onEditStatusClick: (Asesoria) -> Unit) {
+fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List<User>, onEditStatusClick: (Asesoria) -> Unit) {
+    val cliente = usuarios.find { it.id == asesoria.cliente_id }
+    println("AQUI ESTA ASESORIAS: ${asesoria.cliente_id}")
+    println("AQUI ESTA USUARIOS: ${usuarios}")
+
+    val nombreCliente = cliente?.nombre ?: "Desconocido"
+    val apellidoCliente = cliente?.apellido ?: ""
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -226,7 +241,7 @@ fun AsesoriaRow(navController: NavController, asesoria: Asesoria, onEditStatusCl
         ) {
             Column {
                 Text(
-                    text = "Asesoría de ${asesoria.category}",
+                    text = "Caso #${asesoria.id}",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -241,7 +256,7 @@ fun AsesoriaRow(navController: NavController, asesoria: Asesoria, onEditStatusCl
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Cliente ID: ${asesoria.cliente_id}",
+                    text = "Cliente: $nombreCliente $apellidoCliente",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )

@@ -47,16 +47,32 @@ fun TopBarClientes(navController: NavController, viewModel: UserViewModel) {
             )
         },
         actions = {
-            IconButton(
-                onClick = {
-                    showDialog = true // Mostrar el pop-up en lugar de cerrar sesión
-                }
+            // Agregar texto "Mi caso" al lado del ícono de perfil
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Default.Person,
-                    contentDescription = "Perfil de Cliente",
-                    tint = MaterialTheme.colorScheme.onPrimary // Aplica el color adecuado para el ícono
+                Text(
+                    text = "Mi caso",
+                    fontSize = 18.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .clickable {
+                            // Navega a la vista de progreso del caso
+                            navController.navigate("cita_cliente_updates_view")
+                        }
+                        .padding(end = 8.dp)
                 )
+                IconButton(
+                    onClick = {
+                        showDialog = true // Mostrar el pop-up en lugar de cerrar sesión
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Person,
+                        contentDescription = "Perfil de Cliente",
+                        tint = MaterialTheme.colorScheme.onPrimary // Aplica el color adecuado para el ícono
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -74,4 +90,3 @@ fun TopBarClientes(navController: NavController, viewModel: UserViewModel) {
         )
     }
 }
-

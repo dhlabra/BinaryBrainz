@@ -152,7 +152,7 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
                             }
                         )
                         if (index < asesorias.size - 1) {
-                        Divider(thickness = 1.dp, color = Color.Gray)
+                            Divider(thickness = 1.dp, color = Color.Gray)
                         }
                     }
                 }

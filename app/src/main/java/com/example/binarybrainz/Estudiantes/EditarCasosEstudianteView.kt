@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -69,6 +67,11 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
 
     val caseDetail = casesDetail.find { it.id == caseId }
 
+    val students = listOf("Estudiante A", "Estudiante B", "Estudiante Cccccccccccccccccccccc")
+
+    var expanded by remember { mutableStateOf(false) }
+    var selectedStudent by remember { mutableStateOf("") }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -105,27 +108,29 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                             text = "NOMBRE:",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = Color.Gray // Cambiado a dark grey
                         )
                         Text(
                             text = detail.name,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
+                            color = Color.Black,  // Cambiado a negro
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
-                        // Información del correo
+
                         Text(
                             text = "CORREO:",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = Color.Gray,
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         Text(
                             text = detail.email,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
+                            color = Color.Black,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
@@ -134,13 +139,14 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                             text = "TELÉFONO:",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = Color.Gray,
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         Text(
                             text = detail.phone,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
+                            color = Color.Black,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
@@ -149,63 +155,94 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: String) {
                             text = "SERVICIO:",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = Color.Gray,
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         Text(
                             text = detail.service,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
+                            color = Color.Black,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Divider(color = Color.Gray, thickness = 0.5.dp)
-                        // Información de la descripción
+
                         Text(
                             text = "BREVE DESCRIPCIÓN:",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = Color.Gray,
                             modifier = Modifier.padding(top = 8.dp)
                         )
                         Text(
                             text = detail.description,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
+                            color = Color.Black,
                             textAlign = TextAlign.Justify,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
                 }
 
-                // Botones de acción
                 Button(
                     onClick = { /* Acción de editar caso */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4267B2)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    Text(text = "Editar Caso")
+                    Text(text = "Editar Caso", color = Color.White)
                 }
 
                 Button(
                     onClick = { /* Acción de descargar como PDF */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4267B2)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),  // Cambiado a negro
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    Text(text = "Descargar como PDF")
+                    Text(text = "Descargar como PDF", color = Color.White)
                 }
 
-                Button(
-                    onClick = { /* Acción de compartir */ },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4267B2)),
+                // Botón de "Compartir" con lista desplegable
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Compartir")
+                    Button(
+                        onClick = { expanded = !expanded },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Compartir Caso", color = Color.White)
+                    }
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        students.forEach { student ->
+                            DropdownMenuItem(
+                                text = { Text(student) },
+                                onClick = {
+                                    selectedStudent = student
+                                    expanded = false
+                                }
+                            )
+                        }
+                    }
+                }
+
+                if (selectedStudent.isNotEmpty()) {
+                    Text(
+                        text = "Caso asignado a: $selectedStudent",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.DarkGray
+                    )
                 }
             }
         } ?: run {

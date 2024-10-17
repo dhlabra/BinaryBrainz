@@ -223,17 +223,19 @@ fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List
                     imageVector = Icons.Default.Warning,
                     contentDescription = "Advertencia",
                     modifier = Modifier
+
                         .size(24.dp)
                         .clickable { onEditStatusClick(asesoria) }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 // Icono para navegar a la vista de detalles/editar la asesoría
                 Icon(
+
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Editar Asesoría",
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { navController.navigate("edit_asesoria_view/${asesoria.id}") }
+                        .clickable { navController.navigate("edit_case_view/${asesoria.id}") }
                 )
             }
         }

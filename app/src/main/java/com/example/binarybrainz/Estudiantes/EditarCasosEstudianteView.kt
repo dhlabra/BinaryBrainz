@@ -38,7 +38,6 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: Int, viewMo
         isLoading = false
     }
 
-    var expanded by remember { mutableStateOf(false) }
     var selectedStudent by remember { mutableStateOf<User?>(null) }
 
     Scaffold(
@@ -62,7 +61,6 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: Int, viewMo
     ) { paddingValues ->
         asesorias.firstOrNull()?.let { detail ->
             val cliente = users.firstOrNull { it.id == detail.cliente_id }
-            val students = users.filter { it.role == "Estudiante" }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -142,39 +140,6 @@ fun EditarCasosEstudiantesView(navController: NavController, caseId: Int, viewMo
                             textAlign = TextAlign.Justify,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
-                    }
-                }
-
-                // Botón de "Compartir" con lista desplegable
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = { expanded = !expanded },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(text = "Compartir Caso", color = Color.White)
-                    }
-
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        students.forEach { student ->
-                            DropdownMenuItem(
-                                text = { Text("${student.nombre} ${student.apellido}") },
-                                onClick = {
-                                    selectedStudent = student
-                                    expanded = false
-
-                                    viewModel.setAsesoriaCompartida(caseId.toString(), student.id)
-                                }
-                            )
-                        }
                     }
                 }
 

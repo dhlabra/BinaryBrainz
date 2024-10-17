@@ -166,7 +166,7 @@ class UserViewModel( private val userRepository: UserRepository) : ViewModel(){
             try {
                 userRepository.setAsesoria(description, category)
             } catch (e: Exception) {
-                errorMessage.value = e.message ?: "Unknown error"
+                errorMessage.value = e.message ?: "Solo puedes tener una cita activa a la vez."
             } finally {
                 isLoading.value = false
             }

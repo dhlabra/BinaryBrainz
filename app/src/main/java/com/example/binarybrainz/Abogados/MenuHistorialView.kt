@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -157,7 +158,7 @@ fun HistorialFilterSection() {
 fun HistorialCasesList(navController: NavController, cases: List<Asesoria>) {
     LazyColumn {
         itemsIndexed(cases) { index, case ->
-            CaseRow(navController = navController, caseId = case.id)
+            HistorialCaseItem(navController = navController, caseId = case.id.toString())
             if (index < cases.size - 1) {
                 HorizontalDivider(thickness = 1.dp, color = Color.Gray)
             }
@@ -170,25 +171,13 @@ fun HistorialCaseItem(caseId: String, navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "Caso #$caseId",
-            fontSize = 18.sp,
-        )
-
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.clip(RoundedCornerShape(16.dp))
-        ) {
-            Button(
-                modifier = Modifier.padding(8.dp),
-                onClick = { navController.navigate("editar_casos_abogados/$caseId") }
-            ) {
-                Icon(imageVector = Icons.Default.Edit, contentDescription = null)
-            }
+        Text(text = "Caso #$caseId", fontSize = 18.sp)
+        IconButton(onClick = { navController.navigate("editar_casos_abogados/$caseId") }) {
+            Icon(imageVector = Icons.Filled.Edit, contentDescription = "Editar Caso")
         }
     }
 }

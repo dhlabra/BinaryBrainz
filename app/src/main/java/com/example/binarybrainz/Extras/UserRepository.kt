@@ -120,6 +120,11 @@ class UserRepository(private val supabase: SupabaseClient, scope: CoroutineScope
 
         val idAsesoria = asesoriaInfo?.id.toString()
 
+        println("asesoriaId: $idAsesoria")
+        println("phone: $phone")
+        println("fecha: $fecha")
+        println("hora: $hora")
+
         val citaInfo = mapOf("client_phone" to phone, "status" to "Pendiente", "client_id" to idClient, "date" to fecha, "time" to hora, "asesoria_id" to idAsesoria)
         supabase.from("citas")
             .insert(citaInfo)

@@ -42,7 +42,7 @@ fun CitasPendientesScreen(navController: NavController, viewModel: UserViewModel
     LaunchedEffect(Unit) {
         isLoading = true
         viewModel.loadCitaList()
-        citas = viewModel.citaList.filter { it.status == "pendiente" }
+        citas = viewModel.citaList.filter { it.status == "Pendiente" }
         isLoading = false
     }
 

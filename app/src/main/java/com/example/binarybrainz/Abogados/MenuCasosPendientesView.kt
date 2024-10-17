@@ -2,9 +2,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Warning
@@ -24,36 +26,31 @@ import com.example.binarybrainz.Extras.Asesoria
 import com.example.binarybrainz.Extras.User
 import com.example.binarybrainz.Extras.UserViewModel
 import com.example.binarybrainz.components.DrawerAbogados
-import com.example.binarybrainz.components.TopBarAbogados
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var filterType by remember { mutableStateOf("Por Categoría") }  // Estado para el tipo de filtro
-    var expanded by remember { mutableStateOf(false) }  // Estado para el menú desplegable
+    var filterType by remember { mutableStateOf("Por Categoría") }
+    var expanded by remember { mutableStateOf(false) }
     var showStatusDialog by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
-    var selectedAsesoria by remember { mutableStateOf<Asesoria?>(null) }  // Asesoría seleccionada para cambiar estado
+    var selectedAsesoria by remember { mutableStateOf<Asesoria?>(null) }
 
     var asesorias by remember { mutableStateOf<List<Asesoria>>(emptyList()) }
     var usuarios by remember { mutableStateOf<List<User>>(emptyList()) }
 
-    // Cargar asesorías desde el ViewModel
     LaunchedEffect(Unit) {
         isLoading = true
         viewModel.loadAsesoriaList()
         viewModel.loadUserNameList()
-        asesorias =
-            viewModel.asesoriaList
+        asesorias = viewModel.asesoriaList
         usuarios = viewModel.userList
         isLoading = false
     }
 
-    // Aplicar el filtro a la lista de asesorías
     val filteredAsesorias = when (filterType) {
-        "Categoría" -> asesorias.groupBy { it.category }.values.flatten()
+        "Gravedad" -> asesorias.sortedByDescending { it.category }
         "Fecha" -> asesorias.sortedBy { it.created_at }
         else -> asesorias
     }
@@ -84,36 +81,77 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
+                // Título de la sección
                 TitleSection(title = "Asesorías Pendientes")
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                FilterSection(
-                    filterType = filterType,
-                    onFilterSelected = { selectedFilter ->
-                        filterType = selectedFilter
-                    },
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    onClick = { expanded = true }
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                AsesoriasList(
-                    navController = navController,
-                    asesorias = filteredAsesorias,
-                    usuarios = usuarios,
-                    onEditStatusClick = { asesoria ->
-                        selectedAsesoria = asesoria
-                        showStatusDialog = true
+                // Filtro personalizado con lista desplegable
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize(Alignment.TopEnd)
+                ) {
+                    TextButton(
+                        onClick = { expanded = !expanded },
+                        modifier = Modifier.align(Alignment.TopEnd)
+                    ) {
+                        Text("FILTRAR POR: $filterType", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.DarkGray)
+                        Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = "Abrir Filtro")
                     }
-                )
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.align(Alignment.TopEnd)
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Gravedad") },
+                            onClick = {
+                                filterType = "Gravedad"
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Fecha") },
+                            onClick = {
+                                filterType = "Fecha"
+                                expanded = false
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Ambos") },
+                            onClick = {
+                                filterType = "Ambos"
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(filteredAsesorias) { asesoria ->
+                        AsesoriasRow(
+                            navController = navController,
+                            asesoria = asesoria,
+                            usuarios = usuarios,
+                            onEditStatusClick = {
+                                selectedAsesoria = asesoria
+                                showStatusDialog = true
+                            }
+                        )
+                        Divider(thickness = 1.dp, color = Color.Gray)
+                    }
+                }
             }
         }
     }
 
-    // Mostrar dialog para seleccionar el estado de la asesoría
+    // Mostrar diálogo para cambiar el estado de la asesoría
     if (showStatusDialog && selectedAsesoria != null) {
         StatusDialog(
             asesoria = selectedAsesoria!!,
@@ -122,7 +160,6 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
                 selectedAsesoria?.let {
                     it.status = status
                     showStatusDialog = false
-                    //viewModel.updateAsesoria(it)  // Actualizar en Supabase a través del ViewModel
                 }
             }
         )
@@ -130,100 +167,8 @@ fun MenuAsesoriasPendientesScreen(navController: NavController, viewModel: UserV
 }
 
 @Composable
-fun TitleSection(title: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = title,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-fun FilterSection(
-    filterType: String,
-    onFilterSelected: (String) -> Unit,
-    expanded: Boolean,
-    onDismissRequest: () -> Unit,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.TopEnd
-    ) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.clip(RoundedCornerShape(16.dp))
-        ) {
-            Row(
-                modifier = Modifier
-                    .clickable { onClick() }
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "FILTRAR POR: $filterType",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(imageVector = Icons.Default.KeyboardArrowDown, contentDescription = null)
-            }
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = onDismissRequest
-        ) {
-            DropdownMenuItem(
-                text = { Text("Gravedad") },
-                onClick = {
-                    onFilterSelected("Gravedad")
-                    onDismissRequest()
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Fecha") },
-                onClick = {
-                    onFilterSelected("Fecha")
-                    onDismissRequest()
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Ambos") },
-                onClick = {
-                    onFilterSelected("Ambos")
-                    onDismissRequest()
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun AsesoriasList(navController: NavController, asesorias: List<Asesoria>, usuarios: List<User>, onEditStatusClick: (Asesoria) -> Unit) {
-    LazyColumn {
-        items(asesorias) { asesoria ->
-            AsesoriaRow(navController = navController, asesoria = asesoria, usuarios = usuarios, onEditStatusClick = onEditStatusClick)
-            Divider(thickness = 1.dp, color = Color.Gray)
-        }
-    }
-}
-
-@Composable
-fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List<User>, onEditStatusClick: (Asesoria) -> Unit) {
+fun AsesoriasRow(navController: NavController, asesoria: Asesoria, usuarios: List<User>, onEditStatusClick: (Asesoria) -> Unit) {
     val cliente = usuarios.find { it.id == asesoria.cliente_id }
-    println("AQUI ESTA ASESORIAS: ${asesoria.cliente_id}")
-    println("AQUI ESTA USUARIOS: ${usuarios}")
-
     val nombreCliente = cliente?.nombre ?: "Desconocido"
     val apellidoCliente = cliente?.apellido ?: ""
 
@@ -263,16 +208,14 @@ fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List
             }
 
             Row {
-                // Icono para editar el estado de la asesoría
                 Icon(
                     imageVector = Icons.Default.Warning,
-                    contentDescription = "Editar Estado",
+                    contentDescription = "Advertencia",
                     modifier = Modifier
                         .size(24.dp)
                         .clickable { onEditStatusClick(asesoria) }
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                // Icono para navegar a la vista de detalles/editar la asesoría
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Editar Asesoría",
@@ -288,19 +231,36 @@ fun AsesoriaRow(navController: NavController, asesoria: Asesoria, usuarios: List
 @Composable
 fun StatusDialog(asesoria: Asesoria, onDismiss: () -> Unit, onStatusSelected: (String) -> Unit) {
     var status by remember { mutableStateOf(asesoria.status) }
+    var sliderValue by remember { mutableStateOf(1f) } // Gravedad del caso
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            shape = MaterialTheme.shapes.medium,
+            shape = RoundedCornerShape(8.dp),
             tonalElevation = 8.dp
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Icono de cerrar (tacha)
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.TopStart
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Cerrar",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { onDismiss() }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
                     text = "Asignar Estado a la Asesoría #${asesoria.id}",
                     fontWeight = FontWeight.Bold,
@@ -308,44 +268,51 @@ fun StatusDialog(asesoria: Asesoria, onDismiss: () -> Unit, onStatusSelected: (S
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                DropdownMenu(
-                    expanded = true,
-                    onDismissRequest = onDismiss
-                ) {
-                    DropdownMenuItem(
-                        text = { Text("Pendiente") },
-                        onClick = {
-                            status = "Pendiente"
-                            onStatusSelected(status)
-                        }
+                // Slider para seleccionar la gravedad del caso
+                Text(
+                    text = "Gravedad del caso: ${sliderValue.toInt()}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Slider(
+                    value = sliderValue,
+                    onValueChange = { sliderValue = it },
+                    valueRange = 1f..5f,
+                    steps = 3,  // Cambiado a 3 pasos para 5 niveles
+                    colors = SliderDefaults.colors(
+                        thumbColor = Color.DarkGray,
+                        activeTrackColor = Color.Black
                     )
-                    DropdownMenuItem(
-                        text = { Text("En proceso") },
-                        onClick = {
-                            status = "En proceso"
-                            onStatusSelected(status)
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Finalizado") },
-                        onClick = {
-                            status = "Finalizado"
-                            onStatusSelected(status)
-                        }
-                    )
-                }
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(onClick = { onStatusSelected(status) }) {
-                    Text("Asignar Estado")
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = onDismiss) {
-                    Text("Cerrar")
+                Button(
+                    onClick = { onStatusSelected(status) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                ) {
+                    Text("Asignar Estado", color = Color.White)
                 }
             }
         }
     }
 }
 
+@Composable
+fun TitleSection(title: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = title,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = Color.Black  // Cambiado a negro
+        )
+    }
+}

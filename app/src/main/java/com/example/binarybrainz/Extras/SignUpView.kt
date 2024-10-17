@@ -3,6 +3,7 @@ package com.example.binarybrainz.Extras
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -15,9 +16,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -39,8 +43,6 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
 
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
-
-    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {}
@@ -196,6 +198,23 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
+
+            // Texto de "Regresar al Login"
+            Spacer(modifier = Modifier.height(16.dp))
+            ClickableText(
+                text = AnnotatedString(
+                    "Regresar al Login",
+                    spanStyle = androidx.compose.ui.text.SpanStyle(
+                        color = Color.Black,
+                        textDecoration = TextDecoration.Underline
+                    )
+                ),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    // Navegar a la pantalla de Login
+                    navController.navigate("login_view")
+                }
+            )
         }
     }
 
@@ -245,4 +264,3 @@ fun SignUpView(navController: NavController, viewModel: UserViewModel) {
         )
     }
 }
-

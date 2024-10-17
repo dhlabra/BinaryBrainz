@@ -19,7 +19,6 @@ import androidx.navigation.NavController
 import com.example.binarybrainz.Extras.UserViewModel
 import kotlinx.coroutines.launch
 import java.util.*
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewModel) {
@@ -169,7 +168,12 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
             }
 
             // Botón para abrir el selector de fecha modal
-            Button(onClick = { showDatePicker = true }) {
+            Button(
+                onClick = { showDatePicker = true },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onBackground // Cambiar a negro
+                )
+            ) {
                 Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Seleccionar Fecha")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text("Seleccionar Fecha")
@@ -192,7 +196,11 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
                 Checkbox(
                     checked = acceptStudents,
                     onCheckedChange = { acceptStudents = it },
-                    colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = MaterialTheme.colorScheme.onBackground, // Negro cuando está seleccionado
+                        uncheckedColor = MaterialTheme.colorScheme.onSurface, // Borde negro cuando está desmarcado
+                        checkmarkColor = MaterialTheme.colorScheme.background // Check blanco cuando está seleccionado
+                    ),
                 )
                 Text(
                     text = "Acepto que alumnos estén presentes en la cita.",
@@ -204,39 +212,43 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
             Spacer(modifier = Modifier.weight(1f))
 
             // Botón para mandar la solicitud
-            Button(onClick = {
-                scope.launch {
-                    val selectedDate = Calendar.getInstance().apply {
-                        timeInMillis = fechaSeleccionada ?: 0L
-                    }
-                    val today = Calendar.getInstance()
-
-                    if (isFormComplete && fechaSeleccionada != null) {
-                        if (selectedDate.before(today)) {
-                            showDateErrorDialog = true // Mostrar error si la fecha es pasada
-                        } else {
-                            val fechaCita = "${java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(fechaSeleccionada)}"
-
-                            println(caseDescription.text)
-                            println(selectedCategory)
-
-                            viewModel.setAsesoria(caseDescription.text, selectedCategory)
-                            viewModel.setCita(fechaCita, selectedHour)
-                            resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}"
-                            navController.navigateUp()
+            Button(
+                onClick = {
+                    scope.launch {
+                        val selectedDate = Calendar.getInstance().apply {
+                            timeInMillis = fechaSeleccionada ?: 0L
                         }
-                    } else {
-                        resultado = "Por favor, completa todos los espacios."
+                        val today = Calendar.getInstance()
+
+                        if (isFormComplete && fechaSeleccionada != null) {
+                            if (selectedDate.before(today)) {
+                                showDateErrorDialog = true // Mostrar error si la fecha es pasada
+                            } else {
+                                val fechaCita = "${java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(fechaSeleccionada)}"
+
+                                println(caseDescription.text)
+                                println(selectedCategory)
+
+                                viewModel.setAsesoria(caseDescription.text, selectedCategory)
+                                viewModel.setCita(fechaCita, selectedHour)
+                                resultado = "Solicitud enviada para el ${java.text.SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(fechaSeleccionada)} a las ${selectedHour}"
+                                navController.navigateUp()
+                            }
+                        } else {
+                            resultado = "Por favor, completa todos los espacios."
+                        }
                     }
-                }
-            }) {
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onBackground // Cambiar a negro
+                )
+            ) {
                 Text("Mandar Solicitud")
             }
 
             // Mostrar resultado
             Text(resultado)
         }
-
     }
 
     if (showDatePicker) {
@@ -275,6 +287,6 @@ fun GenerarCasosClientesView(navController: NavController, viewModel: UserViewMo
             },
             title = { Text("Fecha no válida") },
             text = { Text("La fecha seleccionada no puede ser anterior a hoy. Por favor, selecciona una fecha válida.") }
-        )
+            )
+            }
     }
-}
